@@ -1,0 +1,76 @@
+# Care Circle: build rules
+
+Mobile web app prototype for a hackathon demo. One developer, speedrun build. Priority: ship a convincing, good-looking demo. Do not over-engineer.
+
+## Stack
+React + Vite + TypeScript, Tailwind CSS v4 (@tailwindcss/vite), lucide-react, framer-motion. Nothing else.
+No router: use a simple `screen` state. No backend, no login, no database, no real notifications, no live AI call, no Docker.
+Persist events in localStorage. A Reset button clears them.
+
+## Product in one line
+A resident living alone has a Circle (Mei = neighbour, Daniel = son, Township Support = community contact). The app lets her understand a message and ask her Circle, request a simple favour, and check in. If she misses her check-in, the Circle is asked one person at a time and every step is logged.
+Persona: Mak Cik Aminah, Unit 12-3. Everything is fictional.
+
+## Language rules
+- Say "resident". Do not say "senior" in the UI.
+- Never write "scam". Write "looks suspicious".
+- Never claim the app "prevents" emergencies.
+- Every simulated number or time must show the word SIMULATED nearby.
+- Never imply a real township, guardhouse, management team or neighbour agreed to anything.
+- "Not an emergency service" goes in the Home footer. "If this is an emergency, call 999" appears only in the Needs help state.
+- No live location tracking. Say so on the Family screen.
+
+## Escalation rules (the core logic)
+All times are SIMULATED. Delays are demo settings, not validated policy.
+- Check-in window ends 09:00. If no CHECK_IN today and not Away, a case opens.
+- 09:15 reminder to the resident.
+- Contacts in order: Neighbour, Family, Community. First contact is alerted at 11:15 (reminder + 2h).
+- A contact taps "I'll check" = HUMAN_AWARE. Then they have 1 simulated hour to record an outcome.
+- If there is no outcome in 1 hour, escalate to the next contact. The earlier contact stays marked "Human aware". The case stays "Being checked".
+- A contact taps "Can't now", or does not reply within 2 simulated hours of being alerted: escalate to the next contact.
+- "She's OK" resolves the case. It is NOT a resident check-in. Home says "Mei checked on you at 11:40."
+- "Needs help" alerts all remaining contacts at once and shows "If this is an emergency, call 999."
+- Resident taps "I'm okay": records a check-in and closes any open case.
+- Resident taps "I'm away" (until tomorrow 09:00 or until Sunday 09:00): pauses everything. "I'm back" ends it.
+- Last contact gets no reply in 2h, or says "I'll check" with no outcome in 1h: case is UNRESOLVED (red). We never claim a human responded.
+- Using the message helper or requesting a favour has NO effect on check-in status.
+
+## Engine
+- Events: { type, time, actor, meta }. Types: CHECK_IN, AWAY, BACK, MESSAGE_CHECKED, ASKED_CIRCLE, HELP_REQUESTED, HELP_ACCEPTED, HELP_DONE, THANKS, ALERTED, CANT_NOW, HUMAN_AWARE, CONTACT_OK, NEEDS_HELP.
+- One pure function: deriveChain(events, now, behaviours) returns the four chain steps plus the case status. No setTimeout, no setInterval. The demo clock is just `now`.
+- Demo behaviours (per contact, set in the demo panel): "No reply", "Can't now", "Checks and confirms OK", "Checks but never reports". The behaviour only applies if the user has not tapped a real button on that contact's screen. Behaviour replies arrive 15 simulated minutes after the alert, and the confirmation 15 minutes after that.
+- Keep it small. No event sourcing library, no state library. React useState/useReducer + context is enough.
+- Write src/lib/engine.selftest.ts with plain assertions and run it with `npx tsx src/lib/engine.selftest.ts` after changing the engine.
+
+## Chain bar (signature visual)
+Vertical line, four steps: You, Neighbour, Family, Community. Each step has an icon, label and time.
+States: Waiting (empty grey circle), Asked (amber dot, "Asked 11:15"), No reply (grey dot with minus icon, "No reply 13:15"), Responded (green tick, "Mei is checking 11:30"; if no outcome later, add "No outcome 12:30"), Not needed (faded).
+Used on Home (chain running), Family and Community screens.
+
+## Screens
+Landing, Home (states: normal, checked in, reminder, chain running, away, contact checked), What is this? (choose, reading, result, sent), I need help (pick, confirm, status, done), Contact welfare card, Neighbour help card, Family timeline, Community case card (thin: no charts), Demo panel.
+Roles: Resident, Neighbour, Family, Community, switched from the demo panel.
+
+## Message helper (simulated)
+Three predefined samples: Suspicious SMS, Electricity bill, Township notice. Each has a fictional message, a two-sentence explanation, and a suspicious flag. Show a thumbnail drawn in HTML/CSS (a message card), not an image file. No Take photo button. Always show the tag DEMO RESULT · SAMPLE MESSAGE. Buttons: Read aloud, Ask My Circle, Done. Under the buttons: "While you're here: tap I'm okay."
+Read aloud uses window.speechSynthesis. If no voice exists for the chosen language, disable the button and show "Voice not available on this device".
+
+## Design
+Follow the accessible-ui skill. It overrides any "bold, distinctive" advice from the frontend-design plugin. This app should look calm, warm and clear, not experimental.
+Tokens: put colours in CSS variables in src/index.css. Warm off-white background, soft warm-orange accent for primary actions, green = done, amber = waiting, grey = no reply/paused, orange box = suspicious, red ONLY for Unresolved and Needs help.
+Phone frame: max width 430px, centred on desktop, full screen on a phone.
+
+## Strings
+All user-facing text lives in src/strings.ts as { en, bm, zh } objects. Translate only the screens in the demo. Export APP_NAME there (working title, placeholder).
+
+## File layout
+src/main.tsx, App.tsx, index.css, strings.ts, types.ts
+src/lib/engine.ts, engine.selftest.ts, store.ts (events + localStorage), speech.ts, samples.ts
+src/components/ (Card, BigButton, CircleStrip, ChainBar, TopBar, DemoPanel, PhoneFrame)
+src/screens/ (Landing, Home, WhatIsThis, NeedHelp, ContactCard, NeighbourHelp, Family, Community)
+
+## Working rules
+- Every phase must leave the app runnable. Run `npm run build` before you finish a phase.
+- Do not add features, libraries or screens that are not in this file. If something seems missing, ask.
+- Keep components small and plain. No abstraction for its own sake.
+- End each phase with: what to look at in the browser (3 bullets max).
