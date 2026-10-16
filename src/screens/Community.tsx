@@ -1,10 +1,10 @@
 import { HeartHandshake, Info, ShieldAlert } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { Card, SimTag } from '../components/Card'
+import { Card, DemoReplyTag, SimTag } from '../components/Card'
 import { StatusTag, StepDot, dotFor } from '../components/ChainBar'
 import { PEOPLE } from '../components/CircleStrip'
 import { formatTime } from '../lib/engine'
-import { useStore } from '../lib/store'
+import { simulatedContacts, useStore } from '../lib/store'
 import { useT, type StrKey } from '../strings'
 import type { ChainStep } from '../types'
 import { ContactTopBar, WelfareSection } from './ContactCard'
@@ -30,12 +30,15 @@ function CaseCard({ icon: Icon, title, children }: { icon: typeof Info; title: s
   )
 }
 
-function Row({ dot, label, state }: { dot: ReactNode; label: string; state: string }) {
+function Row({ dot, label, state, simulated }: { dot: ReactNode; label: string; state: string; simulated?: boolean }) {
   return (
     <li className="flex items-center gap-3">
       {dot}
       <span className="flex flex-col">
-        <span className="text-body font-bold">{label}</span>
+        <span className="flex flex-wrap items-center gap-2 text-body font-bold">
+          {label}
+          {simulated && <DemoReplyTag />}
+        </span>
         <span className="text-small font-bold text-ink-soft">{state}</span>
       </span>
     </li>
@@ -60,6 +63,7 @@ export default function Community() {
   const t = useT()
   const { chain, events, now } = useStore()
   const help = currentHelp(events, now)
+  const sim = simulatedContacts(chain, events)
   const welfare = chain.caseOpenedAt !== undefined && chain.status !== 'none' && chain.status !== 'paused'
   const aware = chain.steps.filter((s) => s.humanAware && s.time !== undefined).map((s) => s.time!)
   const firstAware = aware.length ? Math.min(...aware) : undefined
@@ -101,6 +105,7 @@ export default function Community() {
                   dot={<StepDot dot={dotFor(s)} />}
                   label={`${t(PEOPLE[s.who as keyof typeof PEOPLE].name)}`}
                   state={stepWord(s, t)}
+                  simulated={sim.has(s.who as keyof typeof PEOPLE)}
                 />
               ))}
             </ol>

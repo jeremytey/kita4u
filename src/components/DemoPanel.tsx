@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { Clock, RotateCcw, SlidersHorizontal, X } from 'lucide-react'
+import { useEffect, useRef } from 'react'
 import { dayOf, formatTime } from '../lib/engine'
 import { useStore, type Preset } from '../lib/store'
 import { useT, type StrKey } from '../strings'
@@ -44,20 +45,38 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
   )
 }
 
-// Floating "Demo" chip. Fixed to the bottom-right of the phone column.
-export function DemoChip({ onOpen }: { onOpen: () => void }) {
+// Presenter bar along the bottom of the phone column: SIMULATED clock and the Demo button.
+// Content scrolls above it, so it never covers a card. Clean mode (?clean=1) shows only a faint corner button.
+export function DemoBar({ onOpen, clean }: { onOpen: () => void; clean: boolean }) {
   const t = useT()
   const label = useClockLabel()
+  if (clean) {
+    return (
+      <button
+        type="button"
+        onClick={onOpen}
+        aria-label={t('demoPanel')}
+        style={{ right: 'max(0px, calc(50vw - 215px))' }}
+        className="fixed bottom-0 z-30 flex size-16 items-center justify-center text-ink opacity-15 focus-visible:opacity-100"
+      >
+        <SlidersHorizontal size={26} aria-hidden />
+      </button>
+    )
+  }
   return (
-    <button
-      type="button"
-      onClick={onOpen}
-      style={{ right: 'max(16px, calc(50vw - 215px + 16px))' }}
-      className="fixed bottom-4 z-30 flex min-h-16 items-center gap-2 rounded-full bg-ink px-5 text-small font-bold text-white shadow-card"
-    >
-      <SlidersHorizontal size={22} aria-hidden />
-      {t('demoChip')} · {label}
-    </button>
+    <div className="fixed inset-x-0 bottom-0 z-30 mx-auto flex h-20 w-full max-w-[430px] items-center justify-between gap-3 border-t border-line bg-bg/95 px-4 backdrop-blur-sm">
+      <span className="flex items-center gap-2 text-small font-bold whitespace-nowrap tabular-nums">
+        {label} <SimTag />
+      </span>
+      <button
+        type="button"
+        onClick={onOpen}
+        className="flex min-h-16 shrink-0 items-center gap-2 rounded-full bg-ink px-5 text-small font-bold text-white"
+      >
+        <SlidersHorizontal size={22} aria-hidden />
+        {t('demoChip')}
+      </button>
+    </div>
   )
 }
 
@@ -77,6 +96,16 @@ export default function DemoPanel({
   const t = useT()
   const store = useStore()
   const clock = useClockLabel()
+  const closeRef = useRef<HTMLButtonElement>(null)
+
+  // Move focus into the panel; Escape closes it.
+  useEffect(() => {
+    if (!open) return
+    closeRef.current?.focus()
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open, onClose])
 
   return (
     <AnimatePresence>
@@ -105,6 +134,7 @@ export default function DemoPanel({
                 {t('demoPanel')}
               </h2>
               <button
+                ref={closeRef}
                 type="button"
                 onClick={onClose}
                 aria-label={t('close')}

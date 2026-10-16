@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import DemoPanel, { DemoChip } from './components/DemoPanel'
+import { useCallback, useState } from 'react'
+import DemoPanel, { DemoBar } from './components/DemoPanel'
 import PhoneFrame from './components/PhoneFrame'
 import { useStore, type Preset } from './lib/store'
 import Community from './screens/Community'
@@ -13,6 +13,9 @@ import type { Role, Screen } from './types'
 
 const ROLE_SCREEN: Record<Role, Screen> = { resident: 'home', neighbour: 'contact', family: 'family', community: 'community' }
 
+// ?clean=1: recording mode. Hides the presenter bar; a faint corner button still opens the Demo panel.
+const CLEAN = new URLSearchParams(location.search).get('clean') === '1'
+
 export default function App() {
   const store = useStore()
   const [screen, setScreen] = useState<Screen>('landing')
@@ -21,6 +24,7 @@ export default function App() {
   const [helpTask, setHelpTask] = useState<Task | undefined>()
   const [visit, setVisit] = useState(0) // remounts a screen when a preset re-opens it
 
+  const closePanel = useCallback(() => setPanel(false), [])
   const pickRole = (r: Role) => {
     setRole(r)
     setScreen(ROLE_SCREEN[r])
@@ -37,7 +41,7 @@ export default function App() {
 
   return (
     <PhoneFrame>
-      <div className={screen === 'landing' ? 'flex flex-1 flex-col' : 'flex flex-1 flex-col pb-20'}>
+      <div className={screen === 'landing' || CLEAN ? 'flex flex-1 flex-col' : 'flex flex-1 flex-col pb-20'}>
         {screen === 'landing' && <Landing onStart={() => setScreen('home')} onDemo={() => setPanel(true)} />}
         {screen === 'home' && (
           <Home
@@ -64,8 +68,8 @@ export default function App() {
         {screen === 'community' && <Community />}
       </div>
 
-      {screen !== 'landing' && !panel && <DemoChip onOpen={() => setPanel(true)} />}
-      <DemoPanel open={panel} role={role} onClose={() => setPanel(false)} onRole={pickRole} onPreset={pickPreset} />
+      {screen !== 'landing' && !panel && <DemoBar clean={CLEAN} onOpen={() => setPanel(true)} />}
+      <DemoPanel open={panel} role={role} onClose={closePanel} onRole={pickRole} onPreset={pickPreset} />
     </PhoneFrame>
   )
 }

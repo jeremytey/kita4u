@@ -125,6 +125,9 @@ export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onChecked, on
                 />
               </div>
               <p className="text-center text-title font-bold">{t('reading')}</p>
+              <p className="flex justify-center">
+                <SimTag />
+              </p>
             </motion.div>
           )}
 

@@ -1,6 +1,6 @@
 import { AlertTriangle, CalendarDays, ShieldCheck } from 'lucide-react'
 import ChainBar from '../components/ChainBar'
-import { SimTag } from '../components/Card'
+import { DemoReplyTag, SimTag } from '../components/Card'
 import CircleStrip, { PEOPLE } from '../components/CircleStrip'
 import { DAY, dayOf, formatTime } from '../lib/engine'
 import { SAMPLES } from '../lib/samples'
@@ -17,6 +17,7 @@ interface Line {
   text: string
   tone: Tone
   rank: number // same minute: higher rank is newer
+  simulated: boolean // came from a demo behaviour, not a real tap
 }
 
 // Same-minute order, oldest to newest: deadline lines, replies that pass the case on, alerts, then everything else.
@@ -26,11 +27,12 @@ const MAX_LINES = 8
 const isContact = (a: string): a is Contact => a in PEOPLE
 
 // Plain sentences from the real event log, the engine's derived events and the chain. Nothing in the future.
-export function buildTimeline(events: AppEvent[], chain: ChainResult, now: number, t: T): Line[] {
+function buildTimeline(events: AppEvent[], chain: ChainResult, now: number, t: T): Line[] {
   const lines: Line[] = []
   let rank = 0
+  let simulated = false
   const push = (time: number, text: string, tone: Tone = 'ink') => {
-    if (time <= now) lines.push({ time, text, tone, rank })
+    if (time <= now) lines.push({ time, text, tone, rank, simulated })
   }
   const name = (c: string) => (isContact(c) ? t(PEOPLE[c].name) : '')
   const task = (e: AppEvent) => TASKS[(e.meta?.task as Task) ?? 'groceries']
@@ -52,6 +54,7 @@ export function buildTimeline(events: AppEvent[], chain: ChainResult, now: numbe
 
   for (const e of [...events, ...chain.derived]) {
     rank = RANK[e.type] ?? 3
+    simulated = Boolean(e.meta?.simulated)
     switch (e.type) {
       case 'CHECK_IN':
         push(e.time, t('tlCheckIn'), 'done')
@@ -163,6 +166,7 @@ export default function Family() {
                 <li key={i} className="flex flex-col border-l-4 border-line pl-3">
                   <span className="flex flex-wrap items-center gap-2 text-small text-ink-soft">
                     {stamp(l.time)} <SimTag />
+                    {l.simulated && <DemoReplyTag />}
                   </span>
                   <span className={`text-body font-bold ${TONE[l.tone]}`}>{l.text}</span>
                 </li>
@@ -179,11 +183,12 @@ export default function Family() {
               h: t(helps === 1 ? 'wkHelp' : 'wkHelps', { n: helps }),
             })}
           </p>
-          {sampleHistory && (
-            <p className="self-start rounded-full bg-quiet-tint px-3 py-1 text-small font-bold text-quiet">
-              {t('sampleHistory')}
-            </p>
-          )}
+          <p className="flex flex-wrap items-center gap-2">
+            <SimTag />
+            {sampleHistory && (
+              <span className="rounded-full bg-quiet-tint px-3 py-1 text-small font-bold text-quiet">{t('sampleHistory')}</span>
+            )}
+          </p>
         </section>
 
         <CircleStrip />

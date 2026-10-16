@@ -281,7 +281,13 @@ export const S = {
   csPaused: { en: 'Paused', bm: 'Dihentikan', zh: '已暂停' },
 
   // Demo panel (for the presenter)
-  demoChip: same('Demo'),
+  demoChip: { en: 'Demo', bm: 'Demo', zh: '演示' },
+  demoReply: { en: 'Demo reply', bm: 'Jawapan demo', zh: '演示回复' },
+  demoReplyNote: {
+    en: 'This reply came from the demo panel, not a real person.',
+    bm: 'Jawapan ini daripada panel demo, bukan orang sebenar.',
+    zh: '这个回复来自演示面板，不是真人。',
+  },
   demoPanel: { en: 'Demo panel', bm: 'Panel demo', zh: '演示面板' },
   close: { en: 'Close', bm: 'Tutup', zh: '关闭' },
   clock: { en: 'Clock', bm: 'Jam', zh: '时钟' },

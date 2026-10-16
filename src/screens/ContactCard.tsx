@@ -1,11 +1,11 @@
 import { AlertTriangle, CheckCircle2, Footprints, Info, X } from 'lucide-react'
 import type { ReactNode } from 'react'
 import BigButton from '../components/BigButton'
-import { Card, SimTag } from '../components/Card'
+import { Card, DemoReplyTag, SimTag } from '../components/Card'
 import { Avatar, PEOPLE } from '../components/CircleStrip'
 import TopBar from '../components/TopBar'
 import { CONTACTS, formatTime } from '../lib/engine'
-import { useStore } from '../lib/store'
+import { simulatedContacts, useStore } from '../lib/store'
 import { useT } from '../strings'
 import { currentHelp } from './NeedHelp'
 import NeighbourHelp from './NeighbourHelp'
@@ -21,7 +21,7 @@ type Mode =
   | { kind: 'unresolved' }
 
 // What this contact sees, read from the chain. Read-only once the case has passed them.
-export function contactMode(chain: ChainResult, who: Contact): Mode {
+function contactMode(chain: ChainResult, who: Contact): Mode {
   const i = CONTACTS.indexOf(who)
   const step = chain.steps[i + 1]
   const reached = (s: { state: string }) => s.state !== 'waiting' && s.state !== 'notNeeded'
@@ -73,8 +73,9 @@ export function ContactTopBar({ who }: { who: Contact }) {
 // The welfare part of a contact's screen. Nothing when this contact has not been asked.
 export function WelfareSection({ who }: { who: Contact }) {
   const t = useT()
-  const { chain, add, addAt } = useStore()
+  const { chain, events, add, addAt } = useStore()
   const mode = contactMode(chain, who)
+  const simulated = simulatedContacts(chain, events).has(who)
   const call999 = <p className="font-bold text-alert">{t('call999')}</p>
 
   // A real tap after a simulated "I'll check" keeps that earlier reply in the log.
@@ -111,7 +112,12 @@ export function WelfareSection({ who }: { who: Contact }) {
 
       {mode.kind === 'checking' && (
         <div className="flex flex-col gap-3">
-          <p className="text-body font-bold">{t('whatDidYouFind')}</p>
+          {simulated && (
+          <p className="flex flex-wrap items-center gap-2 text-small text-ink-soft">
+            <DemoReplyTag /> {t('demoReplyNote')}
+          </p>
+        )}
+        <p className="text-body font-bold">{t('whatDidYouFind')}</p>
           <BigButton icon={CheckCircle2} onClick={() => outcome('CONTACT_OK')}>
             {t('shesOk')}
           </BigButton>

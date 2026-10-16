@@ -9,7 +9,7 @@
 - [x] 5 Missed check-in journey
 - [x] 6 Help journey
 - [x] 7 Family and Community views
-- [ ] 8 Polish and audit
+- [x] 8 Polish and audit
 
 ## Choices made
 - Engine (src/lib/engine.ts) and self-test were written early, during phase 0 while npm installed. They are committed in phase 0 and wired up in phase 4.
@@ -61,6 +61,14 @@
 - Phase 7: Family timeline = real events + chain.derived + lines the engine worked out from the clock (No check-in by 09:00, Reminder sent, No reply from X, No outcome from X, Case unresolved). Only times <= now. Newest first, max 8. Each line has its time and a SIMULATED tag; days other than today show the weekday. Same-minute ties: deadline line, then CANT_NOW / NEEDS_HELP, then the alert they caused, then other taps (so "Mum checked in" sits above alerts from the same minute).
 - Phase 7: Family also shows the Circle strip (accessible-ui: Circle strip on family screens) and a red "If this is an emergency, call 999" line under the ChainBar while the case is needsHelp.
 - Phase 7: Community reuses the ChainBar dots (StepDot / dotFor now exported) so a no-reply contact gets a grey minus, not a tick. "Human aware" = earliest "I'll check" time.
+- Phase 8: engine.ts and types.ts not touched.
+- Phase 8 language audit: no UI string contains scam / senior / prevent / guardhouse / validated / unique / AI-powered / live AI. Hits were code comments, identifiers and README lines that already state what is NOT claimed.
+- Phase 8 honesty: store.addAt backfills are flagged meta.simulated. A "Demo reply" tag (robot icon) marks every reply that came from a demo behaviour: ChainBar steps, Community rows, Family timeline lines, Home "X checked on you" (plus "This reply came from the demo panel, not a real person.") and the contact's own "What did you find?" card. Family "This week" counts and the Reading step now carry SIMULATED.
+- Phase 8: the floating Demo chip became a slim bottom presenter bar (clock + SIMULATED on the left, Demo button on the right, solid background). Content scrolls above it, so it never covers the I'm okay card. ?clean=1 hides it and shows a faint 64px corner button that opens the panel; Reset keeps clean mode (URL) and the language (own localStorage key).
+- Phase 8: status tags have an icon as well as a word. Demo panel and away sheet move focus inside when opened and close on Escape.
+- Phase 8: PWA manifest + 192/512 icons (ring on accent). No service worker. Demo chip label translated in 中文 (演示).
+- Phase 8 audit: automated check of 25 screens/states x EN/BM/中文 at 360, 375, 390 and 1280 wide: no text under 16px (smallest 17px), no tappable under 64px, every button named, no horizontal scroll, no top-bar overlap. Text/background pairs all at or above 4.5:1 (only ink is used on the orange accent).
+- Phase 8: lint shows only fast-refresh warnings for files that export helpers next to components (dev-only, harmless).
 
 ## Notes for later phases
 - Phase 4: engine.ts and engine.selftest.ts already exist from phase 0 and pass. Do not rewrite them. Phase 4 builds only store.ts (events, simulated clock, behaviours in context, localStorage, reset), ChainBar and DemoPanel with presets.
@@ -72,4 +80,4 @@
 - Decision: keep the engine. A resident check-in closes a needsHelp case. Show it as "Resolved by Aminah's check-in" and keep the Needs help entry in the log.
 
 ## Next
-Phase 8: polish and audit.
+All phases done. Push, deploy to Vercel, add the link to README (Live demo line).

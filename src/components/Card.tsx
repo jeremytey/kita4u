@@ -1,10 +1,10 @@
-import type { LucideIcon } from 'lucide-react'
+import { Bot, type LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useT } from '../strings'
 
 type Tone = 'accent' | 'done' | 'wait' | 'quiet' | 'warn' | 'alert'
 
-export const TILE: Record<Tone, string> = {
+const TILE: Record<Tone, string> = {
   accent: 'bg-accent-tint text-ink',
   done: 'bg-done-tint text-done',
   wait: 'bg-wait-tint text-wait',
@@ -67,6 +67,17 @@ export function SimTag() {
   return (
     <span className="inline-flex rounded-full bg-quiet-tint px-2.5 py-0.5 align-middle text-small font-bold tracking-wide text-quiet">
       {t('simulated')}
+    </span>
+  )
+}
+
+// Marks a reply that came from a demo behaviour, so no screen suggests a real person acted.
+export function DemoReplyTag() {
+  const t = useT()
+  return (
+    <span className="inline-flex items-center gap-1 rounded-full bg-quiet-tint px-2.5 py-0.5 align-middle text-small font-bold text-quiet">
+      <Bot size={18} aria-hidden />
+      {t('demoReply')}
     </span>
   )
 }

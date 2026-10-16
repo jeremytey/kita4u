@@ -12,14 +12,14 @@ import {
   UserCheck,
   UserX,
 } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import BigButton from '../components/BigButton'
-import { ActionCard, SimTag } from '../components/Card'
+import { ActionCard, DemoReplyTag, SimTag } from '../components/Card'
 import ChainBar, { StatusTag } from '../components/ChainBar'
 import CircleStrip, { PEOPLE } from '../components/CircleStrip'
 import TopBar from '../components/TopBar'
 import { DAY, dayOf, formatTime, homeStatus } from '../lib/engine'
-import { useStore } from '../lib/store'
+import { simulatedContacts, useStore } from '../lib/store'
 import { useT, type StrKey } from '../strings'
 
 const fade = {
@@ -75,6 +75,13 @@ function awayOptions(now: number) {
 function AwaySheet({ now, onPick, onClose }: { now: number; onPick: (until: number) => void; onClose: () => void }) {
   const t = useT()
   const opts = awayOptions(now)
+  const sheetRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    sheetRef.current?.querySelector('button')?.focus()
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
   return (
     <motion.div
       className="absolute inset-0 z-20 flex items-end bg-ink/40"
@@ -85,6 +92,7 @@ function AwaySheet({ now, onPick, onClose }: { now: number; onPick: (until: numb
       onClick={onClose}
     >
       <motion.div
+        ref={sheetRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="away-title"
@@ -116,7 +124,7 @@ function AwaySheet({ now, onPick, onClose }: { now: number; onPick: (until: numb
   )
 }
 
-export function greetingKey(now: number): StrKey {
+function greetingKey(now: number): StrKey {
   const hour = Math.floor((((now % DAY) + DAY) % DAY) / 60)
   if (hour < 12) return 'goodMorning'
   if (hour < 18) return 'goodAfternoon'
@@ -125,9 +133,10 @@ export function greetingKey(now: number): StrKey {
 
 export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () => void; onNeedHelp: () => void }) {
   const t = useT()
-  const { chain, now, add } = useStore()
+  const { chain, now, add, events } = useStore()
   const status = homeStatus(chain)
   const [sheet, setSheet] = useState(false)
+  const closeSheet = useCallback(() => setSheet(false), [])
 
   const checkIn = () => add('CHECK_IN', 'resident')
   const pickAway = (until: number) => {
@@ -237,7 +246,16 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
                 <SimTag />
               </>
             }
-            sub={t('contactCheckedSub')}
+            sub={
+              <>
+                {chain.resolvedBy && chain.resolvedBy !== 'resident' && simulatedContacts(chain, events).has(chain.resolvedBy) && (
+                  <p className="mb-2 flex flex-wrap items-center gap-2 text-small text-ink-soft">
+                    <DemoReplyTag /> {t('demoReplyNote')}
+                  </p>
+                )}
+                <p>{t('contactCheckedSub')}</p>
+              </>
+            }
           />
         )
       default:
@@ -277,7 +295,7 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
         <p className="mt-auto pt-4 text-center text-small text-ink-soft">{t('footer')}</p>
       </main>
 
-      <AnimatePresence>{sheet && <AwaySheet now={now} onPick={pickAway} onClose={() => setSheet(false)} />}</AnimatePresence>
+      <AnimatePresence>{sheet && <AwaySheet now={now} onPick={pickAway} onClose={closeSheet} />}</AnimatePresence>
     </>
   )
 }

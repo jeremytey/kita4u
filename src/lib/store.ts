@@ -1,5 +1,16 @@
 import { createContext, createElement, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { Actor, AppEvent, Behaviours, ChainResult, Contact, EventType } from '../types'
+
+// Contacts whose reply in today's case came from a demo behaviour, not a real tap.
+export function simulatedContacts(chain: ChainResult, events: AppEvent[]): Set<Contact> {
+  const out = new Set<Contact>()
+  if (chain.caseOpenedAt === undefined) return out
+  const dayStart = chain.caseOpenedAt - 9 * 60
+  for (const e of [...chain.derived, ...events.filter((e) => e.time >= dayStart)]) {
+    if (e.meta?.simulated && e.actor !== 'resident' && e.actor !== 'system') out.add(e.actor)
+  }
+  return out
+}
 import { DAY, deriveChain } from './engine'
 
 // Events, the SIMULATED clock and demo behaviours, saved in localStorage.
@@ -72,7 +83,7 @@ function load(): State {
 interface Store extends State {
   chain: ChainResult
   add: (type: EventType, actor: Actor, meta?: AppEvent['meta']) => void
-  // Record a reply at an earlier SIMULATED time (used to keep a simulated "I'll check" when a real tap follows it).
+  // Keep a demo-behaviour reply in the log at its SIMULATED time when a real tap follows it. Always flagged simulated.
   addAt: (type: EventType, actor: Actor, time: number) => void
   advance: (minutes: number) => void
   setBehaviour: (c: Contact, b: Behaviours[Contact]) => void
@@ -100,7 +111,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   )
   const addAt = useCallback(
     (type: EventType, actor: Actor, time: number) =>
-      setState((s) => ({ ...s, events: [...s.events, { type, time, actor }] })),
+      setState((s) => ({ ...s, events: [...s.events, { type, time, actor, meta: { simulated: true } }] })),
     [],
   )
   const advance = useCallback((minutes: number) => setState((s) => ({ ...s, now: s.now + minutes })), [])

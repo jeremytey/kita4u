@@ -1,9 +1,25 @@
 import { motion } from 'framer-motion'
-import { AlertTriangle, Building2, Check, House, Minus, User, Users, type LucideIcon } from 'lucide-react'
+import {
+  AlertTriangle,
+  Building2,
+  Check,
+  CheckCircle2,
+  CircleSlash,
+  Footprints,
+  Hourglass,
+  House,
+  Minus,
+  Pause,
+  User,
+  Users,
+  XCircle,
+  type LucideIcon,
+} from 'lucide-react'
 import { formatTime } from '../lib/engine'
 import { useT, type StrKey } from '../strings'
 import type { CaseStatus, ChainResult, ChainStep } from '../types'
-import { SimTag } from './Card'
+import { useStore, simulatedContacts } from '../lib/store'
+import { DemoReplyTag, SimTag } from './Card'
 import { PEOPLE } from './CircleStrip'
 
 const ICON: Record<ChainStep['who'], LucideIcon> = { you: User, neighbour: House, family: Users, community: Building2 }
@@ -93,7 +109,7 @@ function useStepLines(step: ChainStep, chain: ChainResult) {
   return lines
 }
 
-function Step({ step, chain, index, last }: { step: ChainStep; chain: ChainResult; index: number; last: boolean }) {
+function Step({ step, chain, index, last, simulated }: { step: ChainStep; chain: ChainResult; index: number; last: boolean; simulated: boolean }) {
   const t = useT()
   const lines = useStepLines(step, chain)
   const Icon = ICON[step.who]
@@ -123,6 +139,7 @@ function Step({ step, chain, index, last }: { step: ChainStep; chain: ChainResul
           <Icon size={22} strokeWidth={2.2} aria-hidden className="shrink-0" />
           <span className="whitespace-nowrap">{title}</span>
           <span className="text-small font-normal text-ink-soft">{role}</span>
+          {simulated && <DemoReplyTag />}
         </p>
         {lines.map((l, i) => (
           <p key={i} className={`text-small font-bold ${l.tone}`}>
@@ -140,26 +157,34 @@ function Step({ step, chain, index, last }: { step: ChainStep; chain: ChainResul
   )
 }
 
-const STATUS: Record<CaseStatus, { key: StrKey; style: string }> = {
-  none: { key: 'csNone', style: 'bg-quiet-tint text-quiet' },
-  open: { key: 'csOpen', style: 'bg-wait-tint text-wait' },
-  beingChecked: { key: 'csBeingChecked', style: 'bg-wait-tint text-wait' },
-  resolved: { key: 'csResolved', style: 'bg-done-tint text-done' },
-  unresolved: { key: 'csUnresolved', style: 'bg-alert text-white' },
-  needsHelp: { key: 'csNeedsHelp', style: 'bg-alert text-white' },
-  paused: { key: 'csPaused', style: 'bg-quiet-tint text-quiet' },
+// Every state has an icon and a word, never colour alone.
+const STATUS: Record<CaseStatus, { key: StrKey; style: string; icon: LucideIcon }> = {
+  none: { key: 'csNone', style: 'bg-quiet-tint text-quiet', icon: CircleSlash },
+  open: { key: 'csOpen', style: 'bg-wait-tint text-wait', icon: Hourglass },
+  beingChecked: { key: 'csBeingChecked', style: 'bg-wait-tint text-wait', icon: Footprints },
+  resolved: { key: 'csResolved', style: 'bg-done-tint text-done', icon: CheckCircle2 },
+  unresolved: { key: 'csUnresolved', style: 'bg-alert text-white', icon: XCircle },
+  needsHelp: { key: 'csNeedsHelp', style: 'bg-alert text-white', icon: AlertTriangle },
+  paused: { key: 'csPaused', style: 'bg-quiet-tint text-quiet', icon: Pause },
 }
 
 export function StatusTag({ chain }: { chain: ChainResult }) {
   const t = useT()
   const s = STATUS[chain.status]
   const key: StrKey = chain.status === 'resolved' && chain.resolvedBy === 'resident' ? 'csResolvedByCheckIn' : s.key
-  return <span className={`inline-flex rounded-full px-3 py-1 text-small font-bold ${s.style}`}>{t(key)}</span>
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-small font-bold ring-1 ring-black/5 ${s.style}`}>
+      <s.icon size={18} strokeWidth={2.4} aria-hidden />
+      {t(key)}
+    </span>
+  )
 }
 
 // Signature visual: You, Neighbour, Family, Community on one vertical line.
 // bare: no card around it, for use inside another box.
 export default function ChainBar({ chain, showStatus = true, bare = false }: { chain: ChainResult; showStatus?: boolean; bare?: boolean }) {
+  const { events } = useStore()
+  const sim = simulatedContacts(chain, events)
   return (
     <div className={bare ? '' : 'rounded-[24px] bg-surface p-5 shadow-card'}>
       {showStatus && (
@@ -170,7 +195,14 @@ export default function ChainBar({ chain, showStatus = true, bare = false }: { c
       )}
       <ol>
         {chain.steps.map((s, i) => (
-          <Step key={s.who} step={s} chain={chain} index={i} last={i === chain.steps.length - 1} />
+          <Step
+            key={s.who}
+            step={s}
+            chain={chain}
+            index={i}
+            last={i === chain.steps.length - 1}
+            simulated={s.who !== 'you' && sim.has(s.who)}
+          />
         ))}
       </ol>
     </div>
