@@ -78,9 +78,9 @@ export function WelfareSection({ who }: { who: Contact }) {
   const simulated = simulatedContacts(chain, events).has(who)
   const call999 = <p className="font-bold text-alert">{t('call999')}</p>
 
-  // A real tap after a simulated "I'll check" keeps that earlier reply in the log.
+  // A real tap after a simulated "I'll check" keeps that earlier reply in the log. A real "I'll check" is already logged.
   const outcome = (type: 'CONTACT_OK' | 'NEEDS_HELP') => {
-    if (mode.kind === 'checking') addAt('HUMAN_AWARE', who, mode.awareAt)
+    if (mode.kind === 'checking' && simulated) addAt('HUMAN_AWARE', who, mode.awareAt)
     add(type, who)
   }
 

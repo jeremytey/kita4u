@@ -29,7 +29,7 @@
 
   --color-warn: #8a3d06; /* orange box = suspicious */
   --color-warn-tint: #ffe9d6;
-  --color-warn-line: #e07a2e;
+  --color-warn-line: #d16c25; /* 3.3:1 on the page, 3.0:1 on warn-tint */
 
   --color-alert: #b42318; /* red: Unresolved and Needs help only */
   --color-alert-tint: #fde7e4;

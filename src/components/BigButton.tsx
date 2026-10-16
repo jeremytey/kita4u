@@ -17,18 +17,21 @@ export default function BigButton({
   variant = 'primary',
   onClick,
   disabled,
+  expanded,
 }: {
   children: ReactNode
   icon?: LucideIcon
   variant?: Variant
   onClick?: () => void
   disabled?: boolean
+  expanded?: boolean // set for show/hide toggles (aria-expanded)
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
+      aria-expanded={expanded}
       className={`flex min-h-16 w-full items-center justify-center gap-3 rounded-2xl px-5 text-body font-bold transition-[transform,opacity] duration-200 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 ${STYLE[variant]}`}
     >
       {Icon && <Icon size={26} strokeWidth={2.2} aria-hidden />}

@@ -3,7 +3,6 @@ import { Car, Check, CheckCircle2, Heart, Info, Minus, RotateCcw, ShoppingBasket
 import { useState } from 'react'
 import BigButton from '../components/BigButton'
 import { ActionCard } from '../components/Card'
-import CircleStrip from '../components/CircleStrip'
 import TopBar from '../components/TopBar'
 import { DAY, dayOf, formatTime } from '../lib/engine'
 import { useStore } from '../lib/store'
@@ -123,9 +122,8 @@ export default function NeedHelp({ initialTask, onExit }: { initialTask?: Task; 
           {step === 'confirm' && (
             <motion.div key="confirm" {...fade} className="flex flex-col gap-6">
               <h1 className="text-greet font-bold">{t('helpConfirmQ', { task: phrase })}</h1>
-              <CircleStrip />
-              <p className="flex items-start gap-3 rounded-[24px] bg-accent-tint p-4 text-body font-bold">
-                <Info size={26} className="mt-0.5 shrink-0 text-accent-ink" aria-hidden />
+              <p className="flex items-start gap-3 text-body text-ink-soft">
+                <Info size={26} className="mt-0.5 shrink-0" aria-hidden />
                 {t('doorstepOnly')}
               </p>
               <div className="flex flex-col gap-3">

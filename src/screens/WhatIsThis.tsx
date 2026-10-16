@@ -1,8 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { AlertTriangle, CheckCircle2, MessageSquareText, Square, Users, Volume2 } from 'lucide-react'
+import { AlertTriangle, CheckCircle2, ChevronDown, ChevronUp, MessageSquareText, Square, Users, Volume2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import BigButton from '../components/BigButton'
-import CircleStrip from '../components/CircleStrip'
 import TopBar from '../components/TopBar'
 import { SAMPLES, type Sample, type SampleId } from '../lib/samples'
 import { useSpeech } from '../lib/speech'
@@ -35,7 +34,7 @@ function MessageThumb({ sample, full = false }: { sample: Sample; full?: boolean
         <MessageSquareText size={20} aria-hidden />
         <span className="truncate">{sample.sender[lang]}</span>
       </div>
-      <p className={`rounded-2xl rounded-tl-md bg-surface px-3 py-2 text-ink ${full ? 'text-body' : 'text-[16px] leading-snug'}`}>
+      <p className="rounded-2xl rounded-tl-md bg-surface px-3 py-2 text-body text-ink">
         <span className={full ? '' : 'line-clamp-2'}>{sample.message[lang]}</span>
       </p>
     </div>
@@ -64,6 +63,7 @@ export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onChecked, on
   const { lang } = useLang()
   const [step, setStep] = useState<Step>('choose')
   const [sample, setSample] = useState<Sample>(SAMPLES[0])
+  const [showMsg, setShowMsg] = useState(false)
   const speech = useSpeech(lang)
 
   // The "reading" pause is only for the demo. Nothing is sent anywhere.
@@ -75,6 +75,7 @@ export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onChecked, on
 
   const pick = (s: Sample) => {
     setSample(s)
+    setShowMsg(false)
     setStep('reading')
     onChecked(s.id)
   }
@@ -127,10 +128,8 @@ export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onChecked, on
 
           {step === 'result' && (
             <motion.div key="result" {...fade} className="flex flex-col gap-4">
-              <MessageThumb sample={sample} full />
-
-              <p className="ml-10 rounded-[24px] rounded-br-md bg-accent-tint px-4 py-3 text-body font-bold">
-                {t('askQuestion')}
+              <p>
+                <span className="rounded-full bg-quiet-tint px-3 py-1 text-small font-bold text-quiet">{t('demoTag')}</span>
               </p>
 
               <section
@@ -150,23 +149,17 @@ export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onChecked, on
                 <p className="mt-3 text-body text-ink">{sample.explanation[lang]}</p>
               </section>
 
-              <p>
-                <span className="rounded-full bg-quiet-tint px-3 py-1 text-small font-bold text-quiet">{t('demoTag')}</span>
-              </p>
-
-              <CircleStrip />
+              <BigButton
+                icon={showMsg ? ChevronUp : ChevronDown}
+                variant="secondary"
+                expanded={showMsg}
+                onClick={() => setShowMsg((v) => !v)}
+              >
+                {showMsg ? t('hideMessage') : t('showMessage')}
+              </BigButton>
+              {showMsg && <MessageThumb sample={sample} full />}
 
               <div className="flex flex-col gap-3">
-                <BigButton
-                  icon={speech.speaking ? Square : Volume2}
-                  variant="secondary"
-                  disabled={speech.state !== 'ready'}
-                  onClick={() => (speech.speaking ? speech.stop() : speech.speak(`${verdict} ${sample.explanation[lang]}`))}
-                >
-                  {speech.speaking ? t('stopReading') : t('readAloud')}
-                </BigButton>
-                {speech.state === 'none' && <p className="text-center text-small text-ink-soft">{t('voiceUnavailable')}</p>}
-                {speech.state === 'loading' && <p className="text-center text-small text-ink-soft">{t('voiceLoading')}</p>}
                 <BigButton
                   icon={Users}
                   onClick={() => {
@@ -177,6 +170,16 @@ export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onChecked, on
                 >
                   {t('askCircle')}
                 </BigButton>
+                <BigButton
+                  icon={speech.speaking ? Square : Volume2}
+                  variant="secondary"
+                  disabled={speech.state !== 'ready'}
+                  onClick={() => (speech.speaking ? speech.stop() : speech.speak(`${verdict} ${sample.explanation[lang]}`))}
+                >
+                  {speech.speaking ? t('stopReading') : t('readAloud')}
+                </BigButton>
+                {speech.state === 'none' && <p className="text-center text-small text-ink-soft">{t('voiceUnavailable')}</p>}
+                {speech.state === 'loading' && <p className="text-center text-small text-ink-soft">{t('voiceLoading')}</p>}
                 <BigButton variant="quiet" onClick={() => { speech.stop(); onExit() }}>
                   {t('done')}
                 </BigButton>
