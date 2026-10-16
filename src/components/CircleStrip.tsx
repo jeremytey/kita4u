@@ -21,11 +21,14 @@ export function Avatar({ who, size = 56 }: { who: Contact; size?: number }) {
   )
 }
 
-// The resident's Circle: three initial circles with role labels.
+// The resident's Circle: three initial circles with role labels. Home only, no card.
 export default function CircleStrip() {
   const t = useT()
   return (
-    <section aria-label={t('yourCircle')} className="rounded-[24px] bg-surface px-4 py-4 shadow-card">
+    <section aria-labelledby="circle-title" className="flex flex-col gap-3">
+      <h2 id="circle-title" className="text-body font-bold">
+        {t('yourCircle')}
+      </h2>
       <ul className="grid grid-cols-3 gap-2">
         {(Object.keys(PEOPLE) as Contact[]).map((c) => (
           <li key={c} className="flex flex-col items-center gap-1 text-center">
@@ -35,7 +38,7 @@ export default function CircleStrip() {
           </li>
         ))}
       </ul>
-      <p className="mt-3 flex items-center justify-center gap-2 text-small font-bold text-done">
+      <p className="flex items-center justify-center gap-2 text-small font-bold text-done">
         <Check size={20} strokeWidth={3} aria-hidden />
         {t('allAgreed')}
       </p>

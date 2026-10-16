@@ -55,12 +55,9 @@ export default function Landing({ onStart, onDemo }: { onStart: () => void; onDe
           <BigButton icon={User} onClick={onStart}>
             {t('tryAs')}
           </BigButton>
-          <BigButton icon={Play} variant="secondary" onClick={onDemo}>
+          <BigButton icon={Play} variant="quiet" onClick={onDemo}>
             {t('demoMode')}
           </BigButton>
-          <p className="mt-3 self-center rounded-full bg-quiet-tint px-4 py-2 text-small font-bold text-quiet">
-            {t('prototypeTag')}
-          </p>
         </div>
       </main>
     </>
