@@ -8,7 +8,7 @@
 - [x] 4 Engine, ChainBar, Demo panel
 - [x] 5 Missed check-in journey
 - [x] 6 Help journey
-- [ ] 7 Family and Community views
+- [x] 7 Family and Community views
 - [ ] 8 Polish and audit
 
 ## Choices made
@@ -55,6 +55,12 @@
 - Phase 6: Mei's screen is ContactCard (welfare card on top) + NeighbourHelp below. "No one has asked you yet." only shows if there is neither.
 - Phase 6: every tracker line with a time carries its own SIMULATED tag. Say thanks was built (not cut).
 - Phase 6: App remounts NeedHelp / WhatIsThis on each preset (key) so a preset always starts the right step.
+- Phase 7: engine.ts and types.ts not touched.
+- Phase 7: ContactCard split into WelfareSection (the welfare modes, renders nothing when not asked) and ContactTopBar; Neighbour, Family and Community screens all reuse them. Long contact names wrap to two lines in the top bar ("Township Support" ran under the language toggle).
+- Phase 7: seeded history events now carry meta.seed = true; Family shows "Sample history for this demo" when any of them falls in the last 7 simulated days. Week line uses singular/plural forms ("1 help request").
+- Phase 7: Family timeline = real events + chain.derived + lines the engine worked out from the clock (No check-in by 09:00, Reminder sent, No reply from X, No outcome from X, Case unresolved). Only times <= now. Newest first, max 8. Each line has its time and a SIMULATED tag; days other than today show the weekday. Same-minute ties: deadline line, then CANT_NOW / NEEDS_HELP, then the alert they caused, then other taps (so "Mum checked in" sits above alerts from the same minute).
+- Phase 7: Family also shows the Circle strip (accessible-ui: Circle strip on family screens) and a red "If this is an emergency, call 999" line under the ChainBar while the case is needsHelp.
+- Phase 7: Community reuses the ChainBar dots (StepDot / dotFor now exported) so a no-reply contact gets a grey minus, not a tick. "Human aware" = earliest "I'll check" time.
 
 ## Notes for later phases
 - Phase 4: engine.ts and engine.selftest.ts already exist from phase 0 and pass. Do not rewrite them. Phase 4 builds only store.ts (events, simulated clock, behaviours in context, localStorage, reset), ChainBar and DemoPanel with presets.
@@ -66,4 +72,4 @@
 - Decision: keep the engine. A resident check-in closes a needsHelp case. Show it as "Resolved by Aminah's check-in" and keep the Needs help entry in the log.
 
 ## Next
-Phase 7: Family and Community views.
+Phase 8: polish and audit.

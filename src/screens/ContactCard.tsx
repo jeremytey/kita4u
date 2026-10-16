@@ -54,13 +54,27 @@ function Notice({ icon: Icon, tone, children }: { icon: typeof Info; tone: strin
   )
 }
 
-export default function ContactCard({ who }: { who: Contact }) {
+// The contact's own name and initial in the top bar.
+export function ContactTopBar({ who }: { who: Contact }) {
   const t = useT()
-  const { chain, events, now, add, addAt } = useStore()
+  return (
+    <TopBar
+      left={
+        <span className="flex items-center gap-3 text-body leading-tight font-bold whitespace-normal">
+          <Avatar who={who} size={44} />
+          {/* Long names (Township Support) wrap to two lines instead of running under the toggle. */}
+          <span className="min-w-0">{t(PEOPLE[who].name)}</span>
+        </span>
+      }
+    />
+  )
+}
+
+// The welfare part of a contact's screen. Nothing when this contact has not been asked.
+export function WelfareSection({ who }: { who: Contact }) {
+  const t = useT()
+  const { chain, add, addAt } = useStore()
   const mode = contactMode(chain, who)
-  // Mei also sees Aminah's favour request, below any welfare card.
-  const hasHelp = who === 'neighbour' && currentHelp(events, now) !== undefined
-  const name = t(PEOPLE[who].name)
   const call999 = <p className="font-bold text-alert">{t('call999')}</p>
 
   // A real tap after a simulated "I'll check" keeps that earlier reply in the log.
@@ -69,88 +83,95 @@ export default function ContactCard({ who }: { who: Contact }) {
     add(type, who)
   }
 
+  if (mode.kind === 'notAsked') return null
   return (
     <>
-      <TopBar
-        left={
-          <span className="flex items-center gap-3 text-body font-bold">
-            <Avatar who={who} size={44} />
-            {name}
-          </span>
-        }
-      />
+      {(mode.kind === 'asked' || mode.kind === 'checking') && (
+        <Card className="flex flex-col gap-2 border-l-8 border-wait-dot">
+          <p className="text-title font-bold">{t('pleaseCheck')}</p>
+          <p className="text-body">{t('noCheckInToday')}</p>
+          {mode.kind === 'asked' && (
+            <p className="flex flex-wrap items-center gap-2 text-small text-ink-soft">
+              {t('askedAtTime', { time: formatTime(mode.at) })} <SimTag />
+            </p>
+          )}
+        </Card>
+      )}
+
+      {mode.kind === 'asked' && (
+        <div className="flex flex-col gap-3">
+          <BigButton icon={Footprints} onClick={() => add('HUMAN_AWARE', who)}>
+            {t('illCheck')}
+          </BigButton>
+          <BigButton icon={X} variant="secondary" onClick={() => add('CANT_NOW', who)}>
+            {t('cantNow')}
+          </BigButton>
+        </div>
+      )}
+
+      {mode.kind === 'checking' && (
+        <div className="flex flex-col gap-3">
+          <p className="text-body font-bold">{t('whatDidYouFind')}</p>
+          <BigButton icon={CheckCircle2} onClick={() => outcome('CONTACT_OK')}>
+            {t('shesOk')}
+          </BigButton>
+          <BigButton icon={AlertTriangle} variant="alert" onClick={() => outcome('NEEDS_HELP')}>
+            {t('needsHelpBtn')}
+          </BigButton>
+        </div>
+      )}
+
+      {mode.kind === 'movedOn' && (
+        <Notice icon={Info} tone="bg-quiet-tint text-quiet">
+          <p>{mode.to ? t('movedTo', { name: t(PEOPLE[mode.to].name) }) : t('noOneConfirmed')}</p>
+        </Notice>
+      )}
+
+      {mode.kind === 'resolved' && (
+        <Notice icon={CheckCircle2} tone="bg-done-tint text-done">
+          <p className="font-bold">{t('caseResolved')}</p>
+        </Notice>
+      )}
+
+      {mode.kind === 'needsHelp' && (
+        <Notice icon={AlertTriangle} tone="bg-alert-tint text-alert">
+          <p>
+            {mode.reporter === who
+              ? t('youReportedHelp')
+              : t('needsHelpInfo', { name: mode.reporter ? t(PEOPLE[mode.reporter].name) : '' })}
+          </p>
+          {call999}
+        </Notice>
+      )}
+
+      {mode.kind === 'unresolved' && (
+        <Notice icon={Info} tone="bg-alert-tint text-alert">
+          <p className="font-bold">{t('noOneConfirmed')}</p>
+        </Notice>
+      )}
+    </>
+  )
+}
+
+export default function ContactCard({ who }: { who: Contact }) {
+  const t = useT()
+  const { chain, events, now } = useStore()
+  const asked = contactMode(chain, who).kind !== 'notAsked'
+  // Mei also sees Aminah's favour request, below any welfare card.
+  const hasHelp = who === 'neighbour' && currentHelp(events, now) !== undefined
+  const name = t(PEOPLE[who].name)
+
+  return (
+    <>
+      <ContactTopBar who={who} />
       <main className="flex flex-1 flex-col gap-6 px-4 pt-4 pb-8">
         <h1 className="text-greet font-bold">{t('contactHi', { name })}</h1>
-
-        {mode.kind === 'notAsked' && !hasHelp && (
+        {!asked && !hasHelp && (
           <Notice icon={Info} tone="bg-quiet-tint text-quiet">
             <p>{t('notAskedYet')}</p>
           </Notice>
         )}
-
-        {(mode.kind === 'asked' || mode.kind === 'checking') && (
-          <Card className="flex flex-col gap-2 border-l-8 border-wait-dot">
-            <p className="text-title font-bold">{t('pleaseCheck')}</p>
-            <p className="text-body">{t('noCheckInToday')}</p>
-            {mode.kind === 'asked' && (
-              <p className="flex flex-wrap items-center gap-2 text-small text-ink-soft">
-                {t('askedAtTime', { time: formatTime(mode.at) })} <SimTag />
-              </p>
-            )}
-          </Card>
-        )}
-
-        {mode.kind === 'asked' && (
-          <div className="flex flex-col gap-3">
-            <BigButton icon={Footprints} onClick={() => add('HUMAN_AWARE', who)}>
-              {t('illCheck')}
-            </BigButton>
-            <BigButton icon={X} variant="secondary" onClick={() => add('CANT_NOW', who)}>
-              {t('cantNow')}
-            </BigButton>
-          </div>
-        )}
-
-        {mode.kind === 'checking' && (
-          <div className="flex flex-col gap-3">
-            <p className="text-body font-bold">{t('whatDidYouFind')}</p>
-            <BigButton icon={CheckCircle2} onClick={() => outcome('CONTACT_OK')}>
-              {t('shesOk')}
-            </BigButton>
-            <BigButton icon={AlertTriangle} variant="alert" onClick={() => outcome('NEEDS_HELP')}>
-              {t('needsHelpBtn')}
-            </BigButton>
-          </div>
-        )}
-
-        {mode.kind === 'movedOn' && (
-          <Notice icon={Info} tone="bg-quiet-tint text-quiet">
-            <p>{mode.to ? t('movedTo', { name: t(PEOPLE[mode.to].name) }) : t('noOneConfirmed')}</p>
-          </Notice>
-        )}
-
-        {mode.kind === 'resolved' && (
-          <Notice icon={CheckCircle2} tone="bg-done-tint text-done">
-            <p className="font-bold">{t('caseResolved')}</p>
-          </Notice>
-        )}
-
-        {mode.kind === 'needsHelp' && (
-          <Notice icon={AlertTriangle} tone="bg-alert-tint text-alert">
-            <p>
-              {mode.reporter === who
-                ? t('youReportedHelp')
-                : t('needsHelpInfo', { name: mode.reporter ? t(PEOPLE[mode.reporter].name) : '' })}
-            </p>
-            {call999}
-          </Notice>
-        )}
-
-        {mode.kind === 'unresolved' && (
-          <Notice icon={Info} tone="bg-alert-tint text-alert">
-            <p className="font-bold">{t('noOneConfirmed')}</p>
-          </Notice>
-        )}
+        <WelfareSection who={who} />
         {hasHelp && <NeighbourHelp />}
       </main>
     </>

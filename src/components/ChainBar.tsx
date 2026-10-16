@@ -10,12 +10,12 @@ const ICON: Record<ChainStep['who'], LucideIcon> = { you: User, neighbour: House
 
 type Dot = 'waiting' | 'asked' | 'noReply' | 'responded' | 'notNeeded' | 'alert'
 
-function dotFor(step: ChainStep): Dot {
+export function dotFor(step: ChainStep): Dot {
   if (step.outcome === 'needsHelp') return 'alert'
   return step.state
 }
 
-function StepDot({ dot }: { dot: Dot }) {
+export function StepDot({ dot }: { dot: Dot }) {
   const base = 'relative z-10 flex size-10 items-center justify-center rounded-full'
   switch (dot) {
     case 'waiting':

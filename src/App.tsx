@@ -2,15 +2,16 @@ import { useState } from 'react'
 import DemoPanel, { DemoChip } from './components/DemoPanel'
 import PhoneFrame from './components/PhoneFrame'
 import { useStore, type Preset } from './lib/store'
+import Community from './screens/Community'
 import ContactCard from './screens/ContactCard'
+import Family from './screens/Family'
 import Home from './screens/Home'
 import Landing from './screens/Landing'
 import NeedHelp, { type Task } from './screens/NeedHelp'
 import WhatIsThis from './screens/WhatIsThis'
 import type { Role, Screen } from './types'
 
-// Phase 5: every contact role opens their ContactCard. Family and Community get their own screens in phase 7.
-const ROLE_SCREEN: Record<Role, Screen> = { resident: 'home', neighbour: 'contact', family: 'contact', community: 'contact' }
+const ROLE_SCREEN: Record<Role, Screen> = { resident: 'home', neighbour: 'contact', family: 'family', community: 'community' }
 
 export default function App() {
   const store = useStore()
@@ -58,7 +59,9 @@ export default function App() {
             onAskCircle={(id) => store.add('ASKED_CIRCLE', 'resident', { sample: id, to: 'family' })}
           />
         )}
-        {screen === 'contact' && role !== 'resident' && <ContactCard key={role} who={role} />}
+        {screen === 'contact' && <ContactCard who="neighbour" />}
+        {screen === 'family' && <Family />}
+        {screen === 'community' && <Community />}
       </div>
 
       {screen !== 'landing' && !panel && <DemoChip onOpen={() => setPanel(true)} />}

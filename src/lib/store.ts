@@ -20,16 +20,22 @@ interface State {
 
 const fresh = (): State => ({ events: [], now: START, behaviours: { ...DEFAULT_BEHAVIOURS } })
 
-// A few quiet days before today, so the Family week looks lived in.
+// A few quiet days before today, so the Family week looks lived in. Marked seed: true (sample history).
 function history(): AppEvent[] {
+  const seed = (type: EventType, time: number, actor: Actor, task?: string): AppEvent => ({
+    type,
+    time,
+    actor,
+    meta: task ? { seed: true, task } : { seed: true },
+  })
   return [
-    { type: 'CHECK_IN', time: -3 * DAY + 8 * 60 + 12, actor: 'resident' },
-    { type: 'CHECK_IN', time: -2 * DAY + 7 * 60 + 55, actor: 'resident' },
-    { type: 'HELP_REQUESTED', time: -2 * DAY + 10 * 60, actor: 'resident', meta: { task: 'groceries' } },
-    { type: 'HELP_ACCEPTED', time: -2 * DAY + 10 * 60 + 6, actor: 'neighbour', meta: { task: 'groceries' } },
-    { type: 'HELP_DONE', time: -2 * DAY + 11 * 60 + 20, actor: 'neighbour', meta: { task: 'groceries' } },
-    { type: 'THANKS', time: -2 * DAY + 11 * 60 + 25, actor: 'resident', meta: { task: 'groceries' } },
-    { type: 'CHECK_IN', time: -1 * DAY + 8 * 60 + 3, actor: 'resident' },
+    seed('CHECK_IN', -3 * DAY + 8 * 60 + 12, 'resident'),
+    seed('CHECK_IN', -2 * DAY + 7 * 60 + 55, 'resident'),
+    seed('HELP_REQUESTED', -2 * DAY + 10 * 60, 'resident', 'groceries'),
+    seed('HELP_ACCEPTED', -2 * DAY + 10 * 60 + 6, 'neighbour', 'groceries'),
+    seed('HELP_DONE', -2 * DAY + 11 * 60 + 20, 'neighbour', 'groceries'),
+    seed('THANKS', -2 * DAY + 11 * 60 + 25, 'resident', 'groceries'),
+    seed('CHECK_IN', -1 * DAY + 8 * 60 + 3, 'resident'),
   ]
 }
 
