@@ -2,7 +2,7 @@
 
 ## Phases
 - [x] 0 Setup
-- [ ] 1 Foundation
+- [x] 1 Foundation
 - [ ] 2 Landing and Home
 - [ ] 3 Sample message helper
 - [ ] 4 Engine, ChainBar, Demo panel
@@ -20,3 +20,11 @@
 - Going away during an open case closes it (pauses everything).
 - A contact tap after their window has passed is ignored by the chain.
 - Self-test uses tiny local assert helpers (node:assert breaks the app tsconfig).
+- Font: Atkinson Hyperlegible (made for low-vision readers) via a Google Fonts <link> in index.html. Not an npm library. Falls back to system fonts offline; Chinese uses PingFang SC / Noto Sans SC.
+- Colour tokens live in the Tailwind v4 @theme block in src/index.css (they become CSS variables --color-*). All text pairs checked at 4.5:1 or better.
+- Language choice is saved in localStorage (separate from events, so Reset keeps the language).
+- The words SIMULATED and DEMO RESULT · SAMPLE MESSAGE stay in English in all three languages so they are always recognisable.
+- Phase 1 App.tsx shows a temporary foundation preview; phase 2 replaces it with Landing and Home.
+
+## Next
+Phase 2: Landing and Home.

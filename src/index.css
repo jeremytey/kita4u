@@ -1,1 +1,90 @@
 @import "tailwindcss";
+
+/* Design tokens. All colours live here. */
+@theme {
+  --font-sans: "Atkinson Hyperlegible", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+
+  --color-bg: #faf6f0; /* warm off-white page */
+  --color-surround: #efe6da; /* desktop area around the phone */
+  --color-surface: #ffffff;
+  --color-ink: #2a211b;
+  --color-ink-soft: #5c5048;
+  --color-line: #e8dfd4;
+
+  --color-accent: #f4a261; /* soft warm orange, primary actions (ink text on top) */
+  --color-accent-tint: #fdead7;
+  --color-accent-ink: #9a4a12;
+
+  --color-done: #256b42; /* green = done */
+  --color-done-tint: #e2f1e7;
+  --color-done-dot: #2e7d4f;
+
+  --color-wait: #8a5b00; /* amber = waiting */
+  --color-wait-tint: #fff2d1;
+  --color-wait-dot: #e3a21a;
+
+  --color-quiet: #6b625c; /* grey = no reply / paused / not needed */
+  --color-quiet-tint: #ede8e3;
+
+  --color-warn: #8a3d06; /* orange box = suspicious */
+  --color-warn-tint: #ffe9d6;
+  --color-warn-line: #e07a2e;
+
+  --color-alert: #b42318; /* red: Unresolved and Needs help only */
+  --color-alert-tint: #fde7e4;
+
+  --color-mei: #1f5b52;
+  --color-mei-tint: #d7eeea;
+  --color-daniel: #2a4a7a;
+  --color-daniel-tint: #dce7f7;
+  --color-township: #4f3a78;
+  --color-township-tint: #e8e0f3;
+
+  --text-small: 17px;
+  --text-small--line-height: 1.4;
+  --text-body: 20px;
+  --text-body--line-height: 1.45;
+  --text-title: 24px;
+  --text-title--line-height: 1.25;
+  --text-greet: 30px;
+  --text-greet--line-height: 1.2;
+
+  --shadow-card: 0 1px 2px rgb(74 52 30 / 0.06), 0 6px 18px rgb(74 52 30 / 0.07);
+}
+
+html,
+body {
+  background: var(--color-surround);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-accent-ink);
+  outline-offset: 3px;
+}
+
+@keyframes scan {
+  from {
+    top: 0%;
+  }
+  to {
+    top: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
