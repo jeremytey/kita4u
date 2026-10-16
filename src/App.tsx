@@ -5,6 +5,7 @@ import { useStore, type Preset } from './lib/store'
 import ContactCard from './screens/ContactCard'
 import Home from './screens/Home'
 import Landing from './screens/Landing'
+import NeedHelp, { type Task } from './screens/NeedHelp'
 import WhatIsThis from './screens/WhatIsThis'
 import type { Role, Screen } from './types'
 
@@ -16,6 +17,8 @@ export default function App() {
   const [screen, setScreen] = useState<Screen>('landing')
   const [role, setRole] = useState<Role>('resident')
   const [panel, setPanel] = useState(false)
+  const [helpTask, setHelpTask] = useState<Task | undefined>()
+  const [visit, setVisit] = useState(0) // remounts a screen when a preset re-opens it
 
   const pickRole = (r: Role) => {
     setRole(r)
@@ -25,7 +28,9 @@ export default function App() {
   const pickPreset = (p: Preset) => {
     store.preset(p)
     setRole('resident')
-    setScreen(p === 'sample' ? 'whatIsThis' : 'home') // help: NeedHelp screen arrives in phase 6
+    setScreen(p === 'sample' ? 'whatIsThis' : p === 'help' ? 'needHelp' : 'home')
+    setHelpTask(p === 'help' ? 'groceries' : undefined) // Help request opens on the confirm step
+    setVisit((v) => v + 1)
     setPanel(false)
   }
 
@@ -33,9 +38,19 @@ export default function App() {
     <PhoneFrame>
       <div className={screen === 'landing' ? 'flex flex-1 flex-col' : 'flex flex-1 flex-col pb-20'}>
         {screen === 'landing' && <Landing onStart={() => setScreen('home')} onDemo={() => setPanel(true)} />}
-        {screen === 'home' && <Home onWhatIsThis={() => setScreen('whatIsThis')} onNeedHelp={() => {}} />}
+        {screen === 'home' && (
+          <Home
+            onWhatIsThis={() => setScreen('whatIsThis')}
+            onNeedHelp={() => {
+              setHelpTask(undefined)
+              setScreen('needHelp')
+            }}
+          />
+        )}
+        {screen === 'needHelp' && <NeedHelp key={visit} initialTask={helpTask} onExit={() => setScreen('home')} />}
         {screen === 'whatIsThis' && (
           <WhatIsThis
+            key={visit}
             checkedIn={store.chain.checkedInAt !== undefined}
             onCheckIn={() => store.add('CHECK_IN', 'resident')}
             onExit={() => setScreen('home')}

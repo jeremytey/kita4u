@@ -7,6 +7,8 @@ import TopBar from '../components/TopBar'
 import { CONTACTS, formatTime } from '../lib/engine'
 import { useStore } from '../lib/store'
 import { useT } from '../strings'
+import { currentHelp } from './NeedHelp'
+import NeighbourHelp from './NeighbourHelp'
 import type { ChainResult, Contact } from '../types'
 
 type Mode =
@@ -54,8 +56,10 @@ function Notice({ icon: Icon, tone, children }: { icon: typeof Info; tone: strin
 
 export default function ContactCard({ who }: { who: Contact }) {
   const t = useT()
-  const { chain, add, addAt } = useStore()
+  const { chain, events, now, add, addAt } = useStore()
   const mode = contactMode(chain, who)
+  // Mei also sees Aminah's favour request, below any welfare card.
+  const hasHelp = who === 'neighbour' && currentHelp(events, now) !== undefined
   const name = t(PEOPLE[who].name)
   const call999 = <p className="font-bold text-alert">{t('call999')}</p>
 
@@ -78,7 +82,7 @@ export default function ContactCard({ who }: { who: Contact }) {
       <main className="flex flex-1 flex-col gap-6 px-4 pt-4 pb-8">
         <h1 className="text-greet font-bold">{t('contactHi', { name })}</h1>
 
-        {mode.kind === 'notAsked' && (
+        {mode.kind === 'notAsked' && !hasHelp && (
           <Notice icon={Info} tone="bg-quiet-tint text-quiet">
             <p>{t('notAskedYet')}</p>
           </Notice>
@@ -147,6 +151,7 @@ export default function ContactCard({ who }: { who: Contact }) {
             <p className="font-bold">{t('noOneConfirmed')}</p>
           </Notice>
         )}
+        {hasHelp && <NeighbourHelp />}
       </main>
     </>
   )

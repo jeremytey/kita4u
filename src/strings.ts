@@ -157,6 +157,42 @@ export const S = {
   },
   noOneConfirmed: { en: 'No one has confirmed yet.', bm: 'Belum ada yang mengesahkan.', zh: '还没有人确认。' },
 
+  // I need help (favour from the neighbour)
+  helpPickTitle: { en: 'What do you need help with?', bm: 'Anda perlukan bantuan apa?', zh: '你需要什么帮忙？' },
+  taskGroceriesTitle: { en: 'Groceries', bm: 'Barang dapur', zh: '买菜' },
+  taskPhoneTitle: { en: 'Phone help', bm: 'Bantuan telefon', zh: '手机帮忙' },
+  taskClinicTitle: { en: 'Clinic ride', bm: 'Tumpang ke klinik', zh: '载去诊所' },
+  taskGroceries: { en: 'groceries', bm: 'barang dapur', zh: '买菜' },
+  taskPhone: { en: 'phone help', bm: 'bantuan telefon', zh: '看手机' },
+  taskClinic: { en: 'a clinic ride', bm: 'tumpang ke klinik', zh: '载去诊所' },
+  helpConfirmQ: { en: 'Ask Mei to help with {task}?', bm: 'Minta Mei bantu {task}?', zh: '请 Mei 帮忙{task}？' },
+  yesAskMei: { en: 'Yes, ask Mei', bm: 'Ya, minta Mei', zh: '好，请 Mei 帮忙' },
+  doorstepOnly: {
+    en: 'Doorstep help only. No money or cards.',
+    bm: 'Bantuan di depan pintu sahaja. Tiada wang atau kad.',
+    zh: '只在门口帮忙。不涉及钱或银行卡。',
+  },
+  helpStatusTitle: { en: 'Your request: {task}', bm: 'Permintaan anda: {task}', zh: '你的请求：{task}' },
+  trackRequested: { en: 'Requested {time}', bm: 'Diminta {time}', zh: '{time} 已请求' },
+  trackAccepted: { en: 'Mei accepted {time}', bm: 'Mei terima {time}', zh: '{time} Mei 已接受' },
+  trackWaitingMei: { en: 'Waiting for Mei', bm: 'Menunggu Mei', zh: '等待 Mei' },
+  trackDone: { en: 'Done {time}', bm: 'Selesai {time}', zh: '{time} 已完成' },
+  trackNotYet: { en: 'Done: not yet', bm: 'Selesai: belum', zh: '完成：还没' },
+  meiCantNow: { en: "Mei can't help right now.", bm: 'Mei tak dapat bantu sekarang.', zh: 'Mei 现在没办法帮忙。' },
+  askAgain: { en: 'Ask again', bm: 'Minta lagi', zh: '再请一次' },
+  helpDoneTitle: { en: 'Mei helped you with {task}', bm: 'Mei sudah bantu {task}', zh: 'Mei 已帮你{task}' },
+  sayThanks: { en: 'Say thanks', bm: 'Ucap terima kasih', zh: '道谢' },
+  thanksSent: { en: 'Thanks sent to Mei', bm: 'Terima kasih dihantar kepada Mei', zh: '已向 Mei 道谢' },
+  backHome: { en: 'Back to home', bm: 'Kembali ke laman utama', zh: '回到主页' },
+
+  // Neighbour help card
+  neighbourAsk: { en: 'Aminah asks for {task}.', bm: 'Aminah minta bantuan {task}.', zh: 'Aminah 请你帮忙{task}。' },
+  accept: { en: 'Accept', bm: 'Terima', zh: '接受' },
+  youAccepted: { en: 'You accepted. Tap Done when you have finished.', bm: 'Anda terima. Tekan Selesai bila sudah siap.', zh: '你已接受。完成后请点“完成”。' },
+  youDeclined: { en: "You said you can't now.", bm: 'Anda kata tak boleh sekarang.', zh: '你说现在不行。' },
+  helpFinished: { en: 'Done. Thank you for helping.', bm: 'Selesai. Terima kasih kerana membantu.', zh: '完成了。谢谢你的帮忙。' },
+  aminahThanks: { en: 'Aminah says thanks.', bm: 'Aminah ucap terima kasih.', zh: 'Aminah 向你道谢。' },
+
   // Chain bar
   stepYou: { en: 'You', bm: 'Anda', zh: '你' },
   stepAminah: same('Aminah'),

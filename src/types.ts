@@ -22,6 +22,7 @@ export type EventType =
   | 'ASKED_CIRCLE'
   | 'HELP_REQUESTED'
   | 'HELP_ACCEPTED'
+  | 'HELP_DECLINED' // neighbour can't help with a favour (kept apart from welfare CANT_NOW)
   | 'HELP_DONE'
   | 'THANKS'
   | 'ALERTED'

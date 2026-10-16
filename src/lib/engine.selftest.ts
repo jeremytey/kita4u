@@ -181,10 +181,17 @@ test('helper and help-request events change nothing', () => {
     { type: 'MESSAGE_CHECKED', time: at(8, 30), actor: 'resident' },
     { type: 'ASKED_CIRCLE', time: at(8, 31), actor: 'resident' },
     { type: 'HELP_REQUESTED', time: at(8, 40), actor: 'resident' },
+    { type: 'HELP_DECLINED', time: at(8, 42), actor: 'neighbour' },
     { type: 'HELP_ACCEPTED', time: at(8, 45), actor: 'neighbour' },
     { type: 'HELP_DONE', time: at(9, 30), actor: 'neighbour' },
     { type: 'THANKS', time: at(9, 35), actor: 'resident' },
   ]
+  noise.push(
+    { type: 'HELP_REQUESTED', time: at(11, 20), actor: 'resident' },
+    { type: 'HELP_DECLINED', time: at(11, 25), actor: 'neighbour' },
+    { type: 'HELP_ACCEPTED', time: at(11, 26), actor: 'neighbour' },
+    { type: 'HELP_DONE', time: at(12, 0), actor: 'neighbour' },
+  )
   for (const t of [at(8, 50), at(10), at(12), at(18)]) {
     const a = deriveChain([], t, all('noReply'))
     const b = deriveChain(noise, t, all('noReply'))

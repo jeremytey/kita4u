@@ -7,7 +7,7 @@
 - [x] 3 Sample message helper
 - [x] 4 Engine, ChainBar, Demo panel
 - [x] 5 Missed check-in journey
-- [ ] 6 Help journey
+- [x] 6 Help journey
 - [ ] 7 Family and Community views
 - [ ] 8 Polish and audit
 
@@ -48,6 +48,13 @@
 - Phase 5: after a resident check-in that closed a case, Home's green box also shows the case tag (e.g. "Resolved by Aminah's check-in").
 - Phase 5: all three roles open their ContactCard for now; Family and Community get their own screens in phase 7.
 - Verified: story path ends Resolved at 15:00 (whole-hour steps cannot land on 15:30; checked 15:00 and 16:00). All No reply ends red Unresolved at 18:00 with "We have not reached anyone in your Circle yet."; I'm okay then closes it as "Resolved by Aminah's check-in".
+- Phase 6 types change: new event type HELP_DECLINED (Mei's "Can't now" on a favour). Reusing CANT_NOW would have been read by the engine as a welfare reply and escalated her case. Engine code untouched; the self-test "helper and help-request events change nothing" case now includes HELP_DECLINED and help events inside Mei's 11:15 alert window.
+- Phase 6: help state is read from the log by currentHelp(events, now) in NeedHelp.tsx: today's latest HELP_REQUESTED and the events logged after it (by log order, since taps can share a SIMULATED minute).
+- Phase 6: opening I need help when today's request is still open (not yet thanked) goes straight to the status tracker. The Help request preset opens NeedHelp on the confirm step with Groceries.
+- Phase 6: when Mei declines, the tracker's middle line becomes "Mei can't help right now." (grey minus) with an Ask again button under the tracker. Ask again logs a new HELP_REQUESTED. No escalation for favours.
+- Phase 6: Mei's screen is ContactCard (welfare card on top) + NeighbourHelp below. "No one has asked you yet." only shows if there is neither.
+- Phase 6: every tracker line with a time carries its own SIMULATED tag. Say thanks was built (not cut).
+- Phase 6: App remounts NeedHelp / WhatIsThis on each preset (key) so a preset always starts the right step.
 
 ## Notes for later phases
 - Phase 4: engine.ts and engine.selftest.ts already exist from phase 0 and pass. Do not rewrite them. Phase 4 builds only store.ts (events, simulated clock, behaviours in context, localStorage, reset), ChainBar and DemoPanel with presets.
@@ -59,4 +66,4 @@
 - Decision: keep the engine. A resident check-in closes a needsHelp case. Show it as "Resolved by Aminah's check-in" and keep the Needs help entry in the log.
 
 ## Next
-Phase 6: help journey (NeedHelp screen, NeighbourHelp card).
+Phase 7: Family and Community views.
