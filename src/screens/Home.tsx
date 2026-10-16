@@ -7,7 +7,6 @@ import {
   Hourglass,
   Luggage,
   ScanSearch,
-  Sun,
   Undo2,
   UserCheck,
 } from 'lucide-react'
@@ -44,7 +43,7 @@ const fade = {
 
 function StatusBox({ tone, icon: Icon, title, sub, children }: {
   tone: 'done' | 'wait' | 'quiet'
-  icon: typeof Sun
+  icon: typeof BellRing
   title: ReactNode
   sub?: string
   children?: ReactNode
@@ -184,15 +183,13 @@ export default function Home(p: Props) {
 
   // The banner (reminder) or away card replaces the I'm okay card, so there are never more than a few actions.
   const showOkayCard = p.status !== 'reminder' && p.status !== 'away'
+  const checkedIn = p.status === 'checkedIn'
 
   return (
     <>
       <TopBar
         left={
-          <span className="flex items-center gap-2 text-body font-bold">
-            <Sun size={26} strokeWidth={2.2} className="text-accent-ink" aria-hidden />
-            {t('goodMorning')}
-          </span>
+<span className="text-body font-bold">{t('goodMorning')}</span>
         }
       />
       <main className="flex flex-1 flex-col gap-6 px-4 pt-4 pb-8">
@@ -206,9 +203,10 @@ export default function Home(p: Props) {
           {showOkayCard && (
             <ActionCard
               icon={CheckCircle2}
-              tone="done"
-              title={p.status === 'checkedIn' ? t('checkedInCard') : t('imOkay')}
-              sub={p.status === 'checkedIn' ? undefined : t('imOkaySub')}
+              tone={checkedIn ? 'done' : 'accent'}
+              title={checkedIn ? t('checkedInCard') : t('imOkay')}
+              sub={checkedIn ? undefined : t('imOkaySub')}
+              disabled={checkedIn}
               onClick={p.onCheckIn}
             />
           )}

@@ -63,7 +63,7 @@ export const S = {
   checkedInSub: { en: 'Your Circle can see you are okay.', bm: 'Bulatan anda tahu anda okey.', zh: '你的关怀圈知道你平安。' },
   checkedInCard: { en: 'Checked in today', bm: 'Sudah lapor diri hari ini', zh: '今天已报平安' },
   reminderTitle: { en: 'Are you okay today?', bm: 'Anda okey hari ini?', zh: '你今天还好吗？' },
-  reminderSub: { en: 'Please tap I\'m okay.', bm: 'Sila tekan Saya okey.', zh: '请点"我很好"。' },
+  reminderSub: { en: 'Please tap I\'m okay.', bm: 'Sila tekan Saya okey.', zh: '请点“我很好”。' },
   imAway: { en: "I'm away", bm: 'Saya tiada di rumah', zh: '我不在家' },
   awayTitle: { en: 'You are away until {when}', bm: 'Anda tiada hingga {when}', zh: '你外出至 {when}' },
   awaySub: { en: 'Check-ins are paused.', bm: 'Lapor diri dihentikan sementara.', zh: '报平安已暂停。' },
@@ -84,7 +84,33 @@ export const S = {
   contactCheckedSub: {
     en: "Tap I'm okay when you are ready.",
     bm: 'Tekan Saya okey bila anda sedia.',
-    zh: '准备好时请点"我很好"。',
+    zh: '准备好时请点“我很好”。',
+  },
+
+  // What is this? (message helper, simulated)
+  chooseTitle: { en: 'Which message do you want to understand?', bm: 'Mesej mana yang anda mahu faham?', zh: '你想看懂哪一条信息？' },
+  samplesLabel: { en: 'Sample messages for this prototype.', bm: 'Mesej contoh untuk prototaip ini.', zh: '本原型的示例信息。' },
+  reading: { en: 'Reading…', bm: 'Membaca…', zh: '正在读取…' },
+  askQuestion: { en: 'Aminah: What does this message mean?', bm: 'Aminah: Apa maksud mesej ini?', zh: 'Aminah：这条信息是什么意思？' },
+  suspiciousBox: {
+    en: "This looks suspicious. Don't pay. Don't share your OTP.",
+    bm: 'Ini nampak mencurigakan. Jangan bayar. Jangan kongsi OTP anda.',
+    zh: '这看起来可疑。不要付钱。不要分享你的 OTP。',
+  },
+  normalBox: { en: 'This looks like a normal message.', bm: 'Ini nampak seperti mesej biasa.', zh: '这看起来是一条普通信息。' },
+  demoTag: same('DEMO RESULT · SAMPLE MESSAGE'),
+  readAloud: { en: 'Read aloud', bm: 'Baca kuat', zh: '朗读' },
+  stopReading: { en: 'Stop reading', bm: 'Berhenti baca', zh: '停止朗读' },
+  voiceLoading: { en: 'Looking for a voice…', bm: 'Mencari suara…', zh: '正在寻找语音…' },
+  voiceUnavailable: { en: 'Voice not available on this device', bm: 'Suara tiada pada peranti ini', zh: '此设备没有可用语音' },
+  askCircle: { en: 'Ask My Circle', bm: 'Tanya Bulatan Saya', zh: '问我的关怀圈' },
+  done: { en: 'Done', bm: 'Selesai', zh: '完成' },
+  whileHere: { en: "While you're here: tap I'm okay.", bm: 'Sementara di sini: tekan Saya okey.', zh: '顺便：点一下“我很好”。' },
+  sentTo: { en: 'Sent to Daniel', bm: 'Dihantar kepada Daniel', zh: '已发送给 Daniel' },
+  sentSub: {
+    en: 'Daniel will see the message and what it means.',
+    bm: 'Daniel akan lihat mesej ini dan maksudnya.',
+    zh: 'Daniel 会看到这条信息和它的意思。',
   },
 } satisfies Record<string, Str>
 

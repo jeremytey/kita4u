@@ -33,19 +33,24 @@ export function ActionCard({
   title,
   sub,
   tone = 'accent',
+  disabled,
   onClick,
 }: {
   icon: LucideIcon
   title: string
   sub?: string
   tone?: Tone
+  disabled?: boolean
   onClick: () => void
 }) {
   return (
     <button
       type="button"
-      onClick={onClick}
-      className="flex min-h-24 w-full items-center gap-4 rounded-[24px] bg-surface p-5 text-left shadow-card transition-transform duration-200 active:scale-[0.98]"
+      onClick={disabled ? undefined : onClick}
+      aria-disabled={disabled || undefined}
+      className={`flex min-h-24 w-full items-center gap-4 rounded-[24px] bg-surface p-5 text-left shadow-card transition-transform duration-200 ${
+        disabled ? 'cursor-default' : 'active:scale-[0.98]'
+      }`}
     >
       <IconTile icon={icon} tone={tone} />
       <span className="flex flex-col">

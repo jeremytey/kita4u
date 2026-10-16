@@ -9,7 +9,7 @@ const LANGS: { id: Lang; label: string }[] = [
   { id: 'zh', label: '中文' },
 ]
 
-// One even pill: three equal 64px buttons. The selected one gets an inset fill of the same size.
+// One even pill: three equal buttons, 56px wide and 64px tall. The selected one gets an inset fill of the same size.
 function LangToggle() {
   const { lang, setLang } = useLang()
   const t = useT()
@@ -21,10 +21,10 @@ function LangToggle() {
           type="button"
           aria-pressed={lang === l.id}
           onClick={() => setLang(l.id)}
-          className="flex size-16 items-center justify-center rounded-full"
+          className="flex h-16 w-14 items-center justify-center rounded-full"
         >
           <span
-            className={`flex h-12 w-14 items-center justify-center rounded-full text-small font-bold transition-colors duration-200 ${
+            className={`flex h-12 w-12 items-center justify-center rounded-full text-small font-bold transition-colors duration-200 ${
               lang === l.id ? 'bg-accent text-ink' : 'text-ink-soft'
             }`}
           >
