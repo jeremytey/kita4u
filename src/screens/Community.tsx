@@ -110,9 +110,7 @@ export default function Community() {
               ))}
             </ol>
             {firstAware !== undefined && (
-              <p className="flex flex-wrap items-center gap-2 text-body font-bold text-done">
-                {t('humanAware', { time: formatTime(firstAware) })} <SimTag />
-              </p>
+              <p className="text-body font-bold text-done">{t('humanAware', { time: formatTime(firstAware) })}</p>
             )}
           </CaseCard>
         )}
@@ -120,9 +118,7 @@ export default function Community() {
         {help && (
           <CaseCard icon={HeartHandshake} title={t('caseHelp')}>
             <p className="text-body font-bold">{t(TASKS[help.task].title as StrKey)}</p>
-            <p className="flex flex-wrap items-center gap-2 text-body text-ink-soft">
-              {helpState} <SimTag />
-            </p>
+            <p className="text-body text-ink-soft">{helpState}</p>
           </CaseCard>
         )}
 

@@ -45,11 +45,10 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
   )
 }
 
-// Presenter bar along the bottom of the phone column: SIMULATED clock and the Demo button.
-// Content scrolls above it, so it never covers a card. Clean mode (?clean=1) shows only a faint corner button.
+// Presenter handle along the bottom of the phone column. The clock lives in the Ribbon.
+// Content scrolls above it, so it never covers a button. Clean mode (?clean=1) shows only a faint corner button.
 export function DemoBar({ onOpen, clean }: { onOpen: () => void; clean: boolean }) {
   const t = useT()
-  const label = useClockLabel()
   if (clean) {
     return (
       <button
@@ -64,19 +63,14 @@ export function DemoBar({ onOpen, clean }: { onOpen: () => void; clean: boolean 
     )
   }
   return (
-    <div className="fixed inset-x-0 bottom-0 z-30 mx-auto flex h-20 w-full max-w-[430px] items-center justify-between gap-3 border-t border-line bg-bg/95 px-4 backdrop-blur-sm">
-      <span className="flex items-center gap-2 text-small font-bold whitespace-nowrap tabular-nums">
-        {label} <SimTag />
-      </span>
-      <button
-        type="button"
-        onClick={onOpen}
-        className="flex min-h-16 shrink-0 items-center gap-2 rounded-full bg-ink px-5 text-small font-bold text-white"
-      >
-        <SlidersHorizontal size={22} aria-hidden />
-        {t('demoChip')}
-      </button>
-    </div>
+    <button
+      type="button"
+      onClick={onOpen}
+      className="fixed inset-x-0 bottom-0 z-30 mx-auto flex h-16 w-full max-w-[430px] items-center justify-center gap-3 border-t-2 border-edge bg-surface text-body font-bold text-ink focus-visible:outline-offset-[-6px]"
+    >
+      <SlidersHorizontal size={26} aria-hidden />
+      {t('demoControls')}
+    </button>
   )
 }
 

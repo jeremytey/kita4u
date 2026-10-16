@@ -14,7 +14,7 @@ import {
 } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import BigButton from '../components/BigButton'
-import { ActionCard, DemoReplyTag, SimTag } from '../components/Card'
+import { ActionCard, DemoReplyTag } from '../components/Card'
 import ChainBar, { StatusTag } from '../components/ChainBar'
 import CircleStrip, { PEOPLE } from '../components/CircleStrip'
 import TopBar from '../components/TopBar'
@@ -161,11 +161,7 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
             key="checkedIn"
             tone="done"
             icon={CheckCircle2}
-            title={
-              <>
-                {t('checkedInTitle', { time: formatTime(chain.checkedInAt ?? now) })} <SimTag />
-              </>
-            }
+            title={t('checkedInTitle', { time: formatTime(chain.checkedInAt ?? now) })}
             sub={t('checkedInSub')}
           >
             {hadCase && (
@@ -219,11 +215,7 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
             key="away"
             tone="quiet"
             icon={Luggage}
-            title={
-              <>
-                {t('awayTitle', { when: awayWhen })} <SimTag />
-              </>
-            }
+            title={t('awayTitle', { when: awayWhen })}
             sub={t('awaySub')}
           >
             <BigButton icon={Undo2} variant="secondary" onClick={() => add('BACK', 'resident')}>
@@ -237,15 +229,10 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
             key="contact"
             tone="done"
             icon={UserCheck}
-            title={
-              <>
-                {t('contactCheckedTitle', {
-                  name: contactName(chain.resolvedBy),
-                  time: formatTime(chain.resolvedAt ?? now),
-                })}{' '}
-                <SimTag />
-              </>
-            }
+            title={t('contactCheckedTitle', {
+              name: contactName(chain.resolvedBy),
+              time: formatTime(chain.resolvedAt ?? now),
+            })}
             sub={
               <>
                 {chain.resolvedBy && chain.resolvedBy !== 'resident' && simulatedContacts(chain, events).has(chain.resolvedBy) && (

@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import DemoPanel, { DemoBar } from './components/DemoPanel'
 import PhoneFrame from './components/PhoneFrame'
+import Ribbon from './components/Ribbon'
 import { useStore, type Preset } from './lib/store'
 import Community from './screens/Community'
 import ContactCard from './screens/ContactCard'
@@ -41,7 +42,8 @@ export default function App() {
 
   return (
     <PhoneFrame>
-      <div className={screen === 'landing' || CLEAN ? 'flex flex-1 flex-col' : 'flex flex-1 flex-col pb-20'}>
+      <Ribbon />
+      <div className={screen === 'landing' || CLEAN ? 'flex flex-1 flex-col' : 'flex flex-1 flex-col pb-16'}>
         {screen === 'landing' && <Landing onStart={() => setScreen('home')} onDemo={() => setPanel(true)} />}
         {screen === 'home' && (
           <Home

@@ -1,7 +1,7 @@
 import { AlertTriangle, CheckCircle2, Footprints, Info, X } from 'lucide-react'
 import type { ReactNode } from 'react'
 import BigButton from '../components/BigButton'
-import { Card, DemoReplyTag, SimTag } from '../components/Card'
+import { Card, DemoReplyTag } from '../components/Card'
 import { Avatar, PEOPLE } from '../components/CircleStrip'
 import TopBar from '../components/TopBar'
 import { CONTACTS, formatTime } from '../lib/engine'
@@ -92,9 +92,7 @@ export function WelfareSection({ who }: { who: Contact }) {
           <p className="text-title font-bold">{t('pleaseCheck')}</p>
           <p className="text-body">{t('noCheckInToday')}</p>
           {mode.kind === 'asked' && (
-            <p className="flex flex-wrap items-center gap-2 text-small text-ink-soft">
-              {t('askedAtTime', { time: formatTime(mode.at) })} <SimTag />
-            </p>
+            <p className="text-small text-ink-soft">{t('askedAtTime', { time: formatTime(mode.at) })}</p>
           )}
         </Card>
       )}

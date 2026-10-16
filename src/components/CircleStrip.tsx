@@ -3,9 +3,9 @@ import { useT, type StrKey } from '../strings'
 import type { Contact } from '../types'
 
 export const PEOPLE: Record<Contact, { name: StrKey; role: StrKey; initial: string; colour: string }> = {
-  neighbour: { name: 'mei', role: 'roleNeighbour', initial: 'M', colour: 'bg-mei-tint text-mei' },
-  family: { name: 'daniel', role: 'roleSon', initial: 'D', colour: 'bg-daniel-tint text-daniel' },
-  community: { name: 'township', role: 'roleCommunity', initial: 'T', colour: 'bg-township-tint text-township' },
+  neighbour: { name: 'mei', role: 'roleNeighbour', initial: 'M', colour: 'bg-quiet-tint text-ink' },
+  family: { name: 'daniel', role: 'roleSon', initial: 'D', colour: 'bg-quiet-tint text-ink' },
+  community: { name: 'township', role: 'roleCommunity', initial: 'T', colour: 'bg-quiet-tint text-ink' },
 }
 
 export function Avatar({ who, size = 56 }: { who: Contact; size?: number }) {

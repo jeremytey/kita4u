@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Car, Check, CheckCircle2, Heart, Info, Minus, RotateCcw, ShoppingBasket, Smartphone, type LucideIcon } from 'lucide-react'
 import { useState } from 'react'
 import BigButton from '../components/BigButton'
-import { ActionCard, SimTag } from '../components/Card'
+import { ActionCard } from '../components/Card'
 import CircleStrip from '../components/CircleStrip'
 import TopBar from '../components/TopBar'
 import { DAY, dayOf, formatTime } from '../lib/engine'
@@ -56,7 +56,7 @@ const fade = {
   transition: { duration: 0.2 },
 }
 
-function TrackLine({ state, text, time }: { state: 'done' | 'wait' | 'todo' | 'no'; text: string; time?: number }) {
+function TrackLine({ state, text }: { state: 'done' | 'wait' | 'todo' | 'no'; text: string }) {
   const dot =
     state === 'done' ? (
       <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-done-dot text-white">
@@ -76,10 +76,7 @@ function TrackLine({ state, text, time }: { state: 'done' | 'wait' | 'todo' | 'n
   return (
     <li className="flex items-center gap-4">
       {dot}
-      <span className="flex flex-wrap items-center gap-2 text-body font-bold">
-        {text}
-        {time !== undefined && <SimTag />}
-      </span>
+      <span className="text-body font-bold">{text}</span>
     </li>
   )
 }
@@ -147,9 +144,9 @@ export default function NeedHelp({ initialTask, onExit }: { initialTask?: Task; 
               <h1 className="text-title font-bold">{t('helpStatusTitle', { task: t(TASKS[help.task].title) })}</h1>
 
               <ol className="flex flex-col gap-4 rounded-[24px] bg-surface p-5 shadow-card" aria-live="polite">
-                <TrackLine state="done" text={t('trackRequested', { time: formatTime(help.requestedAt) })} time={help.requestedAt} />
+                <TrackLine state="done" text={t('trackRequested', { time: formatTime(help.requestedAt) })} />
                 {help.acceptedAt !== undefined ? (
-                  <TrackLine state="done" text={t('trackAccepted', { time: formatTime(help.acceptedAt) })} time={help.acceptedAt} />
+                  <TrackLine state="done" text={t('trackAccepted', { time: formatTime(help.acceptedAt) })} />
                 ) : (
                   <TrackLine
                     state={help.declinedAt !== undefined ? 'no' : 'wait'}
@@ -157,7 +154,7 @@ export default function NeedHelp({ initialTask, onExit }: { initialTask?: Task; 
                   />
                 )}
                 {help.doneAt !== undefined ? (
-                  <TrackLine state="done" text={t('trackDone', { time: formatTime(help.doneAt) })} time={help.doneAt} />
+                  <TrackLine state="done" text={t('trackDone', { time: formatTime(help.doneAt) })} />
                 ) : (
                   <TrackLine state="todo" text={t('trackNotYet')} />
                 )}

@@ -1,6 +1,6 @@
 import { Check, CheckCircle2, Heart, Info, X } from 'lucide-react'
 import BigButton from '../components/BigButton'
-import { Card, SimTag } from '../components/Card'
+import { Card } from '../components/Card'
 import { formatTime } from '../lib/engine'
 import { useStore } from '../lib/store'
 import { useT } from '../strings'
@@ -24,9 +24,7 @@ export default function NeighbourHelp() {
           </span>
           <span className="pt-2">{t('neighbourAsk', { task: t(TASKS[help.task].phrase) })}</span>
         </p>
-        <p className="flex flex-wrap items-center gap-2 text-small text-ink-soft">
-          {formatTime(help.requestedAt)} <SimTag />
-        </p>
+        <p className="text-small text-ink-soft">{formatTime(help.requestedAt)}</p>
         <p className="text-body">{t('doorstepOnly')}</p>
       </Card>
 

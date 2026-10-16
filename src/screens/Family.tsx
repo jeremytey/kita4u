@@ -1,6 +1,6 @@
 import { AlertTriangle, CalendarDays, ShieldCheck } from 'lucide-react'
 import ChainBar from '../components/ChainBar'
-import { DemoReplyTag, SimTag } from '../components/Card'
+import { DemoReplyTag } from '../components/Card'
 import CircleStrip, { PEOPLE } from '../components/CircleStrip'
 import { DAY, dayOf, formatTime } from '../lib/engine'
 import { SAMPLES } from '../lib/samples'
@@ -165,7 +165,7 @@ export default function Family() {
               {lines.map((l, i) => (
                 <li key={i} className="flex flex-col border-l-4 border-line pl-3">
                   <span className="flex flex-wrap items-center gap-2 text-small text-ink-soft">
-                    {stamp(l.time)} <SimTag />
+                    {stamp(l.time)}
                     {l.simulated && <DemoReplyTag />}
                   </span>
                   <span className={`text-body font-bold ${TONE[l.tone]}`}>{l.text}</span>
@@ -183,12 +183,11 @@ export default function Family() {
               h: t(helps === 1 ? 'wkHelp' : 'wkHelps', { n: helps }),
             })}
           </p>
-          <p className="flex flex-wrap items-center gap-2">
-            <SimTag />
-            {sampleHistory && (
+          {sampleHistory && (
+            <p>
               <span className="rounded-full bg-quiet-tint px-3 py-1 text-small font-bold text-quiet">{t('sampleHistory')}</span>
-            )}
-          </p>
+            </p>
+          )}
         </section>
 
         <CircleStrip />

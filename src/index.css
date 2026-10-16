@@ -10,6 +10,7 @@
   --color-ink: #2a211b;
   --color-ink-soft: #5c5048;
   --color-line: #e8dfd4;
+  --color-edge: #9a8570; /* 2px card and bar borders: 3.3:1 on the page, 3.5:1 on white */
 
   --color-accent: #f4a261; /* soft warm orange, primary actions (ink text on top) */
   --color-accent-tint: #fdead7;
@@ -33,14 +34,7 @@
   --color-alert: #b42318; /* red: Unresolved and Needs help only */
   --color-alert-tint: #fde7e4;
 
-  --color-mei: #1f5b52;
-  --color-mei-tint: #d7eeea;
-  --color-daniel: #2a4a7a;
-  --color-daniel-tint: #dce7f7;
-  --color-township: #4f3a78;
-  --color-township-tint: #e8e0f3;
-
-  --text-small: 17px;
+  --text-small: 20px;
   --text-small--line-height: 1.4;
   --text-body: 20px;
   --text-body--line-height: 1.45;
@@ -48,8 +42,10 @@
   --text-title--line-height: 1.25;
   --text-greet: 30px;
   --text-greet--line-height: 1.2;
+  --text-hero: 28px;
+  --text-hero--line-height: 1.15;
 
-  --shadow-card: 0 1px 2px rgb(74 52 30 / 0.06), 0 6px 18px rgb(74 52 30 / 0.07);
+  --shadow-card: 0 0 0 2px var(--color-edge); /* a 2px outline, not a soft shadow */
 }
 
 html,

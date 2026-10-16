@@ -2,7 +2,6 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { AlertTriangle, CheckCircle2, MessageSquareText, Square, Users, Volume2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import BigButton from '../components/BigButton'
-import { SimTag } from '../components/Card'
 import CircleStrip from '../components/CircleStrip'
 import TopBar from '../components/TopBar'
 import { SAMPLES, type Sample, type SampleId } from '../lib/samples'
@@ -97,9 +96,7 @@ export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onChecked, on
           {step === 'choose' && (
             <motion.div key="choose" {...fade} className="flex flex-col gap-4">
               <h1 className="text-title font-bold">{t('chooseTitle')}</h1>
-              <p className="flex flex-wrap items-center gap-2 text-body text-ink-soft">
-                {t('samplesLabel')} <SimTag />
-              </p>
+              <p className="text-body text-ink-soft">{t('samplesLabel')}</p>
               {SAMPLES.map((s) => (
                 <button
                   key={s.id}
@@ -125,9 +122,6 @@ export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onChecked, on
                 />
               </div>
               <p className="text-center text-title font-bold">{t('reading')}</p>
-              <p className="flex justify-center">
-                <SimTag />
-              </p>
             </motion.div>
           )}
 
@@ -156,9 +150,8 @@ export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onChecked, on
                 <p className="mt-3 text-body text-ink">{sample.explanation[lang]}</p>
               </section>
 
-              <p className="flex flex-wrap items-center gap-2">
+              <p>
                 <span className="rounded-full bg-quiet-tint px-3 py-1 text-small font-bold text-quiet">{t('demoTag')}</span>
-                <SimTag />
               </p>
 
               <CircleStrip />

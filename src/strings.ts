@@ -281,7 +281,7 @@ export const S = {
   csPaused: { en: 'Paused', bm: 'Dihentikan', zh: '已暂停' },
 
   // Demo panel (for the presenter)
-  demoChip: { en: 'Demo', bm: 'Demo', zh: '演示' },
+  demoControls: { en: 'Demo controls', bm: 'Kawalan demo', zh: '演示控制' },
   demoReply: { en: 'Demo reply', bm: 'Jawapan demo', zh: '演示回复' },
   demoReplyNote: {
     en: 'This reply came from the demo panel, not a real person.',

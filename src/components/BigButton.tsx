@@ -5,7 +5,7 @@ type Variant = 'primary' | 'secondary' | 'quiet' | 'alert'
 
 const STYLE: Record<Variant, string> = {
   primary: 'bg-accent text-ink',
-  secondary: 'bg-surface text-ink ring-2 ring-line ring-inset',
+  secondary: 'bg-surface text-ink ring-2 ring-edge ring-inset',
   quiet: 'bg-quiet-tint text-ink',
   alert: 'bg-alert text-white',
 }
