@@ -3,7 +3,7 @@
 ## Phases
 - [x] 0 Setup
 - [x] 1 Foundation
-- [ ] 2 Landing and Home
+- [x] 2 Landing and Home
 - [ ] 3 Sample message helper
 - [ ] 4 Engine, ChainBar, Demo panel
 - [ ] 5 Missed check-in journey
@@ -24,7 +24,19 @@
 - Colour tokens live in the Tailwind v4 @theme block in src/index.css (they become CSS variables --color-*). All text pairs checked at 4.5:1 or better.
 - Language choice is saved in localStorage (separate from events, so Reset keeps the language).
 - The words SIMULATED and DEMO RESULT · SAMPLE MESSAGE stay in English in all three languages so they are always recognisable.
-- Phase 1 App.tsx shows a temporary foundation preview; phase 2 replaces it with Landing and Home.
+- Phase 2: the phase 1 preview is gone. Until phase 5, Home status is local state in App.tsx. Preview any Home state with ?status=normal|checkedIn|reminder|chainRunning|away|contactChecked (opens straight on Home). Remove this in phase 5.
+- Phase 2: "Demo mode" on Landing goes to Home until the Demo panel exists (phase 4).
+- Home: the reminder banner and the away card replace the I'm okay card, so the resident never sees I'm okay twice. After check-in the card reads "Checked in today".
+- Landing hero: Aminah's initial in the centre of a dashed ring with Mei, Daniel and Township Support on it. Names also given as screen-reader text.
+- Fixed: 20px body text is set on <body>, not <html>, so Tailwind rem sizes stay 16px-based (64px buttons really are 64px).
+
+## Notes for later phases (from Jeremy)
+- Phase 4: engine.ts and engine.selftest.ts already exist from phase 0 and pass. Do not rewrite them. Phase 4 builds only store.ts (events, simulated clock, behaviours in context, localStorage, reset), ChainBar and DemoPanel with presets.
+- Missed check-in preset: clear events, set clock to Day 0 09:00. Main demo row has +1h and +2h only; +24h sits under an "Advanced" label.
+- needsHelp status shown everywhere: Home (calm text plus "If this is an emergency, call 999"), Family, Community (red tag, never Resolved).
+- Once a contact's step has passed to the next person, their ContactCard is read-only: "This case has moved to <next contact>." No buttons.
+- Do not change engine rules without asking first.
+- Decision: keep the engine. A resident check-in closes a needsHelp case. Show it as "Resolved by Aminah's check-in" and keep the Needs help entry in the log.
 
 ## Next
-Phase 2: Landing and Home.
+Phase 3: Sample message helper.

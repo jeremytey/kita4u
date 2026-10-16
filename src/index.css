@@ -57,8 +57,12 @@ body {
   background: var(--color-surround);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  font-size: var(--text-body);
   -webkit-font-smoothing: antialiased;
+}
+
+/* Body text is 20px. Kept off <html> so rem (and Tailwind sizes) stay 16px-based. */
+body {
+  font-size: var(--text-body);
 }
 
 button {

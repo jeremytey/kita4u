@@ -26,6 +26,66 @@ export const S = {
   yourCircle: { en: 'Your Circle', bm: 'Bulatan anda', zh: '你的关怀圈' },
   allAgreed: { en: 'All agreed to help', bm: 'Semua setuju membantu', zh: '都已同意帮忙' },
   simulated: same('SIMULATED'),
+
+  // Landing
+  tagline: {
+    en: 'Ask when you need. Be noticed when you go quiet.',
+    bm: 'Minta bila perlu. Diperhatikan bila anda senyap.',
+    zh: '需要时开口。沉默时有人留意。',
+  },
+  landingIntro: {
+    en: 'A small Circle of people who look out for a resident living alone.',
+    bm: 'Bulatan kecil orang yang menjaga penduduk yang tinggal seorang.',
+    zh: '一个小小的关怀圈，照看独居的居民。',
+  },
+  tryAs: { en: 'Try as Mak Cik Aminah', bm: 'Cuba sebagai Mak Cik Aminah', zh: '以 Mak Cik Aminah 身份试用' },
+  demoMode: { en: 'Demo mode', bm: 'Mod demo', zh: '演示模式' },
+  prototypeTag: {
+    en: 'Prototype. Sample data. Simulated.',
+    bm: 'Prototaip. Data contoh. Simulasi.',
+    zh: '原型。示例数据。模拟。',
+  },
+
+  // Home
+  goodMorning: { en: 'Good morning', bm: 'Selamat pagi', zh: '早上好' },
+  imOkay: { en: "I'm okay", bm: 'Saya okey', zh: '我很好' },
+  imOkaySub: { en: 'Tap once to check in', bm: 'Tekan sekali untuk lapor diri', zh: '点一下报平安' },
+  whatIsThis: { en: 'What is this?', bm: 'Apa ini?', zh: '这是什么？' },
+  whatIsThisSub: { en: 'Understand a message', bm: 'Fahami satu mesej', zh: '看懂一条信息' },
+  needHelp: { en: 'I need help', bm: 'Saya perlukan bantuan', zh: '我需要帮忙' },
+  needHelpSub: { en: 'Ask someone nearby', bm: 'Minta orang berdekatan', zh: '请附近的人帮忙' },
+  footer: {
+    en: `${APP_NAME} is not an emergency service.`,
+    bm: `${APP_NAME} bukan perkhidmatan kecemasan.`,
+    zh: `${APP_NAME} 不是紧急服务。`,
+  },
+  checkedInTitle: { en: 'You checked in at {time}', bm: 'Anda lapor diri pada {time}', zh: '你在 {time} 报了平安' },
+  checkedInSub: { en: 'Your Circle can see you are okay.', bm: 'Bulatan anda tahu anda okey.', zh: '你的关怀圈知道你平安。' },
+  checkedInCard: { en: 'Checked in today', bm: 'Sudah lapor diri hari ini', zh: '今天已报平安' },
+  reminderTitle: { en: 'Are you okay today?', bm: 'Anda okey hari ini?', zh: '你今天还好吗？' },
+  reminderSub: { en: 'Please tap I\'m okay.', bm: 'Sila tekan Saya okey.', zh: '请点"我很好"。' },
+  imAway: { en: "I'm away", bm: 'Saya tiada di rumah', zh: '我不在家' },
+  awayTitle: { en: 'You are away until {when}', bm: 'Anda tiada hingga {when}', zh: '你外出至 {when}' },
+  awaySub: { en: 'Check-ins are paused.', bm: 'Lapor diri dihentikan sementara.', zh: '报平安已暂停。' },
+  imBack: { en: "I'm back", bm: 'Saya sudah balik', zh: '我回来了' },
+  awaySheetTitle: { en: 'How long will you be away?', bm: 'Berapa lama anda tiada?', zh: '你会外出多久？' },
+  untilTomorrow: { en: 'Until tomorrow 09:00', bm: 'Hingga esok 09:00', zh: '到明天 09:00' },
+  untilSunday: { en: 'Until Sunday 09:00', bm: 'Hingga Ahad 09:00', zh: '到星期日 09:00' },
+  whenTomorrow: { en: 'tomorrow 09:00', bm: 'esok 09:00', zh: '明天 09:00' },
+  whenSunday: { en: 'Sunday 09:00', bm: 'Ahad 09:00', zh: '星期日 09:00' },
+  cancel: { en: 'Cancel', bm: 'Batal', zh: '取消' },
+  chainTitle: { en: 'No check-in yet today', bm: 'Belum lapor diri hari ini', zh: '今天还没报平安' },
+  chainSub: {
+    en: 'We are asking your Circle, one at a time.',
+    bm: 'Kami sedang bertanya Bulatan anda, seorang demi seorang.',
+    zh: '我们正逐一询问你的关怀圈。',
+  },
+  contactCheckedTitle: { en: '{name} checked on you at {time}', bm: '{name} melawat anda pada {time}', zh: '{name} 在 {time} 来看过你' },
+  contactCheckedSub: {
+    en: "Tap I'm okay when you are ready.",
+    bm: 'Tekan Saya okey bila anda sedia.',
+    zh: '准备好时请点"我很好"。',
+  },
 } satisfies Record<string, Str>
 
 export type StrKey = keyof typeof S

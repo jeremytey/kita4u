@@ -1,5 +1,6 @@
 import type { LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
+import { useT } from '../strings'
 
 type Tone = 'accent' | 'done' | 'wait' | 'quiet' | 'warn' | 'alert'
 
@@ -52,5 +53,15 @@ export function ActionCard({
         {sub && <span className="text-body text-ink-soft">{sub}</span>}
       </span>
     </button>
+  )
+}
+
+// Shown next to every simulated number or time.
+export function SimTag() {
+  const t = useT()
+  return (
+    <span className="inline-flex rounded-full bg-quiet-tint px-2.5 py-0.5 align-middle text-small font-bold tracking-wide text-quiet">
+      {t('simulated')}
+    </span>
   )
 }

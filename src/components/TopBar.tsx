@@ -9,22 +9,27 @@ const LANGS: { id: Lang; label: string }[] = [
   { id: 'zh', label: '中文' },
 ]
 
+// One even pill: three equal 64px buttons. The selected one gets an inset fill of the same size.
 function LangToggle() {
   const { lang, setLang } = useLang()
   const t = useT()
   return (
-    <div role="group" aria-label={t('language')} className="flex gap-1 rounded-2xl bg-surface shadow-card">
+    <div role="group" aria-label={t('language')} className="grid h-16 shrink-0 grid-cols-3 rounded-full bg-surface shadow-card">
       {LANGS.map((l) => (
         <button
           key={l.id}
           type="button"
           aria-pressed={lang === l.id}
           onClick={() => setLang(l.id)}
-          className={`min-h-16 min-w-14 rounded-2xl px-2 text-small font-bold transition-colors duration-200 ${
-            lang === l.id ? 'bg-accent text-ink' : 'text-ink-soft'
-          }`}
+          className="flex size-16 items-center justify-center rounded-full"
         >
-          {l.label}
+          <span
+            className={`flex h-12 w-14 items-center justify-center rounded-full text-small font-bold transition-colors duration-200 ${
+              lang === l.id ? 'bg-accent text-ink' : 'text-ink-soft'
+            }`}
+          >
+            {l.label}
+          </span>
         </button>
       ))}
     </div>
@@ -40,13 +45,13 @@ export default function TopBar({ onBack, left }: { onBack?: () => void; left?: R
         <button
           type="button"
           onClick={onBack}
-          className="flex min-h-16 items-center gap-2 rounded-2xl bg-surface pr-5 pl-3 text-body font-bold shadow-card"
+          className="flex min-h-16 items-center gap-2 rounded-full bg-surface pr-5 pl-4 text-body font-bold whitespace-nowrap shadow-card"
         >
           <ArrowLeft size={28} strokeWidth={2.4} aria-hidden />
           {t('back')}
         </button>
       ) : (
-        <div className="flex min-h-16 items-center">{left}</div>
+        <div className="flex min-h-16 min-w-0 items-center whitespace-nowrap">{left}</div>
       )}
       <LangToggle />
     </header>
