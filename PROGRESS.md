@@ -5,7 +5,7 @@
 - [x] 1 Foundation
 - [x] 2 Landing and Home
 - [x] 3 Sample message helper
-- [ ] 4 Engine, ChainBar, Demo panel
+- [x] 4 Engine, ChainBar, Demo panel
 - [ ] 5 Missed check-in journey
 - [ ] 6 Help journey
 - [ ] 7 Family and Community views
@@ -35,6 +35,12 @@
 - Phase 3: sample senders are fictional and marked "(sample)". A SIMULATED tag sits by the sample list and by the DEMO RESULT tag. Read aloud reads the verdict plus the explanation. While a voice is still loading the button is disabled with "Looking for a voice…"; "Voice not available on this device" only shows once voices have loaded (or after 2s with none) and no en / ms / zh voice matches.
 - Phase 3: the 1.5s "Reading…" pause uses a UI setTimeout. The engine stays timer-free.
 - Phase 5 check: "Good afternoon" / "Selamat petang" is longer than "Good morning"; re-check the 360px top bar then.
+- Phase 4: engine.ts / engine.selftest.ts untouched (written in phase 0). Built store.ts, ChainBar, DemoPanel.
+- Phase 4 store: localStorage key care-circle-state holds { events, now, behaviours }. Reset = no events, Fri 08:00, all "No reply".
+- Phase 4 presets: Normal = 3 past days of history (check-ins + one finished grocery help) at Fri 08:00. Missed check-in = no events, Fri 09:00, and behaviours set to the demo story (Mei: checks but never reports, Daniel: no reply, Township: checks and confirms OK). Help request = history + check-in 08:05, clock 10:00, lands on Home until phase 6. Sample message = history, 08:30, opens What is this?.
+- Phase 4 Demo panel: clock + +1h / +2h on the main row; +24h and Reset under "Advanced". Floating dark "Demo · Fri 09:00" chip on every screen except Landing; Landing's Demo mode button opens the panel.
+- Phase 4 ChainBar: the "Human aware" tag shows only once a contact has been passed on with no outcome (otherwise it repeats "Mei is checking"). Line between steps is solid once the next step is reached, dotted before.
+- Phase 4: Neighbour / Family / Community roles show a temporary preview (name + ChainBar) until phases 5 and 7. MESSAGE_CHECKED and ASKED_CIRCLE are now recorded.
 
 ## Notes for later phases (from Jeremy)
 - Phase 4: engine.ts and engine.selftest.ts already exist from phase 0 and pass. Do not rewrite them. Phase 4 builds only store.ts (events, simulated clock, behaviours in context, localStorage, reset), ChainBar and DemoPanel with presets.
@@ -46,4 +52,4 @@
 - Decision: keep the engine. A resident check-in closes a needsHelp case. Show it as "Resolved by Aminah's check-in" and keep the Needs help entry in the log.
 
 ## Next
-Phase 4: store, ChainBar, Demo panel (engine already exists, do not rewrite).
+Phase 5: wire the missed check-in journey (Home status from deriveChain, ContactCard).
