@@ -114,6 +114,27 @@ test('everyone no reply ends unresolved', () => {
   assert.ok(r2.steps.slice(1).every((s) => s.state === 'noReply'))
 })
 
+test('home shows unresolved, not the running chain', () => {
+  const r = deriveChain([], at(18), all('noReply'))
+  assert.equal(r.status, 'unresolved')
+  assert.equal(homeStatus(r), 'unresolved')
+})
+
+test('home shows needs help', () => {
+  const events: AppEvent[] = [
+    { type: 'HUMAN_AWARE', time: at(11, 20), actor: 'neighbour' },
+    { type: 'NEEDS_HELP', time: at(11, 35), actor: 'neighbour' },
+  ]
+  const r = deriveChain(events, at(12), all('noReply'))
+  assert.equal(homeStatus(r), 'needsHelp')
+  // A resident check-in closes it: resolved by resident, Home shows checked in.
+  const r2 = deriveChain([...events, { type: 'CHECK_IN', time: at(12, 30), actor: 'resident' }], at(13), all('noReply'))
+  assert.equal(r2.status, 'resolved')
+  assert.equal(r2.resolvedBy, 'resident')
+  assert.equal(homeStatus(r2), 'checkedIn')
+  assert.equal(r2.steps[1].outcome, 'needsHelp', 'the Needs help entry stays in the log')
+})
+
 test('last contact checks but never reports: unresolved', () => {
   const r = deriveChain([], at(20), all('neverReports'))
   assert.equal(r.status, 'unresolved')

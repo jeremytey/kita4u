@@ -6,7 +6,7 @@
 - [x] 2 Landing and Home
 - [x] 3 Sample message helper
 - [x] 4 Engine, ChainBar, Demo panel
-- [ ] 5 Missed check-in journey
+- [x] 5 Missed check-in journey
 - [ ] 6 Help journey
 - [ ] 7 Family and Community views
 - [ ] 8 Polish and audit
@@ -41,8 +41,15 @@
 - Phase 4 Demo panel: clock + +1h / +2h on the main row; +24h and Reset under "Advanced". Floating dark "Demo · Fri 09:00" chip on every screen except Landing; Landing's Demo mode button opens the panel.
 - Phase 4 ChainBar: the "Human aware" tag shows only once a contact has been passed on with no outcome (otherwise it repeats "Mei is checking"). Line between steps is solid once the next step is reached, dotted before.
 - Phase 4: Neighbour / Family / Community roles show a temporary preview (name + ChainBar) until phases 5 and 7. MESSAGE_CHECKED and ASKED_CIRCLE are now recorded.
+- Phase 5 engine/types change (mapping only): HomeStatus gained 'needsHelp' and 'unresolved'; homeStatus() returns them for chain.status needsHelp / unresolved before the reminder/chainRunning check. Escalation rules unchanged. Self-test now 16 cases.
+- Phase 5: ?status= / ?screen= previews and local Home status removed. Home reads the store directly (homeStatus(store.chain)), greeting follows the simulated hour.
+- Phase 5: store.addAt(type, actor, time). When a contact taps She's OK / Needs help after a *simulated* "I'll check", the UI first records that HUMAN_AWARE at its simulated time, so the real tap (which overrides behaviours) does not lose the "is checking" step.
+- Phase 5: ContactCard shows "If this is an emergency, call 999" only once Needs help has been tapped (CLAUDE.md: only in the Needs help state), not next to the Needs help button.
+- Phase 5: after a resident check-in that closed a case, Home's green box also shows the case tag (e.g. "Resolved by Aminah's check-in").
+- Phase 5: all three roles open their ContactCard for now; Family and Community get their own screens in phase 7.
+- Verified: story path ends Resolved at 15:00 (whole-hour steps cannot land on 15:30; checked 15:00 and 16:00). All No reply ends red Unresolved at 18:00 with "We have not reached anyone in your Circle yet."; I'm okay then closes it as "Resolved by Aminah's check-in".
 
-## Notes for later phases (from Jeremy)
+## Notes for later phases
 - Phase 4: engine.ts and engine.selftest.ts already exist from phase 0 and pass. Do not rewrite them. Phase 4 builds only store.ts (events, simulated clock, behaviours in context, localStorage, reset), ChainBar and DemoPanel with presets.
 - Missed check-in preset: clear events, set clock to Day 0 09:00. Main demo row has +1h and +2h only; +24h sits under an "Advanced" label.
 - needsHelp status shown everywhere: Home (calm text plus "If this is an emergency, call 999"), Family, Community (red tag, never Resolved).
@@ -52,4 +59,4 @@
 - Decision: keep the engine. A resident check-in closes a needsHelp case. Show it as "Resolved by Aminah's check-in" and keep the Needs help entry in the log.
 
 ## Next
-Phase 5: wire the missed check-in journey (Home status from deriveChain, ContactCard).
+Phase 6: help journey (NeedHelp screen, NeighbourHelp card).

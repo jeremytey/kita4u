@@ -241,6 +241,8 @@ export function homeStatus(chain: ChainResult): HomeStatus {
   if (chain.status === 'paused') return 'away'
   if (chain.checkedInAt !== undefined) return 'checkedIn'
   if (chain.status === 'resolved' && chain.resolvedBy !== 'resident') return 'contactChecked'
+  if (chain.status === 'needsHelp') return 'needsHelp'
+  if (chain.status === 'unresolved') return 'unresolved'
   if (chain.caseOpenedAt !== undefined && chain.status !== 'none') {
     const firstAlert = chain.steps[1].state !== 'waiting'
     return firstAlert ? 'chainRunning' : 'reminder'

@@ -66,6 +66,8 @@ function load(): State {
 interface Store extends State {
   chain: ChainResult
   add: (type: EventType, actor: Actor, meta?: AppEvent['meta']) => void
+  // Record a reply at an earlier SIMULATED time (used to keep a simulated "I'll check" when a real tap follows it).
+  addAt: (type: EventType, actor: Actor, time: number) => void
   advance: (minutes: number) => void
   setBehaviour: (c: Contact, b: Behaviours[Contact]) => void
   preset: (p: Preset) => void
@@ -90,6 +92,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       setState((s) => ({ ...s, events: [...s.events, { type, time: s.now, actor, ...(meta ? { meta } : {}) }] })),
     [],
   )
+  const addAt = useCallback(
+    (type: EventType, actor: Actor, time: number) =>
+      setState((s) => ({ ...s, events: [...s.events, { type, time, actor }] })),
+    [],
+  )
   const advance = useCallback((minutes: number) => setState((s) => ({ ...s, now: s.now + minutes })), [])
   const setBehaviour = useCallback(
     (c: Contact, b: Behaviours[Contact]) => setState((s) => ({ ...s, behaviours: { ...s.behaviours, [c]: b } })),
@@ -100,7 +107,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const chain = useMemo(() => deriveChain(state.events, state.now, state.behaviours), [state])
 
-  const value: Store = { ...state, chain, add, advance, setBehaviour, preset, reset }
+  const value: Store = { ...state, chain, add, addAt, advance, setBehaviour, preset, reset }
   return createElement(StoreContext.Provider, { value }, children)
 }
 

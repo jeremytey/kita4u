@@ -158,9 +158,10 @@ export function StatusTag({ chain }: { chain: ChainResult }) {
 }
 
 // Signature visual: You, Neighbour, Family, Community on one vertical line.
-export default function ChainBar({ chain, showStatus = true }: { chain: ChainResult; showStatus?: boolean }) {
+// bare: no card around it, for use inside another box.
+export default function ChainBar({ chain, showStatus = true, bare = false }: { chain: ChainResult; showStatus?: boolean; bare?: boolean }) {
   return (
-    <div className="rounded-[24px] bg-surface p-5 shadow-card">
+    <div className={bare ? '' : 'rounded-[24px] bg-surface p-5 shadow-card'}>
       {showStatus && (
         <div className="mb-5 flex flex-wrap items-center gap-2">
           <StatusTag chain={chain} />

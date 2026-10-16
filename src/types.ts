@@ -75,4 +75,12 @@ export interface ChainResult {
   derived: AppEvent[]
 }
 
-export type HomeStatus = 'normal' | 'checkedIn' | 'reminder' | 'chainRunning' | 'away' | 'contactChecked'
+export type HomeStatus =
+  | 'normal'
+  | 'checkedIn'
+  | 'reminder'
+  | 'chainRunning'
+  | 'away'
+  | 'contactChecked'
+  | 'needsHelp'
+  | 'unresolved'

@@ -112,6 +112,50 @@ export const S = {
     bm: 'Daniel akan lihat mesej ini dan maksudnya.',
     zh: 'Daniel 会看到这条信息和它的意思。',
   },
+  goodAfternoon: { en: 'Good afternoon', bm: 'Selamat petang', zh: '下午好' },
+  goodEvening: { en: 'Good evening', bm: 'Selamat malam', zh: '晚上好' },
+  call999: { en: 'If this is an emergency, call 999.', bm: 'Jika ini kecemasan, hubungi 999.', zh: '如属紧急情况，请拨打 999。' },
+  homeNeedsHelpTitle: { en: 'Your Circle has been told', bm: 'Bulatan anda sudah diberitahu', zh: '已通知你的关怀圈' },
+  homeNeedsHelpSub: {
+    en: '{name} asked everyone in your Circle to help you.',
+    bm: '{name} sudah minta semua dalam Bulatan anda untuk membantu.',
+    zh: '{name} 已请关怀圈里的每个人来帮你。',
+  },
+  homeUnresolvedTitle: {
+    en: 'We have not reached anyone in your Circle yet.',
+    bm: 'Kami belum dapat hubungi sesiapa dalam Bulatan anda.',
+    zh: '我们还没联系上你关怀圈里的任何人。',
+  },
+  homeUnresolvedSub: { en: "If you are okay, tap I'm okay.", bm: 'Jika anda okey, tekan Saya okey.', zh: '如果你平安，请点“我很好”。' },
+
+  // Contact card (Neighbour, Family, Community)
+  contactHi: { en: 'Hi {name}', bm: 'Hai {name}', zh: '{name}，你好' },
+  notAskedYet: { en: 'No one has asked you yet.', bm: 'Belum ada yang minta anda.', zh: '还没有人请你帮忙。' },
+  pleaseCheck: {
+    en: 'Please check on Mak Cik Aminah, Unit 12-3.',
+    bm: 'Sila tengok Mak Cik Aminah, Unit 12-3.',
+    zh: '请去看看 Mak Cik Aminah（12-3 单位）。',
+  },
+  noCheckInToday: { en: 'No check-in today.', bm: 'Tiada lapor diri hari ini.', zh: '今天没有报平安。' },
+  askedAtTime: { en: 'Asked at {time}', bm: 'Ditanya pada {time}', zh: '{time} 询问' },
+  illCheck: { en: "I'll check", bm: 'Saya akan tengok', zh: '我去看看' },
+  cantNow: { en: "Can't now", bm: 'Tak boleh sekarang', zh: '现在不行' },
+  whatDidYouFind: { en: 'You said you would check. What did you find?', bm: 'Anda kata akan tengok. Apa yang anda dapati?', zh: '你说会去看看。情况怎样？' },
+  shesOk: { en: "She's OK", bm: 'Dia okey', zh: '她平安' },
+  needsHelpBtn: { en: 'Needs help', bm: 'Perlukan bantuan', zh: '需要帮助' },
+  movedTo: { en: 'This case has moved to {name}.', bm: 'Kes ini sudah beralih kepada {name}.', zh: '此个案已转给 {name}。' },
+  caseResolved: { en: 'This case is resolved.', bm: 'Kes ini sudah selesai.', zh: '此个案已解决。' },
+  needsHelpInfo: {
+    en: '{name} found that Aminah needs help. Everyone in the Circle has been told.',
+    bm: '{name} dapati Aminah perlukan bantuan. Semua dalam Bulatan sudah diberitahu.',
+    zh: '{name} 发现 Aminah 需要帮助。关怀圈里的每个人都已收到通知。',
+  },
+  youReportedHelp: {
+    en: 'You said Aminah needs help. Everyone in the Circle has been told.',
+    bm: 'Anda kata Aminah perlukan bantuan. Semua dalam Bulatan sudah diberitahu.',
+    zh: '你说 Aminah 需要帮助。关怀圈里的每个人都已收到通知。',
+  },
+  noOneConfirmed: { en: 'No one has confirmed yet.', bm: 'Belum ada yang mengesahkan.', zh: '还没有人确认。' },
 
   // Chain bar
   stepYou: { en: 'You', bm: 'Anda', zh: '你' },
