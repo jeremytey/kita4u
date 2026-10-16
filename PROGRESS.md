@@ -10,6 +10,7 @@
 - [x] 6 Help journey
 - [x] 7 Family and Community views
 - [x] 8 Polish and audit
+- [x] 9 UI redesign (calm resident app, not a dashboard)
 
 ## Choices made
 - Engine (src/lib/engine.ts) and self-test were written early, during phase 0 while npm installed. They are committed in phase 0 and wired up in phase 4.
@@ -69,6 +70,17 @@
 - Phase 8: PWA manifest + 192/512 icons (ring on accent). No service worker. Demo chip label translated in 中文 (演示).
 - Phase 8 audit: automated check of 25 screens/states x EN/BM/中文 at 360, 375, 390 and 1280 wide: no text under 16px (smallest 17px), no tappable under 64px, every button named, no horizontal scroll, no top-bar overlap. Text/background pairs all at or above 4.5:1 (only ink is used on the orange accent).
 - Phase 8: lint shows only fast-refresh warnings for files that export helpers next to components (dev-only, harmless).
+
+## Phase 9: UI redesign
+engine.ts, types.ts, store.ts, speech.ts, samples.ts and engine.selftest.ts were not touched (git diff empty after every batch, self-test 16/16). No escalation rule, delay or event type changed.
+- 9A: --shadow-card is a 2px outline in a new --color-edge (#9a8570, 3.3:1 on the page, 3.5:1 on white; #dccfbf was only 1.4:1). --text-small 20px, new --text-hero 28px. One neutral avatar tint; mei/daniel/township colour tokens removed. New Ribbon (sticky, every screen incl. Landing and ?clean=1): "PROTOTYPE · SAMPLE DATA" and "SIMULATED TIME · {clock}", 16px, English except the day name, role="note". Per-time SIMULATED tags removed; kept on chain status pills, Demo panel clock, Demo reply, DEMO RESULT, Sample history, stagedNote. Presenter bar is one 64px "Demo controls" handle. PhoneFrame uses overflow-clip so the ribbon stays sticky on desktop. Secondary buttons use the edge ring.
+- 9B: Home = name, one status sentence (aria-live), HeroButton (120px; I'm okay / Checked in {time} done variant with aria-disabled and no disabled attribute / I'm back), I'm away under it in the reminder state only, two secondary buttons, Circle row, footer. Red box only for Needs help and Unresolved. No ChainBar on Home. src/lib/statusText.ts latestContact() (read-only). CircleStrip has no card, a visible "Your Circle" heading, Home only. Landing: prototype pill gone (ribbon covers it), Demo mode is quiet. Clean mode also gets pb-16 so the corner button never covers a button.
+- 9C: message result = DEMO RESULT tag, verdict box, Show / Hide message (aria-expanded), Ask Daniel, Read aloud, Done, I'm okay prompt. Speech bubble and CircleStrip removed. Picker preview text 20px (two lines kept: one line would not make the three cards fit either). Help confirm: no CircleStrip, doorstep note as one plain line. Suspicious border token #e07a2e -> #d16c25 (3.3:1). ContactCard only backfills HUMAN_AWARE when the "I'll check" came from a demo behaviour (a real I'll check was logged twice and marked Demo reply).
+- 9D: Family = "How is Mum?", one lead sentence (aria-live) from homeStatus + latestContact, WelfareSection, ChainBar only while a case exists, timeline with newest 3 lines and Show all / Show less (aria-expanded), plain week line, Sample history tag, privacy line. No CircleStrip. Lead never says the reminder was sent before reminderAt (09:15). Timeline skips a derived event that is already in the log (the demo backfill showed twice). ChainBar: dot pops and state lines slide in, keyed by state. Quiet BigButton has the edge ring.
+- 9 a11y: useDialog hook (src/lib/useDialog.ts) for the Demo panel and away sheet: focus in, Tab trapped, Escape closes, focus back to the opener (or the first button on the screen). The Demo controls handle stays mounted while the panel is open so focus can return to it. useReducedMotion turns off the hero tick pop and chain dot / line animations completely. html scroll-padding keeps keyboard focus clear of the ribbon and the handle. Avatar initial never below 20px.
+- 9 final audit: 29 screens/states x 360/375/390/1280 x EN/BM/中文 (348 checks): no text under 20px except the 16px ribbon, no tappable under 64px, every button named, no horizontal scroll, ribbon never over the top bar or hero, handle never over a button, every text/background pair 4.5:1 or better (lowest: Demo reply tag 4.89).
+- 9 strings removed (unused): prototypeTag, whatIsThisSub, needHelpSub, checkedInTitle, checkedInSub, reminderSub, chainSub, askQuestion. demoChip was replaced by demoControls.
+- 9: BM and 中文 for all new phase 9 strings are drafts. A native speaker should check them.
 
 ## Notes for later phases
 - Phase 4: engine.ts and engine.selftest.ts already exist from phase 0 and pass. Do not rewrite them. Phase 4 builds only store.ts (events, simulated clock, behaviours in context, localStorage, reset), ChainBar and DemoPanel with presets.

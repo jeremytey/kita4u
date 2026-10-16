@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import type { LucideIcon } from 'lucide-react'
 
 type Variant = 'primary' | 'done' | 'quiet'
@@ -25,6 +25,7 @@ export default function HeroButton({
   onClick?: () => void
 }) {
   const done = variant === 'done'
+  const still = useReducedMotion() // no tick pop when the OS asks for reduced motion
   return (
     <button
       type="button"
@@ -36,7 +37,7 @@ export default function HeroButton({
       <motion.span
         key={variant}
         className="shrink-0"
-        initial={done ? { scale: 0.6, opacity: 0 } : false}
+        initial={done && !still ? { scale: 0.6, opacity: 0 } : false}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.2, ease: 'easeOut' }}
       >

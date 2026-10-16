@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { Clock, RotateCcw, SlidersHorizontal, X } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { dayOf, formatTime } from '../lib/engine'
 import { useStore, type Preset } from '../lib/store'
+import { useDialog } from '../lib/useDialog'
 import { useT, type StrKey } from '../strings'
 import type { Behaviour, Contact, Role } from '../types'
 import { SimTag } from './Card'
@@ -90,16 +91,8 @@ export default function DemoPanel({
   const t = useT()
   const store = useStore()
   const clock = useClockLabel()
-  const closeRef = useRef<HTMLButtonElement>(null)
-
-  // Move focus into the panel; Escape closes it.
-  useEffect(() => {
-    if (!open) return
-    closeRef.current?.focus()
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [open, onClose])
+  const dialogRef = useRef<HTMLDivElement>(null)
+  useDialog(dialogRef, open, onClose) // focus in (on Close), Tab trapped, Escape closes, focus back to the opener
 
   return (
     <AnimatePresence>
@@ -113,6 +106,7 @@ export default function DemoPanel({
           onClick={onClose}
         >
           <motion.div
+            ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby="demo-title"
@@ -128,7 +122,6 @@ export default function DemoPanel({
                 {t('demoPanel')}
               </h2>
               <button
-                ref={closeRef}
                 type="button"
                 onClick={onClose}
                 aria-label={t('close')}

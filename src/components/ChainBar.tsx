@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import {
   AlertTriangle,
   Building2,
@@ -119,11 +119,13 @@ function Step({ step, chain, index, last, simulated }: { step: ChainStep; chain:
   const faded = step.state === 'notNeeded'
   const title = step.who === 'you' ? t('stepYou') : t(PEOPLE[step.who].name)
   const role = step.who === 'you' ? t('residentName') : t(step.who === 'neighbour' ? 'roleNeighbour' : step.who === 'family' ? 'roleFamily' : 'roleCommunity')
+  // Reduced motion: no fade, pop or slide at all. The words and icons carry the state.
+  const still = useReducedMotion()
 
   return (
     <motion.li
       className="relative grid grid-cols-[40px_1fr] gap-x-4 pb-6 last:pb-0"
-      initial={{ opacity: 0, y: 6 }}
+      initial={still ? false : { opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2, delay: index * 0.12 }}
     >
@@ -133,7 +135,16 @@ function Step({ step, chain, index, last, simulated }: { step: ChainStep; chain:
           className={`absolute top-10 bottom-0 left-[18px] w-1 rounded-full ${solid ? 'bg-ink-soft/40' : 'border-l-4 border-dotted border-line'}`}
         />
       )}
-      <StepDot dot={dotFor(step)} />
+      {/* Keyed by the dot, so a state change pops the new dot in. */}
+      <motion.span
+        key={dotFor(step)}
+        className="relative z-10 size-10"
+        initial={still ? false : { scale: 0.6, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.2, ease: 'easeOut' }}
+      >
+        <StepDot dot={dotFor(step)} />
+      </motion.span>
       <div className="flex flex-col pt-1">
         <p className={`flex flex-wrap items-center gap-x-2 text-body font-bold ${faded ? 'text-quiet' : 'text-ink'}`}>
           <Icon size={22} strokeWidth={2.2} aria-hidden className="shrink-0" />
@@ -141,11 +152,19 @@ function Step({ step, chain, index, last, simulated }: { step: ChainStep; chain:
           <span className="text-small font-normal text-ink-soft">{role}</span>
           {simulated && <DemoReplyTag />}
         </p>
-        {lines.map((l, i) => (
-          <p key={i} className={`text-small font-bold ${l.tone}`}>
-            {l.text}
-          </p>
-        ))}
+        {/* Keyed by the state, so new lines slide in. */}
+        <motion.div
+          key={`${step.state}-${step.outcome ?? ''}`}
+          initial={still ? false : { x: -8, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.2 }}
+        >
+          {lines.map((l, i) => (
+            <p key={i} className={`text-small font-bold ${l.tone}`}>
+              {l.text}
+            </p>
+          ))}
+        </motion.div>
         {/* After escalation, the earlier contact stays marked Human aware. */}
         {step.humanAware && step.outcome === 'noOutcome' && step.time !== undefined && (
           <p className="mt-1 self-start rounded-full bg-done-tint px-3 py-0.5 text-small font-bold text-done">

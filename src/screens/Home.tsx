@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { AlertTriangle, CalendarClock, CheckCircle2, HandHeart, Luggage, ScanSearch, Undo2, UserX } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useRef, useState, type ReactNode } from 'react'
 import BigButton from '../components/BigButton'
 import { DemoReplyTag } from '../components/Card'
 import { StatusTag } from '../components/ChainBar'
@@ -10,6 +10,7 @@ import TopBar from '../components/TopBar'
 import { DAY, dayOf, formatTime, homeStatus } from '../lib/engine'
 import { latestContact } from '../lib/statusText'
 import { simulatedContacts, useStore } from '../lib/store'
+import { useDialog } from '../lib/useDialog'
 import { useT, type StrKey } from '../strings'
 
 const fade = {
@@ -50,12 +51,7 @@ function AwaySheet({ now, onPick, onClose }: { now: number; onPick: (until: numb
   const t = useT()
   const opts = awayOptions(now)
   const sheetRef = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    sheetRef.current?.querySelector('button')?.focus()
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
+  useDialog(sheetRef, true, onClose) // focus in, Tab trapped, Escape closes, focus back to I'm away (or the hero)
   return (
     <motion.div
       className="absolute inset-0 z-20 flex items-end bg-ink/40"

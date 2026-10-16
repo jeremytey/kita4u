@@ -15,7 +15,7 @@ Persona: Mak Cik Aminah, Unit 12-3. Everything is fictional.
 - Say "resident". Do not say "senior" in the UI.
 - Never write "scam". Write "looks suspicious".
 - Never claim the app "prevents" emergencies.
-- Every simulated number or time must show the word SIMULATED nearby.
+- A top ribbon on every screen (Landing and ?clean=1 too) says PROTOTYPE · SAMPLE DATA and SIMULATED TIME · {clock}. There are no per-time SIMULATED tags. SIMULATED stays on chain status pills; the Demo reply label, the DEMO RESULT · SAMPLE MESSAGE tag and the Sample history tag also stay.
 - Never imply a real township, guardhouse, management team or neighbour agreed to anything.
 - "Not an emergency service" goes in the Home footer. "If this is an emergency, call 999" appears only in the Needs help state.
 - No live location tracking. Say so on the Family screen.
@@ -45,14 +45,17 @@ All times are SIMULATED. Delays are demo settings, not validated policy.
 ## Chain bar (signature visual)
 Vertical line, four steps: You, Neighbour, Family, Community. Each step has an icon, label and time.
 States: Waiting (empty grey circle), Asked (amber dot, "Asked 11:15"), No reply (grey dot with minus icon, "No reply 13:15"), Responded (green tick, "Mei is checking 11:30"; if no outcome later, add "No outcome 12:30"), Not needed (faded).
-Used on Home (chain running), Family and Community screens.
+Used on Family and Community only. Never on resident Home: the resident gets one plain sentence instead.
 
 ## Screens
 Landing, Home (states: normal, checked in, reminder, chain running, away, contact checked), What is this? (choose, reading, result, sent), I need help (pick, confirm, status, done), Contact welfare card, Neighbour help card, Family timeline, Community case card (thin: no charts), Demo panel.
 Roles: Resident, Neighbour, Family, Community, switched from the demo panel.
+Home layout, top to bottom: status sentence, one hero "I'm okay" button (I'm back while away, Checked in {time} when done), two full-width secondary buttons (What is this?, I need help), the Circle row, footer. Red box only for Needs help and Unresolved.
+CircleStrip (the Circle row) is on Home only.
+Demo bar: one full-width "Demo controls" handle at the bottom. The clock lives in the ribbon.
 
 ## Message helper (simulated)
-Three predefined samples: Suspicious SMS, Electricity bill, Township notice. Each has a fictional message, a two-sentence explanation, and a suspicious flag. Show a thumbnail drawn in HTML/CSS (a message card), not an image file. No Take photo button. Always show the tag DEMO RESULT · SAMPLE MESSAGE. Buttons: Read aloud, Ask My Circle, Done. Under the buttons: "While you're here: tap I'm okay."
+Three predefined samples: Suspicious SMS, Electricity bill, Township notice. Each has a fictional message, a two-sentence explanation, and a suspicious flag. Show a thumbnail drawn in HTML/CSS (a message card), not an image file. No Take photo button. Always show the tag DEMO RESULT · SAMPLE MESSAGE. Buttons: Ask Daniel, Read aloud, Done. The message itself sits behind a Show message toggle. Under the buttons: "While you're here: tap I'm okay."
 Read aloud uses window.speechSynthesis. If no voice exists for the chosen language, disable the button and show "Voice not available on this device".
 
 ## Design

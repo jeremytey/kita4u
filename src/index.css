@@ -56,6 +56,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Keyboard focus never scrolls under the sticky ribbon or the Demo controls handle. */
+html {
+  scroll-padding-top: 80px;
+  scroll-padding-bottom: 80px;
+}
+
 /* Body text is 20px. Kept off <html> so rem (and Tailwind sizes) stay 16px-based. */
 body {
   font-size: var(--text-body);

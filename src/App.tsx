@@ -70,7 +70,7 @@ export default function App() {
         {screen === 'community' && <Community />}
       </div>
 
-      {screen !== 'landing' && !panel && <DemoBar clean={CLEAN} onOpen={() => setPanel(true)} />}
+      {screen !== 'landing' && <DemoBar clean={CLEAN} onOpen={() => setPanel(true)} />}
       <DemoPanel open={panel} role={role} onClose={closePanel} onRole={pickRole} onPreset={pickPreset} />
     </PhoneFrame>
   )

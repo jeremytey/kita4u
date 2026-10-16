@@ -13,7 +13,7 @@ export function Avatar({ who, size = 56 }: { who: Contact; size?: number }) {
   return (
     <span
       aria-hidden
-      style={{ width: size, height: size, fontSize: size * 0.42 }}
+      style={{ width: size, height: size, fontSize: Math.max(20, size * 0.42) }}
       className={`flex shrink-0 items-center justify-center rounded-full font-bold ${p.colour}`}
     >
       {p.initial}

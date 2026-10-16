@@ -1,9 +1,12 @@
-import { AlertTriangle, CalendarDays, ShieldCheck } from 'lucide-react'
+import { AlertTriangle, ChevronDown, ChevronUp, ShieldCheck } from 'lucide-react'
+import { useState } from 'react'
+import BigButton from '../components/BigButton'
 import ChainBar from '../components/ChainBar'
 import { DemoReplyTag } from '../components/Card'
-import CircleStrip, { PEOPLE } from '../components/CircleStrip'
-import { DAY, dayOf, formatTime } from '../lib/engine'
+import { PEOPLE } from '../components/CircleStrip'
+import { DAY, dayOf, formatTime, homeStatus } from '../lib/engine'
 import { SAMPLES } from '../lib/samples'
+import { latestContact } from '../lib/statusText'
 import { useStore } from '../lib/store'
 import { useT, type StrKey } from '../strings'
 import type { AppEvent, ChainResult, Contact } from '../types'
@@ -24,6 +27,7 @@ interface Line {
 const RANK: Partial<Record<AppEvent['type'], number>> = { CANT_NOW: 1, NEEDS_HELP: 1, ALERTED: 2 }
 
 const MAX_LINES = 8
+const FIRST_LINES = 3 // newest lines shown before Show all
 const isContact = (a: string): a is Contact => a in PEOPLE
 
 // Plain sentences from the real event log, the engine's derived events and the chain. Nothing in the future.
@@ -52,7 +56,9 @@ function buildTimeline(events: AppEvent[], chain: ChainResult, now: number, t: T
     }
   }
 
-  for (const e of [...events, ...chain.derived]) {
+  // The engine also lists a logged demo backfill in derived. Show it once.
+  const logged = (d: AppEvent) => events.some((e) => e.type === d.type && e.time === d.time && e.actor === d.actor)
+  for (const e of [...events, ...chain.derived.filter((d) => !logged(d))]) {
     rank = RANK[e.type] ?? 3
     simulated = Boolean(e.meta?.simulated)
     switch (e.type) {
@@ -122,7 +128,11 @@ const TONE: Record<Tone, string> = { ink: 'text-ink', done: 'text-done', alert: 
 export default function Family() {
   const t = useT()
   const { events, chain, now } = useStore()
+  const [all, setAll] = useState(false)
   const lines = buildTimeline(events, chain, now, t)
+  const shown = all ? lines : lines.slice(0, FIRST_LINES)
+  const status = homeStatus(chain)
+  const caseExists = chain.caseOpenedAt !== undefined && chain.status !== 'none'
 
   const stamp = (time: number) => {
     const d = dayOf(time)
@@ -136,33 +146,69 @@ export default function Family() {
   const helps = week.filter((e) => e.type === 'HELP_REQUESTED').length
   const sampleHistory = week.some((e) => e.meta?.seed)
 
+  // One lead sentence, read from the chain. Screens never change it.
+  const name = (c?: string) => (c && isContact(c) ? t(PEOPLE[c].name) : '')
+  const lead = (() => {
+    switch (status) {
+      case 'checkedIn':
+        return t('fMumOk', { time: formatTime(chain.checkedInAt ?? now) })
+      case 'normal':
+        return t('fNoCheckIn')
+      case 'reminder':
+        // The case opens at 09:00 but the reminder only goes out at 09:15: never say it was sent before then.
+        return chain.reminderAt !== undefined && chain.reminderAt <= now ? t('fReminder') : t('fNoCheckIn')
+      case 'chainRunning': {
+        const latest = latestContact(chain)
+        if (!latest) return t('fNoCheckIn')
+        return t(latest.kind === 'asked' ? 'fAsked' : 'fChecking', { name: name(latest.who) })
+      }
+      case 'contactChecked':
+        return t('fChecked', { name: name(chain.resolvedBy), time: formatTime(chain.resolvedAt ?? now) })
+      case 'needsHelp':
+        return t('fNeedsHelp', { name: name(chain.steps.find((s) => s.outcome === 'needsHelp')?.who) })
+      case 'unresolved':
+        return t('fUnresolved')
+      case 'away': {
+        const until = chain.awayUntil ?? now
+        return t('fAway', { when: t(dayOf(until) === dayOf(now) + 1 ? 'whenTomorrow' : 'whenSunday') })
+      }
+    }
+  })()
+
   return (
     <>
       <ContactTopBar who="family" />
       <main className="flex flex-1 flex-col gap-6 px-4 pt-4 pb-8">
-        <h1 className="text-greet font-bold">{t('familyTitle')}</h1>
+        <div className="flex flex-col gap-3">
+          <h1 className="text-title font-bold text-ink-soft">{t('familyTitle')}</h1>
+          <p className="text-greet font-bold" aria-live="polite">
+            {lead}
+          </p>
+        </div>
 
         <WelfareSection who="family" />
 
-        <div className="flex flex-col gap-3">
-          <ChainBar chain={chain} />
-          {chain.status === 'needsHelp' && (
-            <p className="flex items-center gap-3 rounded-[24px] bg-alert-tint p-4 text-body font-bold text-alert">
-              <AlertTriangle size={26} className="shrink-0" aria-hidden />
-              {t('call999')}
-            </p>
-          )}
-        </div>
+        {caseExists && (
+          <div className="flex flex-col gap-3">
+            <ChainBar chain={chain} />
+            {chain.status === 'needsHelp' && (
+              <p className="flex items-center gap-3 rounded-[24px] bg-alert-tint p-4 text-body font-bold text-alert">
+                <AlertTriangle size={26} className="shrink-0" aria-hidden />
+                {t('call999')}
+              </p>
+            )}
+          </div>
+        )}
 
-        <section className="rounded-[24px] bg-surface p-5 shadow-card" aria-labelledby="tl-title">
-          <h2 id="tl-title" className="mb-4 text-title font-bold">
+        <section className="flex flex-col gap-4 rounded-[24px] bg-surface p-5 shadow-card" aria-labelledby="tl-title">
+          <h2 id="tl-title" className="text-title font-bold">
             {t('timelineTitle')}
           </h2>
           {lines.length === 0 ? (
             <p className="text-body text-ink-soft">{t('timelineEmpty')}</p>
           ) : (
-            <ol className="flex flex-col gap-3">
-              {lines.map((l, i) => (
+            <ol id="tl-lines" className="flex flex-col gap-3">
+              {shown.map((l, i) => (
                 <li key={i} className="flex flex-col border-l-4 border-line pl-3">
                   <span className="flex flex-wrap items-center gap-2 text-small text-ink-soft">
                     {stamp(l.time)}
@@ -173,24 +219,24 @@ export default function Family() {
               ))}
             </ol>
           )}
+          {lines.length > FIRST_LINES && (
+            <BigButton variant="quiet" icon={all ? ChevronUp : ChevronDown} expanded={all} onClick={() => setAll((v) => !v)}>
+              {all ? t('showLess') : t('showAll')}
+            </BigButton>
+          )}
         </section>
 
-        <section className="flex flex-col gap-2 rounded-[24px] bg-surface p-5 shadow-card">
-          <p className="flex items-start gap-3 text-body font-bold">
-            <CalendarDays size={26} className="mt-0.5 shrink-0 text-accent-ink" aria-hidden />
+        <div className="flex flex-col items-start gap-2">
+          <p className="text-small text-ink-soft">
             {t('thisWeek', {
               c: t(checkIns === 1 ? 'wkCheckIn' : 'wkCheckIns', { n: checkIns }),
               h: t(helps === 1 ? 'wkHelp' : 'wkHelps', { n: helps }),
             })}
           </p>
           {sampleHistory && (
-            <p>
-              <span className="rounded-full bg-quiet-tint px-3 py-1 text-small font-bold text-quiet">{t('sampleHistory')}</span>
-            </p>
+            <span className="rounded-full bg-quiet-tint px-3 py-1 text-small font-bold text-quiet">{t('sampleHistory')}</span>
           )}
-        </section>
-
-        <CircleStrip />
+        </div>
 
         <p className="flex items-start gap-3 text-body text-ink-soft">
           <ShieldCheck size={26} className="mt-0.5 shrink-0 text-done" aria-hidden />
