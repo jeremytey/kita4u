@@ -1,8 +1,8 @@
-import { AlertTriangle, ChevronDown, ChevronUp, MessageSquareText, ShieldCheck } from 'lucide-react'
+import { AlertTriangle, BellRing, ChevronDown, ChevronUp, MessageSquareText, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'
 import BigButton from '../components/BigButton'
 import ChainBar from '../components/ChainBar'
-import { DemoReplyTag, IconTile } from '../components/Card'
+import { DemoReplyTag, Eyebrow, IconTile } from '../components/Card'
 import { PEOPLE } from '../components/CircleStrip'
 import { DAY, dayOf, formatTime, homeStatus } from '../lib/engine'
 import { SAMPLES, type Sample } from '../lib/samples'
@@ -226,7 +226,18 @@ export default function Family() {
 
         {caseExists && (
           <div className="flex flex-col gap-3">
-            <ChainBar chain={chain} />
+            <section aria-labelledby="chain-title" className="flex flex-col gap-5 rounded-[24px] bg-surface p-5 shadow-card">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex flex-col gap-1">
+                  <Eyebrow>{t('noticeChain')}</Eyebrow>
+                  <h2 id="chain-title" className="text-title font-bold">
+                    {t('whoKnows')}
+                  </h2>
+                </div>
+                <BellRing size={28} strokeWidth={2.4} className="mt-1 shrink-0 text-ink-soft" aria-hidden />
+              </div>
+              <ChainBar chain={chain} bare />
+            </section>
             {chain.status === 'needsHelp' && (
               <p className="flex items-center gap-3 rounded-[24px] bg-alert-tint p-4 text-body font-bold text-alert">
                 <AlertTriangle size={26} className="shrink-0" aria-hidden />
@@ -245,14 +256,15 @@ export default function Family() {
           {lines.length === 0 ? (
             <p className="text-body text-ink-soft">{t('timelineEmpty')}</p>
           ) : (
-            <ol id="tl-lines" className="flex flex-col gap-3">
+            // Time column is as wide as its longest entry ("Sat 09:00"), shared by every row through the subgrid.
+            <ol id="tl-lines" className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-3">
               {shown.map((l, i) => (
-                <li key={i} className="flex flex-col border-l-4 border-line pl-3">
-                  <span className="flex flex-wrap items-center gap-2 text-small text-ink-soft">
-                    {stamp(l.time)}
+                <li key={i} className="col-span-2 grid grid-cols-subgrid border-t-2 border-line pt-3 first:border-t-0 first:pt-0">
+                  <span className="text-small whitespace-nowrap text-ink-soft tabular-nums">{stamp(l.time)}</span>
+                  <span className="flex flex-col items-start gap-1">
+                    <span className={`text-body font-bold ${TONE[l.tone]}`}>{l.text}</span>
                     {l.simulated && <DemoReplyTag />}
                   </span>
-                  <span className={`text-body font-bold ${TONE[l.tone]}`}>{l.text}</span>
                 </li>
               ))}
             </ol>

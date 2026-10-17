@@ -166,6 +166,17 @@ export const S = {
     zh: '你说 Aminah 需要帮助。关怀圈里的每个人都已收到通知。',
   },
   noOneConfirmed: { en: 'No one has confirmed yet.', bm: 'Belum ada yang mengesahkan.', zh: '还没有人确认。' },
+  // Phase 11 role views. BM and 中文 are drafts.
+  neighbourView: { en: 'Neighbour view', bm: 'Paparan jiran', zh: '邻居视图' },
+  communityView: { en: 'Community view', bm: 'Paparan komuniti', zh: '社区视图' },
+  pillPleaseCheck: { en: 'Please check', bm: 'Sila tengok', zh: '请去看看' },
+  canYouCheck: { en: 'Can you check on Aminah?', bm: 'Boleh anda tengok Aminah?', zh: '你能去看看 Aminah 吗？' },
+  circleUpdated: { en: 'Circle updated', bm: 'Bulatan dikemas kini', zh: '关怀圈已更新' },
+  thankYouName: { en: 'Thank you, {name}.', bm: 'Terima kasih, {name}.', zh: '谢谢你，{name}。' },
+  everyoneAlerted: { en: 'Everyone alerted', bm: 'Semua telah dimaklumkan', zh: '已通知所有人' },
+  forAminah: { en: 'For Aminah', bm: 'Untuk Aminah', zh: '给 Aminah' },
+  noticeChain: { en: 'Notice chain', bm: 'Rantaian pemberitahuan', zh: '关注链' },
+  whoKnows: { en: 'Who knows?', bm: 'Siapa tahu?', zh: '谁知道？' },
 
   // I need help (favour from the neighbour)
   smallFavour: { en: 'Small favour', bm: 'Pertolongan kecil', zh: '小帮忙' },

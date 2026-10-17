@@ -39,9 +39,14 @@ export default function DemoChat() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-center gap-3">
-        <Avatar who="neighbour" size={44} />
-        <h1 className="text-title font-bold">{t('mei')}</h1>
+      <div className="flex flex-col items-start gap-3">
+        <div className="flex items-center gap-3">
+          <Avatar who="neighbour" size={58} />
+          <div className="flex flex-col">
+            <h1 className="text-title leading-tight font-bold">{t('mei')}</h1>
+            <p className="text-small text-ink-soft">{t('roleNeighbour')}</p>
+          </div>
+        </div>
         <span className="rounded-full bg-quiet-tint px-3 py-1 text-small font-bold text-quiet">{t('chatTag')}</span>
       </div>
 
@@ -57,7 +62,7 @@ export default function DemoChat() {
               className={`flex max-w-[85%] flex-col gap-1 ${mine ? 'items-end self-end' : 'items-start self-start'}`}
             >
               <p
-                className={`rounded-2xl px-3 py-2 text-body ${
+                className={`rounded-[20px] px-4 py-3 text-body ${
                   mine ? 'rounded-tr-md bg-accent-tint' : 'rounded-tl-md bg-quiet-tint'
                 }`}
               >

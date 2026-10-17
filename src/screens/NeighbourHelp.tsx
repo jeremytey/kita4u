@@ -1,6 +1,6 @@
-import { Check, CheckCircle2, Heart, Info, X } from 'lucide-react'
+import { Check, CheckCircle2, Heart, Info, ShoppingBag, X } from 'lucide-react'
 import BigButton from '../components/BigButton'
-import { Card } from '../components/Card'
+import { Eyebrow, IconTile } from '../components/Card'
 import { formatTime } from '../lib/engine'
 import { useStore } from '../lib/store'
 import { useT } from '../strings'
@@ -12,21 +12,28 @@ export default function NeighbourHelp() {
   const { events, now, add } = useStore()
   const help = currentHelp(events, now)
   if (!help) return null
-  const Icon = TASKS[help.task].icon
+  const Icon = help.task === 'groceries' ? ShoppingBag : TASKS[help.task].icon
   const meta = { task: help.task }
 
   return (
-    <section className="flex flex-col gap-4">
-      <Card className="flex flex-col gap-3">
-        <p className="flex items-start gap-3 text-title font-bold">
-          <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent-tint">
-            <Icon size={30} strokeWidth={2.2} aria-hidden />
-          </span>
-          <span className="pt-2">{t('neighbourAsk', { task: t(TASKS[help.task].phrase) })}</span>
-        </p>
-        <p className="text-small text-ink-soft">{formatTime(help.requestedAt)}</p>
-        <p className="text-body">{t('doorstepOnly')}</p>
-      </Card>
+    // A separate card below the welfare card. A favour never changes the check-in.
+    <section
+      aria-labelledby="favour-title"
+      className="flex flex-col gap-4 rounded-[24px] border-2 border-edge bg-surface p-5 shadow-[0_4px_0_rgba(154,133,112,0.14)]"
+    >
+      <div className="flex items-start gap-4">
+        <IconTile icon={Icon} tone="done" />
+        <div className="flex min-w-0 flex-col gap-1">
+          <Eyebrow>{t('smallFavour')}</Eyebrow>
+          <h2 id="favour-title" className="text-title font-bold">
+            {t('neighbourAsk', { task: t(TASKS[help.task].phrase) })}
+          </h2>
+          <p className="text-body text-ink-soft">
+            {t('forAminah')} · {formatTime(help.requestedAt)}
+          </p>
+        </div>
+      </div>
+      <p className="text-body">{t('doorstepOnly')}</p>
 
       {help.acceptedAt === undefined && help.declinedAt === undefined && (
         <div className="flex flex-col gap-3">

@@ -1,47 +1,57 @@
-import { HeartHandshake, Info, ShieldAlert } from 'lucide-react'
+import { Bell, BellRing, Building2, Clock3, HeartHandshake, Info, PackageCheck, type LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { Card, DemoReplyTag, SimTag } from '../components/Card'
+import { DemoReplyTag, Eyebrow, IconTile, SimTag } from '../components/Card'
 import { StatusTag, StepDot, dotFor } from '../components/ChainBar'
-import { PEOPLE } from '../components/CircleStrip'
+import { Avatar, PEOPLE } from '../components/CircleStrip'
 import { formatTime } from '../lib/engine'
 import { simulatedContacts, useStore } from '../lib/store'
 import { useT, type StrKey } from '../strings'
-import type { ChainStep } from '../types'
+import type { CaseStatus, ChainStep, Contact } from '../types'
 import { ContactTopBar, WelfareSection } from './ContactCard'
 import { currentHelp, TASKS } from './NeedHelp'
 
-function CaseCard({ icon: Icon, title, children }: { icon: typeof Info; title: string; children: ReactNode }) {
-  const t = useT()
+// Left edge colour follows the case: amber while open, red for Unresolved and Needs help, green when resolved, grey when paused.
+const EDGE: Record<CaseStatus, string> = {
+  none: 'border-l-quiet',
+  open: 'border-l-wait-dot',
+  beingChecked: 'border-l-wait-dot',
+  resolved: 'border-l-done-dot',
+  unresolved: 'border-l-alert',
+  needsHelp: 'border-l-alert',
+  paused: 'border-l-quiet',
+}
+
+// One row per contact, read from the chain: picture, name and role, what happened, and the same dot as the chain bar.
+function Row({ lead, name, role, state, dot, simulated }: { lead: ReactNode; name: string; role?: string; state: string; dot: ReactNode; simulated?: boolean }) {
   return (
-    <Card className="flex flex-col gap-4">
-      <div className="flex items-center gap-4">
-        <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-accent-tint">
-          <Icon size={30} strokeWidth={2.2} aria-hidden />
+    <li className="grid grid-cols-[48px_1fr_auto] items-center gap-3 border-t-2 border-line pt-3">
+      <span className="flex justify-center">{lead}</span>
+      <span className="flex min-w-0 flex-col">
+        <span className="flex flex-wrap items-center gap-x-2 text-body leading-tight font-bold">
+          {name}
+          {role && <span className="text-small font-normal text-ink-soft">{role}</span>}
         </span>
-        <div>
-          <h2 className="text-title font-bold">{title}</h2>
-          <p className="text-body text-ink-soft">
-            {t('residentName')}, {t('unit')}
-          </p>
-        </div>
-      </div>
-      {children}
-    </Card>
+        <span className="text-small font-bold text-ink-soft">{state}</span>
+        {simulated && (
+          <span className="mt-1">
+            <DemoReplyTag />
+          </span>
+        )}
+      </span>
+      {dot}
+    </li>
   )
 }
 
-function Row({ dot, label, state, simulated }: { dot: ReactNode; label: string; state: string; simulated?: boolean }) {
+function CaseHeader({ icon, tone, title, children }: { icon: LucideIcon; tone: 'wait' | 'done' | 'accent'; title: ReactNode; children?: ReactNode }) {
   return (
-    <li className="flex items-center gap-3">
-      {dot}
-      <span className="flex flex-col">
-        <span className="flex flex-wrap items-center gap-2 text-body font-bold">
-          {label}
-          {simulated && <DemoReplyTag />}
-        </span>
-        <span className="text-small font-bold text-ink-soft">{state}</span>
-      </span>
-    </li>
+    <div className="flex items-start gap-4">
+      <IconTile icon={icon} tone={tone} />
+      <div className="flex min-w-0 flex-col items-start gap-2">
+        {children}
+        <h2 className="text-title font-bold">{title}</h2>
+      </div>
+    </div>
   )
 }
 
@@ -81,45 +91,77 @@ export default function Community() {
     <>
       <ContactTopBar who="community" />
       <main className="flex flex-1 flex-col gap-6 px-4 pt-4 pb-8">
-        <h1 className="text-greet font-bold">{t('communityTitle')}</h1>
+        <div className="flex items-center gap-4">
+          <IconTile icon={Building2} tone="blue" size="lg" />
+          <div className="flex min-w-0 flex-col gap-1">
+            <Eyebrow>{t('communityView')}</Eyebrow>
+            <h1 className="text-greet font-bold">{t('communityTitle')}</h1>
+          </div>
+        </div>
 
         <WelfareSection who="community" />
 
         {welfare && (
-          <CaseCard icon={ShieldAlert} title={t('caseWelfare')}>
-            <div className="flex flex-wrap items-center gap-2">
-              <StatusTag chain={chain} />
-              <SimTag />
-            </div>
+          <section className={`flex flex-col gap-4 rounded-[24px] border-2 border-l-8 border-edge bg-surface p-4.5 ${EDGE[chain.status]}`}>
+            <CaseHeader
+              icon={BellRing}
+              tone="wait"
+              title={
+                <>
+                  {t('stepAminah')} · <span className="whitespace-nowrap">{t('unit')}</span>
+                </>
+              }
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                <StatusTag chain={chain} />
+                <SimTag />
+              </div>
+            </CaseHeader>
+            <p className="text-body font-bold text-ink-soft">{t('caseWelfare')}</p>
             <ol className="flex flex-col gap-3">
               {chain.reminderAt !== undefined && chain.reminderAt <= now && (
                 <Row
-                  dot={<StepDot dot="responded" />}
-                  label={t('stepReminder')}
+                  lead={
+                    <span className="flex size-[46px] items-center justify-center rounded-full bg-quiet-tint text-quiet">
+                      <Bell size={24} strokeWidth={2.4} aria-hidden />
+                    </span>
+                  }
+                  name={t('stepReminder')}
                   state={formatTime(chain.reminderAt)}
+                  dot={<StepDot dot="responded" />}
                 />
               )}
-              {chain.steps.slice(1).map((s) => (
-                <Row
-                  key={s.who}
-                  dot={<StepDot dot={dotFor(s)} />}
-                  label={`${t(PEOPLE[s.who as keyof typeof PEOPLE].name)}`}
-                  state={stepWord(s, t)}
-                  simulated={sim.has(s.who as keyof typeof PEOPLE)}
-                />
-              ))}
+              {chain.steps.slice(1).map((s) => {
+                const c = s.who as Contact
+                return (
+                  <Row
+                    key={c}
+                    lead={<Avatar who={c} size={46} />}
+                    name={t(PEOPLE[c].name)}
+                    role={t(PEOPLE[c].role)}
+                    state={stepWord(s, t)}
+                    dot={<StepDot dot={dotFor(s)} />}
+                    simulated={sim.has(c)}
+                  />
+                )
+              })}
             </ol>
             {firstAware !== undefined && (
               <p className="text-body font-bold text-done">{t('humanAware', { time: formatTime(firstAware) })}</p>
             )}
-          </CaseCard>
+          </section>
         )}
 
         {help && (
-          <CaseCard icon={HeartHandshake} title={t('caseHelp')}>
+          <section className="flex flex-col gap-3 rounded-[24px] border-2 border-line bg-surface p-4.5">
+            <CaseHeader
+              icon={help.doneAt !== undefined ? PackageCheck : HeartHandshake}
+              tone={help.doneAt !== undefined ? 'done' : 'accent'}
+              title={t('caseHelp')}
+            />
             <p className="text-body font-bold">{t(TASKS[help.task].title as StrKey)}</p>
             <p className="text-body text-ink-soft">{helpState}</p>
-          </CaseCard>
+          </section>
         )}
 
         {!welfare && !help && (
@@ -129,7 +171,10 @@ export default function Community() {
           </p>
         )}
 
-        <p className="text-small text-ink-soft">{t('stagedNote')}</p>
+        <p className="flex items-start gap-3 text-small text-ink-soft">
+          <Clock3 size={24} strokeWidth={2.4} className="mt-0.5 shrink-0" aria-hidden />
+          {t('stagedNote')}
+        </p>
       </main>
     </>
   )
