@@ -92,6 +92,8 @@ export const S = {
   },
   normalBox: { en: 'This looks like a normal message.', bm: 'Ini nampak seperti mesej biasa.', zh: '这看起来是一条普通信息。' },
   demoTag: same('DEMO RESULT · SAMPLE MESSAGE'),
+  askCardTitle: { en: 'Mum sent you a message', bm: 'Mak hantar mesej kepada anda', zh: '妈妈发了一条信息给你' },
+  askVerdictSus: { en: 'This looks suspicious.', bm: 'Ini nampak mencurigakan.', zh: '这看起来可疑。' },
   readAloud: { en: 'Read aloud', bm: 'Baca kuat', zh: '朗读' },
   stopReading: { en: 'Stop reading', bm: 'Berhenti baca', zh: '停止朗读' },
   voiceLoading: { en: 'Looking for a voice…', bm: 'Mencari suara…', zh: '正在寻找语音…' },

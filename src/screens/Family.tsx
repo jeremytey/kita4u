@@ -1,14 +1,14 @@
-import { AlertTriangle, ChevronDown, ChevronUp, ShieldCheck } from 'lucide-react'
+import { AlertTriangle, ChevronDown, ChevronUp, MessageSquareText, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'
 import BigButton from '../components/BigButton'
 import ChainBar from '../components/ChainBar'
-import { DemoReplyTag } from '../components/Card'
+import { DemoReplyTag, IconTile } from '../components/Card'
 import { PEOPLE } from '../components/CircleStrip'
 import { DAY, dayOf, formatTime, homeStatus } from '../lib/engine'
-import { SAMPLES } from '../lib/samples'
+import { SAMPLES, type Sample } from '../lib/samples'
 import { awayWhen, latestContact } from '../lib/statusText'
 import { useStore } from '../lib/store'
-import { useT, type StrKey } from '../strings'
+import { useLang, useT, type StrKey } from '../strings'
 import type { AppEvent, ChainResult, Contact } from '../types'
 import { ContactTopBar, WelfareSection } from './ContactCard'
 import { TASKS, type Task } from './NeedHelp'
@@ -122,6 +122,44 @@ function buildTimeline(events: AppEvent[], chain: ChainResult, now: number, t: T
     .slice(0, MAX_LINES)
 }
 
+// Today's latest message Mum sent with Ask Daniel (ASKED_CIRCLE, meta.sample). Read-only.
+function latestAsk(events: AppEvent[], now: number): { time: number; sample: Sample } | undefined {
+  const dayStart = dayOf(now) * DAY
+  const last = events.filter((e) => e.type === 'ASKED_CIRCLE' && e.time >= dayStart && e.time <= now).at(-1)
+  const sample = SAMPLES.find((s) => s.id === last?.meta?.sample)
+  return last && sample ? { time: last.time, sample } : undefined
+}
+
+function AskCard({ time, sample }: { time: number; sample: Sample }) {
+  const t = useT()
+  const { lang } = useLang()
+  return (
+    <section
+      aria-labelledby="ask-title"
+      className="flex flex-col gap-3 rounded-[24px] border-l-8 border-accent bg-surface p-5 shadow-card"
+    >
+      <div className="flex items-center gap-4">
+        <IconTile icon={MessageSquareText} tone={sample.suspicious ? 'warn' : 'accent'} />
+        <div className="flex flex-col">
+          <h2 id="ask-title" className="text-title font-bold">
+            {t('askCardTitle')}
+          </h2>
+          <p className="text-small text-ink-soft">{formatTime(time)}</p>
+        </div>
+      </div>
+      <p className={`text-body font-bold ${sample.suspicious ? 'text-warn' : 'text-done'}`}>
+        {t(sample.suspicious ? 'askVerdictSus' : 'normalBox')}
+      </p>
+      <p className="rounded-2xl bg-quiet-tint p-3 text-body">
+        <span className="block text-small font-bold text-ink-soft">{sample.sender[lang]}</span>
+        {sample.message[lang]}
+      </p>
+      <p className="text-body">{sample.explanation[lang]}</p>
+      <span className="self-start rounded-full bg-quiet-tint px-3 py-1 text-small font-bold text-quiet">{t('demoTag')}</span>
+    </section>
+  )
+}
+
 const TONE: Record<Tone, string> = { ink: 'text-ink', done: 'text-done', alert: 'text-alert', quiet: 'text-ink-soft' }
 
 export default function Family() {
@@ -129,6 +167,7 @@ export default function Family() {
   const { events, chain, now } = useStore()
   const [all, setAll] = useState(false)
   const lines = buildTimeline(events, chain, now, t)
+  const ask = latestAsk(events, now)
   const shown = all ? lines : lines.slice(0, FIRST_LINES)
   const status = homeStatus(chain)
   const caseExists = chain.caseOpenedAt !== undefined && chain.status !== 'none'
@@ -196,6 +235,8 @@ export default function Family() {
             )}
           </div>
         )}
+
+        {ask && <AskCard time={ask.time} sample={ask.sample} />}
 
         <section className="flex flex-col gap-4 rounded-[24px] bg-surface p-5 shadow-card" aria-labelledby="tl-title">
           <h2 id="tl-title" className="text-title font-bold">
