@@ -42,7 +42,7 @@ export default function TopBar({ onBack, left }: { onBack?: () => void; left?: R
   return (
     // Tight gaps on narrow phones first. If the Back pill and the toggle still cannot share one row (BM at 320px),
     // the toggle wraps to its own row on the right. Tap targets never shrink.
-    <header className="flex min-h-16 flex-wrap items-center justify-between gap-2 px-4 pt-4 min-[360px]:gap-3">
+    <header className="flex min-h-16 flex-wrap items-center justify-between gap-2 px-4 pt-4 min-[390px]:gap-3">
       {onBack ? (
         <button
           type="button"

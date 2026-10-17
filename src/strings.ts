@@ -141,11 +141,6 @@ export const S = {
   // Contact card (Neighbour, Family, Community)
   contactHi: { en: 'Hi {name}', bm: 'Hai {name}', zh: '{name}，你好' },
   notAskedYet: { en: 'No one has asked you yet.', bm: 'Belum ada yang minta anda.', zh: '还没有人请你帮忙。' },
-  pleaseCheck: {
-    en: 'Please check on Mak Cik Aminah, Unit 12-3.',
-    bm: 'Sila tengok Mak Cik Aminah, Unit 12-3.',
-    zh: '请去看看 Mak Cik Aminah（12-3 单位）。',
-  },
   noCheckInToday: { en: 'No check-in today.', bm: 'Tiada lapor diri hari ini.', zh: '今天没有报平安。' },
   askedAtTime: { en: 'Asked at {time}', bm: 'Ditanya pada {time}', zh: '{time} 询问' },
   illCheck: { en: "I'll check", bm: 'Saya akan tengok', zh: '我去看看' },
