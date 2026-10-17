@@ -1,13 +1,13 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { Clock, RotateCcw, SlidersHorizontal, X } from 'lucide-react'
+import { CheckCircle2, ChevronRight, Clock, RotateCcw, SlidersHorizontal, User, X } from 'lucide-react'
 import { useRef } from 'react'
 import { dayOf, formatTime } from '../lib/engine'
 import { useStore, type Preset } from '../lib/store'
 import { useDialog } from '../lib/useDialog'
 import { useT, type StrKey } from '../strings'
 import type { Behaviour, Contact, Role } from '../types'
-import { SimTag } from './Card'
-import { PEOPLE } from './CircleStrip'
+import { IconTile, SimTag } from './Card'
+import { Avatar, PEOPLE } from './CircleStrip'
 
 const PRESETS: { id: Preset; key: StrKey }[] = [
   { id: 'normal', key: 'pNormal' },
@@ -15,11 +15,12 @@ const PRESETS: { id: Preset; key: StrKey }[] = [
   { id: 'help', key: 'pHelp' },
   { id: 'sample', key: 'pSample' },
 ]
-const ROLES: { id: Role; key: StrKey }[] = [
-  { id: 'resident', key: 'roleResident' },
-  { id: 'neighbour', key: 'roleNeighbour' },
-  { id: 'family', key: 'roleFamily' },
-  { id: 'community', key: 'roleCommunity' },
+// View as: who the presenter is looking through. Contacts show their illustrated badge.
+const ROLES: { id: Role; name: StrKey; role: StrKey; who?: Contact }[] = [
+  { id: 'resident', name: 'residentName', role: 'roleResident' },
+  { id: 'neighbour', name: 'mei', role: 'roleNeighbour', who: 'neighbour' },
+  { id: 'family', name: 'daniel', role: 'roleSon', who: 'family' },
+  { id: 'community', name: 'township', role: 'roleCommunity', who: 'community' },
 ]
 const BEHAVIOURS: { id: Behaviour; key: StrKey }[] = [
   { id: 'noReply', key: 'bNoReply' },
@@ -46,8 +47,8 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
   )
 }
 
-// Presenter handle along the bottom of the phone column. The clock lives in the Ribbon.
-// Content scrolls above it, so it never covers a button. Clean mode (?clean=1) shows only a faint corner button.
+// Presenter pill, floating bottom-right inside the phone column. The clock lives in the Ribbon.
+// Screens pad their bottom (pb-24) so it never covers the last button. Clean mode (?clean=1) shows only a faint corner button.
 export function DemoBar({ onOpen, clean }: { onOpen: () => void; clean: boolean }) {
   const t = useT()
   if (clean) {
@@ -67,9 +68,10 @@ export function DemoBar({ onOpen, clean }: { onOpen: () => void; clean: boolean 
     <button
       type="button"
       onClick={onOpen}
-      className="fixed inset-x-0 bottom-0 z-30 mx-auto flex h-16 w-full max-w-[430px] items-center justify-center gap-3 border-t-2 border-edge bg-surface text-body font-bold text-ink focus-visible:outline-offset-[-6px]"
+      style={{ right: 'max(14px, calc(50vw - 201px))' }}
+      className="fixed bottom-[14px] z-30 flex min-h-[56px] items-center gap-2 rounded-full border-2 border-edge bg-quiet-tint px-4 text-body font-bold text-ink shadow-[0_4px_0_rgba(154,133,112,0.2)]"
     >
-      <SlidersHorizontal size={26} aria-hidden />
+      <SlidersHorizontal size={22} aria-hidden />
       {t('demoControls')}
     </button>
   )
@@ -158,19 +160,36 @@ export default function DemoPanel({
             </Group>
 
             <Group title={t('viewAs')}>
-              <div className="grid grid-cols-2 gap-3" role="group">
-                {ROLES.map((r) => (
-                  <button
-                    key={r.id}
-                    type="button"
-                    aria-pressed={role === r.id}
-                    className={`${chip} ${role === r.id ? 'bg-ink text-white' : 'bg-surface text-ink shadow-card'}`}
-                    onClick={() => onRole(r.id)}
-                  >
-                    {t(r.key)}
-                  </button>
-                ))}
+              <div className="flex flex-col gap-3" role="group">
+                {ROLES.map((r) => {
+                  const on = role === r.id
+                  return (
+                    <button
+                      key={r.id}
+                      type="button"
+                      aria-pressed={on}
+                      className={`grid min-h-[76px] w-full grid-cols-[56px_1fr_auto] items-center gap-3 rounded-[20px] border-2 px-3 py-2 text-left transition-colors duration-200 ${
+                        on ? 'border-done bg-done-tint' : 'border-line bg-surface'
+                      }`}
+                      onClick={() => onRole(r.id)}
+                    >
+                      <span className="flex justify-center">
+                        {r.who ? <Avatar who={r.who} size={52} /> : <IconTile icon={User} tone="accent" />}
+                      </span>
+                      <span className="flex min-w-0 flex-col">
+                        <span className="text-body leading-tight font-bold">{t(r.name)}</span>
+                        <span className="text-small leading-tight text-ink-soft">{t(r.role)}</span>
+                      </span>
+                      {on ? (
+                        <CheckCircle2 size={28} className="text-done" aria-hidden />
+                      ) : (
+                        <ChevronRight size={28} className="text-ink-soft" aria-hidden />
+                      )}
+                    </button>
+                  )
+                })}
               </div>
+              <p className="text-center text-small text-ink-soft">{t('demoViewsNote')}</p>
             </Group>
 
             <Group title={t('behaviours')}>

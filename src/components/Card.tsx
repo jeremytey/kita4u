@@ -2,7 +2,7 @@ import { Bot, type LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useT } from '../strings'
 
-type Tone = 'accent' | 'done' | 'wait' | 'quiet' | 'warn' | 'alert'
+type Tone = 'accent' | 'done' | 'wait' | 'quiet' | 'warn' | 'alert' | 'blue'
 
 const TILE: Record<Tone, string> = {
   accent: 'bg-accent-tint text-ink',
@@ -11,15 +11,42 @@ const TILE: Record<Tone, string> = {
   quiet: 'bg-quiet-tint text-quiet',
   warn: 'bg-warn-tint text-warn',
   alert: 'bg-alert-tint text-alert',
+  blue: 'bg-blue-tint text-blue-ink',
 }
 
-// Dark glyph in a tinted 56px rounded square.
-export function IconTile({ icon: Icon, tone = 'accent' }: { icon: LucideIcon; tone?: Tone }) {
+const TILE_SIZE = {
+  md: { box: 'size-14 rounded-[18px]', icon: 30 }, // 56px
+  lg: { box: 'size-[72px] rounded-[22px]', icon: 36 },
+  xl: { box: 'size-[76px] rounded-[26px]', icon: 40 },
+}
+
+// Dark glyph in a tinted rounded square, slightly tilted, with a small highlight dot. Decorative only.
+export function IconTile({
+  icon: Icon,
+  tone = 'accent',
+  size = 'md',
+  className = 'rotate-[-2deg]',
+}: {
+  icon: LucideIcon
+  tone?: Tone
+  size?: keyof typeof TILE_SIZE
+  className?: string
+}) {
+  const s = TILE_SIZE[size]
   return (
-    <span className={`flex size-14 shrink-0 items-center justify-center rounded-2xl ${TILE[tone]}`}>
-      <Icon size={30} strokeWidth={2.2} aria-hidden />
+    <span
+      aria-hidden
+      className={`relative flex shrink-0 items-center justify-center border-2 border-ink/15 shadow-[0_4px_0_rgba(42,33,27,0.12)] ${s.box} ${TILE[tone]} ${className}`}
+    >
+      <Icon size={s.icon} strokeWidth={2.7} aria-hidden />
+      <span className="absolute top-[7px] right-[8px] size-[7px] rounded-full bg-white/80" />
     </span>
   )
+}
+
+// Small heading above a heading: 20px, bold, upper case. Never smaller.
+export function Eyebrow({ children, className = 'text-accent-ink' }: { children: ReactNode; className?: string }) {
+  return <p className={`text-small font-bold tracking-wide uppercase ${className}`}>{children}</p>
 }
 
 // Plain white card. 24px radius, soft shadow.

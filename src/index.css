@@ -5,7 +5,7 @@
   --font-sans: "Atkinson Hyperlegible", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
 
   --color-bg: #faf6f0; /* warm off-white page */
-  --color-surround: #efe6da; /* desktop area around the phone */
+  --color-surround: #e9dfd2; /* desktop area around the phone */
   --color-surface: #ffffff;
   --color-ink: #2a211b;
   --color-ink-soft: #5c5048;
@@ -14,7 +14,8 @@
 
   --color-accent: #f4a261; /* soft warm orange, primary actions (ink text on top) */
   --color-accent-tint: #fdead7;
-  --color-accent-ink: #9a4a12;
+  --color-accent-ink: #8a3f0d;
+  --color-accent-edge: #bc6630; /* 2px border of the orange check-in card */
 
   --color-done: #256b42; /* green = done */
   --color-done-tint: #e2f1e7;
@@ -33,6 +34,14 @@
 
   --color-alert: #b42318; /* red: Unresolved and Needs help only */
   --color-alert-tint: #fde7e4;
+
+  --color-blue-ink: #245f75; /* Township Support / community tiles */
+  --color-blue-tint: #e2f1f5;
+
+  /* Avatar badge backgrounds (flat fills, no gradients) */
+  --color-avatar-peach: #f6c79f;
+  --color-avatar-sage: #bfddc9; /* muted sage, not the done-green */
+  --color-avatar-blue: #bedce7;
 
   --text-small: 20px;
   --text-small--line-height: 1.4;
@@ -65,6 +74,7 @@ html {
 /* Body text is 20px. Kept off <html> so rem (and Tailwind sizes) stay 16px-based. */
 body {
   font-size: var(--text-body);
+  background: radial-gradient(circle at 50% 0%, rgba(244, 162, 97, 0.24), transparent 34rem), var(--color-surround);
 }
 
 button {

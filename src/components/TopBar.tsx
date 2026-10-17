@@ -40,20 +40,25 @@ function LangToggle() {
 export default function TopBar({ onBack, left }: { onBack?: () => void; left?: ReactNode }) {
   const t = useT()
   return (
-    <header className="flex min-h-16 items-center justify-between gap-3 px-4 pt-4">
+    // Tight gaps on narrow phones first. If the Back pill and the toggle still cannot share one row (BM at 320px),
+    // the toggle wraps to its own row on the right. Tap targets never shrink.
+    <header className="flex min-h-16 flex-wrap items-center justify-between gap-2 px-4 pt-4 min-[360px]:gap-3">
       {onBack ? (
         <button
           type="button"
           onClick={onBack}
-          className="flex min-h-16 items-center gap-2 rounded-full bg-surface pr-5 pl-4 text-body font-bold whitespace-nowrap shadow-card"
+          className="flex min-h-16 shrink-0 items-center gap-2 rounded-full bg-surface pr-4 pl-3 text-body font-bold whitespace-nowrap shadow-card min-[360px]:pr-5 min-[360px]:pl-4"
         >
           <ArrowLeft size={28} strokeWidth={2.4} aria-hidden />
           {t('back')}
         </button>
       ) : (
-        <div className="flex min-h-16 min-w-0 items-center whitespace-nowrap">{left}</div>
+        // basis-0 + min-w-min: long text wraps onto two lines; only a word wider than the space moves the toggle down.
+        <div className="flex min-h-16 min-w-min flex-1 basis-0 items-center">{left}</div>
       )}
-      <LangToggle />
+      <div className="ml-auto">
+        <LangToggle />
+      </div>
     </header>
   )
 }

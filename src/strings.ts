@@ -306,6 +306,11 @@ export const S = {
   pHelp: { en: 'Help request', bm: 'Minta bantuan', zh: '请求帮忙' },
   pSample: { en: 'Sample message', bm: 'Mesej contoh', zh: '示例信息' },
   viewAs: { en: 'View as', bm: 'Lihat sebagai', zh: '查看身份' },
+  demoViewsNote: {
+    en: 'Prototype views. These are not tabs in the real app.',
+    bm: 'Paparan prototaip. Ini bukan tab dalam aplikasi sebenar.',
+    zh: '原型视图。这些不是真实应用里的标签页。',
+  },
   behaviours: { en: 'How each contact replies', bm: 'Cara setiap kenalan menjawab', zh: '每位联系人如何回复' },
   bNoReply: { en: 'No reply', bm: 'Tiada jawapan', zh: '不回复' },
   bCantNow: { en: "Can't now", bm: 'Tak boleh sekarang', zh: '现在不行' },

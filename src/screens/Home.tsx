@@ -48,7 +48,7 @@ function AwaySheet({ now, onPick, onClose }: { now: number; onPick: (until: numb
   useDialog(sheetRef, true, onClose) // focus in, Tab trapped, Escape closes, focus back to I'm away (or the hero)
   return (
     <motion.div
-      className="absolute inset-0 z-20 flex items-end bg-ink/40"
+      className="fixed inset-0 z-40 flex items-end justify-center bg-ink/40"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -60,7 +60,7 @@ function AwaySheet({ now, onPick, onClose }: { now: number; onPick: (until: numb
         role="dialog"
         aria-modal="true"
         aria-labelledby="away-title"
-        className="w-full rounded-t-[32px] bg-bg px-4 pt-6 pb-24" // pb-24: clears the 64px Demo controls handle
+        className="w-full max-w-[430px] rounded-t-[32px] bg-bg px-4 pt-6 pb-8"
         initial={{ y: 40 }}
         animate={{ y: 0 }}
         exit={{ y: 40 }}

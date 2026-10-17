@@ -43,7 +43,7 @@ export default function App() {
   return (
     <PhoneFrame>
       <Ribbon />
-      <div className={screen === 'landing' ? 'flex flex-1 flex-col' : 'flex flex-1 flex-col pb-16'}>
+      <div className={screen === 'landing' ? 'flex flex-1 flex-col' : 'flex flex-1 flex-col pb-24'}>
         {screen === 'landing' && <Landing onStart={() => setScreen('home')} onDemo={() => setPanel(true)} />}
         {screen === 'home' && (
           <Home
