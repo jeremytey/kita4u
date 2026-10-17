@@ -4,18 +4,19 @@ import {
   Check,
   CheckCircle2,
   Heart,
-  Info,
+  HeartHandshake,
   MessageCircle,
   Minus,
   Phone,
   RotateCcw,
   ShoppingBasket,
+  ShieldCheck,
   Smartphone,
   type LucideIcon,
 } from 'lucide-react'
 import { useState } from 'react'
 import BigButton from '../components/BigButton'
-import { ActionCard } from '../components/Card'
+import { ActionCard, Eyebrow, IconTile } from '../components/Card'
 import TopBar from '../components/TopBar'
 import { DAY, dayOf, formatTime } from '../lib/engine'
 import { useStore } from '../lib/store'
@@ -26,10 +27,21 @@ import DemoChat from './DemoChat'
 
 export type Task = 'groceries' | 'phone' | 'clinic'
 
-export const TASKS: Record<Task, { icon: LucideIcon; title: StrKey; phrase: StrKey }> = {
-  groceries: { icon: ShoppingBasket, title: 'taskGroceriesTitle', phrase: 'taskGroceries' },
-  phone: { icon: Smartphone, title: 'taskPhoneTitle', phrase: 'taskPhone' },
-  clinic: { icon: Car, title: 'taskClinicTitle', phrase: 'taskClinic' },
+export const TASKS: Record<Task, { icon: LucideIcon; title: StrKey; phrase: StrKey; sub: StrKey }> = {
+  groceries: { icon: ShoppingBasket, title: 'taskGroceriesTitle', phrase: 'taskGroceries', sub: 'subGroceries' },
+  phone: { icon: Smartphone, title: 'taskPhoneTitle', phrase: 'taskPhone', sub: 'subPhone' },
+  clinic: { icon: Car, title: 'taskClinicTitle', phrase: 'taskClinic', sub: 'subClinic' },
+}
+
+// Doorstep-only reminder. A calm note, not a button.
+function SafetyNote() {
+  const t = useT()
+  return (
+    <p className="flex items-start gap-3 rounded-[24px] bg-done-tint p-4 text-body">
+      <ShieldCheck size={26} strokeWidth={2.4} className="mt-0.5 shrink-0 text-done" aria-hidden />
+      {t('doorstepOnly')}
+    </p>
+  )
 }
 
 export interface HelpState {
@@ -123,28 +135,38 @@ export default function NeedHelp({ initialTask, onExit }: { initialTask?: Task; 
         <AnimatePresence mode="wait">
           {step === 'pick' && (
             <motion.div key="pick" {...fade} className="flex flex-col gap-4">
+              <div className="flex items-center gap-4">
+                <IconTile icon={HeartHandshake} tone="done" />
+                <Eyebrow>{t('smallFavour')}</Eyebrow>
+              </div>
               <h1 className="text-greet font-bold">{t('helpPickTitle')}</h1>
               {(Object.keys(TASKS) as Task[]).map((k) => (
                 <ActionCard
                   key={k}
                   icon={TASKS[k].icon}
+                  tone="done"
                   title={t(TASKS[k].title)}
+                  sub={t(TASKS[k].sub)}
                   onClick={() => {
                     setTask(k)
                     setStep('confirm')
                   }}
                 />
               ))}
+              <SafetyNote />
             </motion.div>
           )}
 
           {step === 'confirm' && (
             <motion.div key="confirm" {...fade} className="flex flex-col gap-6">
-              <h1 className="text-greet font-bold">{t('helpConfirmQ', { task: phrase })}</h1>
-              <p className="flex items-start gap-3 text-body text-ink-soft">
-                <Info size={26} className="mt-0.5 shrink-0" aria-hidden />
-                {t('doorstepOnly')}
-              </p>
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-4">
+                  <IconTile icon={TASKS[task].icon} tone="done" />
+                  <Eyebrow>{t('smallFavour')}</Eyebrow>
+                </div>
+                <h1 className="text-greet font-bold">{t('helpConfirmQ', { task: phrase })}</h1>
+              </div>
+              <SafetyNote />
               <div className="flex flex-col gap-3">
                 <BigButton icon={TASKS[task].icon} onClick={() => ask(task)}>
                   {t('yesAskMei')}
@@ -158,7 +180,10 @@ export default function NeedHelp({ initialTask, onExit }: { initialTask?: Task; 
 
           {step === 'status' && help && (
             <motion.div key="status" {...fade} className="flex flex-col gap-6">
-              <h1 className="text-title font-bold">{t('helpStatusTitle', { task: t(TASKS[help.task].title) })}</h1>
+              <div className="flex items-center gap-4">
+                <IconTile icon={TASKS[help.task].icon} tone="done" />
+                <h1 className="text-title font-bold">{t('helpStatusTitle', { task: t(TASKS[help.task].title) })}</h1>
+              </div>
 
               <ol className="flex flex-col gap-4 rounded-[24px] bg-surface p-5 shadow-card" aria-live="polite">
                 <TrackLine state="done" text={t('trackRequested', { time: formatTime(help.requestedAt) })} />

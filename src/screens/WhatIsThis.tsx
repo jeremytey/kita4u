@@ -1,7 +1,25 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { AlertTriangle, CheckCircle2, ChevronDown, ChevronUp, MessageSquareText, Square, Users, Volume2 } from 'lucide-react'
+import {
+  AlertTriangle,
+  CheckCircle2,
+  ChevronDown,
+  ChevronRight,
+  ChevronUp,
+  CircleHelp,
+  Megaphone,
+  MessageCircleQuestion,
+  MessageSquareText,
+  Receipt,
+  ScanSearch,
+  Send,
+  Square,
+  Undo2,
+  Volume2,
+  type LucideIcon,
+} from 'lucide-react'
 import { useEffect, useState } from 'react'
 import BigButton from '../components/BigButton'
+import { Eyebrow, IconTile } from '../components/Card'
 import TopBar from '../components/TopBar'
 import { SAMPLES, type Sample, type SampleId } from '../lib/samples'
 import { useSpeech } from '../lib/speech'
@@ -9,6 +27,9 @@ import { useLang, useT } from '../strings'
 
 type Step = 'choose' | 'reading' | 'result' | 'sent'
 const READING_MS = 1500
+
+// One icon per sample on the picker. The tile tone is the same calm accent for all three: the result gives the verdict.
+const SAMPLE_ICON: Record<SampleId, LucideIcon> = { sms: MessageSquareText, bill: Receipt, notice: Megaphone }
 
 interface Props {
   checkedIn: boolean
@@ -41,10 +62,21 @@ function MessageThumb({ sample, full = false }: { sample: Sample; full?: boolean
   )
 }
 
+// The message itself, sender first. Behind the Show message toggle on the result.
+function Quote({ sample }: { sample: Sample }) {
+  const { lang } = useLang()
+  return (
+    <div className="flex flex-col gap-1 rounded-[18px] bg-quiet-tint p-4">
+      <p className="text-small font-bold text-ink-soft">{sample.sender[lang]}</p>
+      <p className="text-body text-ink">{sample.message[lang]}</p>
+    </div>
+  )
+}
+
 function CheckInPrompt({ checkedIn, onCheckIn }: { checkedIn: boolean; onCheckIn: () => void }) {
   const t = useT()
   return (
-    <div className="flex flex-col gap-3 rounded-[24px] bg-accent-tint p-4">
+    <div className="flex flex-col gap-3 rounded-[24px] bg-done-tint p-4">
       <p className="text-body font-bold">{t('whileHere')}</p>
       <BigButton
         icon={CheckCircle2}
@@ -96,6 +128,10 @@ export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onChecked, on
         <AnimatePresence mode="wait">
           {step === 'choose' && (
             <motion.div key="choose" {...fade} className="flex flex-col gap-4">
+              <div className="flex items-center gap-4">
+                <IconTile icon={MessageCircleQuestion} tone="warn" />
+                <Eyebrow>{t('messageHelper')}</Eyebrow>
+              </div>
               <h1 className="text-title font-bold">{t('chooseTitle')}</h1>
               <p className="text-body text-ink-soft">{t('samplesLabel')}</p>
               {SAMPLES.map((s) => (
@@ -103,10 +139,15 @@ export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onChecked, on
                   key={s.id}
                   type="button"
                   onClick={() => pick(s)}
-                  className="flex w-full flex-col gap-3 rounded-[24px] bg-surface p-4 text-left shadow-card transition-transform duration-200 active:scale-[0.98]"
+                  className="grid min-h-[124px] w-full grid-cols-[56px_1fr_auto] items-center gap-3.5 rounded-[22px] border-2 border-edge bg-surface p-3.5 text-left shadow-[0_4px_0_rgba(154,133,112,0.14)] transition-transform duration-200 active:scale-[0.98]"
                 >
-                  <span className="text-title font-bold">{s.title[lang]}</span>
-                  <MessageThumb sample={s} />
+                  <IconTile icon={SAMPLE_ICON[s.id]} tone="accent" />
+                  <span className="flex min-w-0 flex-col gap-0.5">
+                    <span className="text-title leading-tight font-bold">{s.title[lang]}</span>
+                    <span className="text-small text-ink-soft">{s.sender[lang]}</span>
+                    <span className="line-clamp-3 text-body">{s.message[lang]}</span>
+                  </span>
+                  <ChevronRight size={27} strokeWidth={2.4} className="text-ink-soft" aria-hidden />
                 </button>
               ))}
             </motion.div>
@@ -128,25 +169,32 @@ export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onChecked, on
 
           {step === 'result' && (
             <motion.div key="result" {...fade} className="flex flex-col gap-4">
-              <p>
+              <div className="flex flex-col items-center gap-3">
+                <IconTile icon={ScanSearch} tone={sample.suspicious ? 'warn' : 'done'} size="xl" className="rotate-[-3deg]" />
                 <span className="rounded-full bg-quiet-tint px-3 py-1 text-small font-bold text-quiet">{t('demoTag')}</span>
-              </p>
+              </div>
 
+              {/* Orange box = suspicious. The verdict always has an icon and a word. */}
               <section
                 aria-live="polite"
-                className={`rounded-[24px] p-5 ${
-                  sample.suspicious ? 'border-[3px] border-warn-line bg-warn-tint' : 'bg-done-tint'
-                }`}
+                className={`rounded-[24px] p-5 ${sample.suspicious ? 'border-[3px] border-warn-line bg-warn-tint' : 'bg-done-tint'}`}
               >
-                <p className={`flex items-start gap-3 text-title font-bold ${sample.suspicious ? 'text-warn' : 'text-done'}`}>
+                <h1 className={`flex items-start gap-3 text-title font-bold ${sample.suspicious ? 'text-warn' : 'text-done'}`}>
                   {sample.suspicious ? (
                     <AlertTriangle size={32} className="mt-0.5 shrink-0" aria-hidden />
                   ) : (
                     <CheckCircle2 size={32} className="mt-0.5 shrink-0" aria-hidden />
                   )}
                   <span>{verdict}</span>
-                </p>
-                <p className="mt-3 text-body text-ink">{sample.explanation[lang]}</p>
+                </h1>
+              </section>
+
+              <section aria-labelledby="simple-title" className="flex flex-col gap-3 rounded-[26px] border-2 border-edge bg-surface p-5">
+                <h2 id="simple-title" className="flex items-center gap-2 text-body font-bold">
+                  <CircleHelp size={26} strokeWidth={2.4} className="shrink-0 text-accent-ink" aria-hidden />
+                  {t('inSimpleWords')}
+                </h2>
+                <p className="text-body text-ink">{sample.explanation[lang]}</p>
               </section>
 
               <BigButton
@@ -157,11 +205,11 @@ export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onChecked, on
               >
                 {showMsg ? t('hideMessage') : t('showMessage')}
               </BigButton>
-              {showMsg && <MessageThumb sample={sample} full />}
+              {showMsg && <Quote sample={sample} />}
 
               <div className="flex flex-col gap-3">
                 <BigButton
-                  icon={Users}
+                  icon={Send}
                   onClick={() => {
                     speech.stop()
                     onAskCircle(sample.id)
@@ -180,6 +228,16 @@ export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onChecked, on
                 </BigButton>
                 {speech.state === 'none' && <p className="text-center text-small text-ink-soft">{t('voiceUnavailable')}</p>}
                 {speech.state === 'loading' && <p className="text-center text-small text-ink-soft">{t('voiceLoading')}</p>}
+                <BigButton
+                  icon={Undo2}
+                  variant="secondary"
+                  onClick={() => {
+                    speech.stop()
+                    setStep('choose')
+                  }}
+                >
+                  {t('chooseAnother')}
+                </BigButton>
                 <BigButton variant="quiet" onClick={() => { speech.stop(); onExit() }}>
                   {t('done')}
                 </BigButton>

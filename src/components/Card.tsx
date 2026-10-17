@@ -1,4 +1,4 @@
-import { Bot, type LucideIcon } from 'lucide-react'
+import { Bot, ChevronRight, type LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useT } from '../strings'
 
@@ -54,7 +54,8 @@ export function Card({ children, className = '' }: { children: ReactNode; classN
   return <div className={`rounded-[24px] bg-surface p-5 shadow-card ${className}`}>{children}</div>
 }
 
-// One action per card: icon, title, one short line.
+// One action per card: icon, title, one short line, chevron. Full width, never in two columns.
+// 2px edge border (3:1 on the page) so the card reads as a button.
 export function ActionCard({
   icon,
   title,
@@ -75,15 +76,16 @@ export function ActionCard({
       type="button"
       onClick={disabled ? undefined : onClick}
       aria-disabled={disabled || undefined}
-      className={`flex min-h-24 w-full items-center gap-4 rounded-[24px] bg-surface p-5 text-left shadow-card transition-transform duration-200 ${
+      className={`grid min-h-[86px] w-full grid-cols-[56px_1fr_auto] items-center gap-3.5 rounded-[22px] border-2 border-edge bg-surface p-3.5 text-left shadow-[0_4px_0_rgba(154,133,112,0.14)] transition-transform duration-200 ${
         disabled ? 'cursor-default' : 'active:scale-[0.98]'
       }`}
     >
       <IconTile icon={icon} tone={tone} />
-      <span className="flex flex-col">
-        <span className="text-title font-bold">{title}</span>
+      <span className="flex min-w-0 flex-col">
+        <span className="text-title leading-tight font-bold">{title}</span>
         {sub && <span className="text-body text-ink-soft">{sub}</span>}
       </span>
+      <ChevronRight size={27} strokeWidth={2.4} className="text-ink-soft" aria-hidden />
     </button>
   )
 }

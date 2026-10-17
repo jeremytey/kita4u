@@ -1,26 +1,24 @@
 import { motion, useReducedMotion } from 'framer-motion'
-import type { LucideIcon } from 'lucide-react'
+import { ArrowRight, type LucideIcon } from 'lucide-react'
 
 type Variant = 'primary' | 'done' | 'quiet'
 
 const STYLE: Record<Variant, string> = {
-  primary: 'bg-accent text-ink active:scale-[0.98]',
+  primary: 'bg-ink text-white active:scale-[0.98]',
   done: 'cursor-default bg-done text-white', // no opacity fade, so contrast stays
   quiet: 'bg-surface text-ink ring-2 ring-edge ring-inset active:scale-[0.98]',
 }
 
-// The one main button on Home. Always the same <button>, so focus stays on it when the state changes.
+// The one main button on Home, inside the check-in card. Always the same <button>, so focus stays on it when the state changes.
 // "done" uses aria-disabled (not disabled) so it stays focusable and is read out.
 export default function HeroButton({
   icon: Icon,
   label,
-  sub,
   variant = 'primary',
   onClick,
 }: {
-  icon: LucideIcon
+  icon?: LucideIcon
   label: string
-  sub?: string
   variant?: Variant
   onClick?: () => void
 }) {
@@ -31,22 +29,22 @@ export default function HeroButton({
       type="button"
       onClick={done ? undefined : onClick}
       aria-disabled={done || undefined}
-      className={`flex min-h-[120px] w-full items-center justify-center gap-4 rounded-[24px] px-6 py-4 text-left transition-transform duration-200 ${STYLE[variant]}`}
+      className={`flex min-h-[82px] w-full items-center gap-4 rounded-[22px] px-6 py-3 text-left transition-transform duration-200 ${STYLE[variant]}`}
     >
-      {/* Keyed by variant: the tick pops in when the button turns to done. */}
-      <motion.span
-        key={variant}
-        className="shrink-0"
-        initial={done && !still ? { scale: 0.6, opacity: 0 } : false}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.2, ease: 'easeOut' }}
-      >
-        <Icon size={40} strokeWidth={2.2} aria-hidden />
-      </motion.span>
-      <span className="flex flex-col">
-        <span className="text-hero font-bold">{label}</span>
-        {sub && <span className="text-body">{sub}</span>}
-      </span>
+      {Icon && (
+        // Keyed by variant: the tick pops in when the button turns to done.
+        <motion.span
+          key={variant}
+          className="shrink-0"
+          initial={done && !still ? { scale: 0.6, opacity: 0 } : false}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.2, ease: 'easeOut' }}
+        >
+          <Icon size={34} strokeWidth={2.4} aria-hidden />
+        </motion.span>
+      )}
+      <span className="flex-1 text-hero font-bold">{label}</span>
+      {variant === 'primary' && <ArrowRight size={30} strokeWidth={2.6} className="shrink-0" aria-hidden />}
     </button>
   )
 }

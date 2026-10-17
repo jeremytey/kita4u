@@ -5,9 +5,10 @@ description: Rules for building large, calm, accessible mobile screens for resid
 # Accessible UI rules
 ## Size and touch
 - Phone width, max 430px, one column, 16px side padding.
-- Body and small text 20px minimum. Only the top ribbon may be 16px. Card titles 24px bold. Greeting 30px. Hero label 28px bold.
-- Every tappable thing is 64px tall or more, with 12px gap between buttons. The Home hero button is 120px tall.
-- One action per card now means: Home uses full-width buttons, not cards. Any card that remains has an icon, a title, at most one short line of subtext. No badges, arrows or extra buttons on a card.
+- Body and small text 20px minimum. Only the top ribbon may be 16px. Never 13 to 18px text. Eyebrows (small labels above a heading) are 20px bold upper case. Card titles 24px bold. Greeting 30px. Hero label 28px bold.
+- Every tappable thing is 64px tall or more, with 12px gap between buttons. Only the floating Demo controls pill (presenter tool) may be 56px. The Home check-in card is at least 282px tall and holds an 82px dark I'm okay button.
+- The language toggle stays three 56x64 buttons. Back stays a labelled pill (arrow + word). On narrow phones tighten gaps and padding first; if they still do not fit, the toggle wraps to its own row. Never shrink a tap target.
+- Action cards: one action per card, full width, one column. Icon tile, title, at most one short line of subtext, a chevron. 2px edge border so the card reads as a button. No badges or extra buttons on a card.
 - Maximum 3 main actions on any resident screen. Full-width buttons, stacked vertically.
 - Every sub-screen has one large Back button, top left. No bottom navigation.
 ## Colour and state
@@ -19,11 +20,15 @@ description: Rules for building large, calm, accessible mobile screens for resid
 ## Layout
 - Cards: 24px radius, a 2px border (--color-edge, 3:1 on the page) instead of a soft shadow, white on warm off-white. 16px between cards, 24px between groups.
 - The Circle strip (3 round initial circles with role labels) is on Home only.
-- Avatars use one neutral tint. The initial and the name tell people apart.
+- Avatars are three flat illustrated badges (Mei, Daniel, Township Support) from src/components/avatars.tsx: one shared spec, flat fills, no gradients. Each is named "Name, Role" for screen readers and always sits near the visible name. Daniel's badge is a muted sage, not the done-green.
+- Icon tiles are slightly tilted with a small highlight dot; decorative only. Never use the Sparkles icon (it implies live AI).
 - No chain bar on resident screens. The resident gets one status sentence; the chain bar is for Family and Community.
 ## Copy
 - Short sentences, everyday words, one idea per line. Warm, not medical.
 - Say "looks suspicious", never "scam". Say "Mei checked on you", never "monitoring".
+## Demo tools
+- The Demo controls pill floats bottom-right inside the phone column. Screens keep 96px of bottom padding so it never covers the last button. Sheets and the Demo panel cover it.
+
 ## Motion
 - 200ms fades and slides. A tick pops on success. Chain dots fade in one by one.
 - Respect prefers-reduced-motion. No bounce, no parallax, no autoplay audio.

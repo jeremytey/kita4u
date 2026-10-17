@@ -44,9 +44,6 @@ export const S = {
   // Home
   goodMorning: { en: 'Good morning', bm: 'Selamat pagi', zh: '早上好' },
   imOkay: { en: "I'm okay", bm: 'Saya okey', zh: '我很好' },
-  imOkaySub: { en: 'Tap once to check in', bm: 'Tekan sekali untuk lapor diri', zh: '点一下报平安' },
-  whatIsThis: { en: 'What is this?', bm: 'Apa ini?', zh: '这是什么？' },
-  needHelp: { en: 'I need help', bm: 'Saya perlukan bantuan', zh: '我需要帮忙' },
   footer: {
     en: `${APP_NAME} is not an emergency service.`,
     bm: `${APP_NAME} bukan perkhidmatan kecemasan.`,
@@ -80,9 +77,25 @@ export const S = {
     bm: 'Tekan Saya okey bila anda sedia.',
     zh: '准备好时请点“我很好”。',
   },
+  // Phase 11 Home cards. BM and 中文 are drafts.
+  todayCheckIn: { en: "Today's check-in", bm: 'Pemeriksaan hari ini', zh: '今日报平安' },
+  letThemKnow: { en: 'Let them know', bm: 'Beritahu mereka', zh: '让他们知道' },
+  justOneTap: { en: 'Just one tap.', bm: 'Hanya satu ketikan.', zh: '只需点一下。' },
+  allSet: { en: 'All set', bm: 'Siap', zh: '已完成' },
+  checkedInHeading: { en: "You're checked in", bm: 'Anda sudah lapor diri', zh: '你已报平安' },
+  needSomething: { en: 'Need something?', bm: 'Perlukan sesuatu?', zh: '需要什么？' },
+  askYourCircle: { en: 'Ask your Circle', bm: 'Tanya Bulatan anda', zh: '问问你的关怀圈' },
+  explainMessage: { en: 'Explain a message', bm: 'Terangkan satu mesej', zh: '解释一条信息' },
+  makeSimple: { en: 'Make it simple', bm: 'Mudahkan', zh: '说得简单点' },
+  askFavour: { en: 'Ask for a small favour', bm: 'Minta pertolongan kecil', zh: '请求一个小帮忙' },
+  askMeiSub: { en: 'Ask Mei', bm: 'Tanya Mei', zh: '请 Mei 帮忙' },
+  peopleWhoHelp: { en: 'People who help', bm: 'Orang yang membantu', zh: '帮助你的人' },
 
   // What is this? (message helper, simulated)
   chooseTitle: { en: 'Which message do you want to understand?', bm: 'Mesej mana yang anda mahu faham?', zh: '你想看懂哪一条信息？' },
+  messageHelper: { en: 'Message helper', bm: 'Pembantu mesej', zh: '信息助手' },
+  chooseAnother: { en: 'Choose another message', bm: 'Pilih mesej lain', zh: '选另一条信息' },
+  inSimpleWords: { en: 'In simple words', bm: 'Dalam bahasa mudah', zh: '用简单的话说' },
   samplesLabel: { en: 'Sample messages for this prototype.', bm: 'Mesej contoh untuk prototaip ini.', zh: '本原型的示例信息。' },
   reading: { en: 'Reading…', bm: 'Membaca…', zh: '正在读取…' },
   suspiciousBox: {
@@ -155,7 +168,11 @@ export const S = {
   noOneConfirmed: { en: 'No one has confirmed yet.', bm: 'Belum ada yang mengesahkan.', zh: '还没有人确认。' },
 
   // I need help (favour from the neighbour)
-  helpPickTitle: { en: 'What do you need help with?', bm: 'Anda perlukan bantuan apa?', zh: '你需要什么帮忙？' },
+  smallFavour: { en: 'Small favour', bm: 'Pertolongan kecil', zh: '小帮忙' },
+  helpPickTitle: { en: 'What can Mei help with?', bm: 'Mei boleh bantu apa?', zh: 'Mei 可以帮你什么？' },
+  subGroceries: { en: 'Pick up a few items', bm: 'Ambil beberapa barang', zh: '买几样东西' },
+  subPhone: { en: 'Help with a phone setting', bm: 'Bantu tetapan telefon', zh: '帮忙设置手机' },
+  subClinic: { en: 'Ask for a lift', bm: 'Minta tumpang', zh: '请人载一程' },
   taskGroceriesTitle: { en: 'Groceries', bm: 'Barang dapur', zh: '买菜' },
   taskPhoneTitle: { en: 'Phone help', bm: 'Bantuan telefon', zh: '手机帮忙' },
   taskClinicTitle: { en: 'Clinic ride', bm: 'Tumpang ke klinik', zh: '载去诊所' },

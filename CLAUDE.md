@@ -51,9 +51,9 @@ Used on Family and Community only. Never on resident Home: the resident gets one
 ## Screens
 Landing, Home (states: normal, checked in, reminder, chain running, away, contact checked), What is this? (choose, reading, result, sent), I need help (pick, confirm, status, done), Contact welfare card, Neighbour help card, Family timeline, Community case card (thin: no charts), Demo panel.
 Roles: Resident, Neighbour, Family, Community, switched from the demo panel.
-Home layout, top to bottom: status sentence, one hero "I'm okay" button (I'm back while away, Checked in {time} when done), two full-width secondary buttons (What is this?, I need help), the Circle row, footer. Red box only for Needs help and Unresolved.
-CircleStrip (the Circle row) is on Home only.
-Demo bar: one full-width "Demo controls" handle at the bottom. The clock lives in the ribbon.
+Home layout, top to bottom: name and status sentence, the check-in card (orange; green when done; white while away) holding the one hero "I'm okay" button (I'm back while away, Checked in {time} when done), I'm away (reminder state only), the Ask section with two full-width action cards (Explain a message, Ask for a small favour), the Circle card, footer. There is no separate "I need help" button: the favour card opens that flow. Red box only for Needs help and Unresolved.
+CircleStrip (the Circle card) is on Home only. Avatars are illustrated badges (src/components/avatars.tsx), named "Name, Role".
+Demo bar: one floating "Demo controls" pill at the bottom right of the phone column. The clock lives in the ribbon.
 
 ## Message helper (simulated)
 Three predefined samples: Suspicious SMS, Electricity bill, Township notice. Each has a fictional message, a two-sentence explanation, and a suspicious flag. Show a thumbnail drawn in HTML/CSS (a message card), not an image file. No Take photo button. Always show the tag DEMO RESULT · SAMPLE MESSAGE. Buttons: Ask Daniel, Read aloud, Done. The message itself sits behind a Show message toggle. Under the buttons: "While you're here: tap I'm okay."
@@ -70,7 +70,7 @@ All user-facing text lives in src/strings.ts as { en, bm, zh } objects. Translat
 ## File layout
 src/main.tsx, App.tsx, index.css, strings.ts, types.ts
 src/lib/engine.ts, engine.selftest.ts, store.ts (events + localStorage), speech.ts, samples.ts
-src/components/ (Card, BigButton, CircleStrip, ChainBar, TopBar, DemoPanel, PhoneFrame)
+src/components/ (Card, BigButton, CircleStrip, avatars, ChainBar, TopBar, DemoPanel, PhoneFrame)
 src/screens/ (Landing, Home, WhatIsThis, NeedHelp, ContactCard, NeighbourHelp, Family, Community)
 
 ## Working rules

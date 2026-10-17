@@ -1,4 +1,5 @@
-import { Check } from 'lucide-react'
+import { CheckCircle2, Users } from 'lucide-react'
+import { Eyebrow } from './Card'
 import { useT, type StrKey } from '../strings'
 import type { Contact } from '../types'
 import { DanielAvatar, MeiAvatar, TownshipAvatar } from './avatars'
@@ -31,25 +32,32 @@ export function Avatar({ who, size = 58, order }: { who: Contact; size?: number;
   )
 }
 
-// The resident's Circle: three illustrated badges with role labels. Home only.
+// The resident's Circle: three illustrated badges, numbered in the order they are asked. Home only.
 export default function CircleStrip() {
   const t = useT()
+  const people = Object.keys(PEOPLE) as Contact[]
   return (
-    <section aria-labelledby="circle-title" className="flex flex-col gap-3">
-      <h2 id="circle-title" className="text-body font-bold">
-        {t('yourCircle')}
-      </h2>
+    <section aria-labelledby="circle-title" className="flex flex-col gap-4 rounded-[26px] border-2 border-edge bg-surface p-5">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex flex-col gap-1">
+          <Eyebrow>{t('yourCircle')}</Eyebrow>
+          <h2 id="circle-title" className="text-title font-bold">
+            {t('peopleWhoHelp')}
+          </h2>
+        </div>
+        <Users size={26} strokeWidth={2.4} className="mt-1 shrink-0 text-ink-soft" aria-hidden />
+      </div>
       <ul className="grid grid-cols-3 gap-2">
-        {(Object.keys(PEOPLE) as Contact[]).map((c) => (
+        {people.map((c, i) => (
           <li key={c} className="flex flex-col items-center gap-1 text-center">
-            <Avatar who={c} order={(Object.keys(PEOPLE) as Contact[]).indexOf(c) + 1} />
-            <span className="text-small leading-tight font-bold">{t(PEOPLE[c].name)}</span>
+            <Avatar who={c} order={i + 1} />
+            <span className="mt-1 text-small leading-tight font-bold">{t(PEOPLE[c].name)}</span>
             <span className="text-small leading-tight text-ink-soft">{t(PEOPLE[c].role)}</span>
           </li>
         ))}
       </ul>
-      <p className="flex items-center justify-center gap-2 text-small font-bold text-done">
-        <Check size={20} strokeWidth={3} aria-hidden />
+      <p className="flex items-center justify-center gap-2 border-t-2 border-line pt-4 text-small font-bold text-done">
+        <CheckCircle2 size={24} strokeWidth={2.4} aria-hidden />
         {t('allAgreed')}
       </p>
     </section>

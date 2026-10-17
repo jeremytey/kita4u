@@ -1,8 +1,21 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { AlertTriangle, CalendarClock, CheckCircle2, HandHeart, Luggage, Minus, Plus, ScanSearch, Undo2, UserX } from 'lucide-react'
+import {
+  AlertTriangle,
+  CalendarClock,
+  Check,
+  CheckCircle2,
+  HeartHandshake,
+  House,
+  Luggage,
+  MessageCircleQuestion,
+  Minus,
+  Plus,
+  Undo2,
+  UserX,
+} from 'lucide-react'
 import { useCallback, useRef, useState, type ReactNode } from 'react'
 import BigButton from '../components/BigButton'
-import { DemoReplyTag } from '../components/Card'
+import { ActionCard, DemoReplyTag, Eyebrow } from '../components/Card'
 import { StatusTag } from '../components/ChainBar'
 import CircleStrip, { PEOPLE } from '../components/CircleStrip'
 import HeroButton from '../components/HeroButton'
@@ -199,17 +212,23 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
     ) : status === 'away' ? (
       <HeroButton variant="quiet" icon={Undo2} label={t('imBack')} onClick={() => add('BACK', 'resident')} />
     ) : (
-      <HeroButton
-        icon={CheckCircle2}
-        label={t('imOkay')}
-        sub={status === 'normal' ? t('imOkaySub') : undefined}
-        onClick={() => add('CHECK_IN', 'resident')}
-      />
+      <HeroButton label={t('imOkay')} onClick={() => add('CHECK_IN', 'resident')} />
     )
+
+  // The check-in card around the hero: orange to do, green when done, white while away. The status sentence above says
+  // where things stand; the card only says what the button is for.
+  const done = status === 'checkedIn'
+  const away = status === 'away'
+  const cardStyle = done
+    ? 'border-done bg-done-tint shadow-[0_10px_0_rgba(37,107,66,0.14)]'
+    : away
+      ? 'border-edge bg-surface'
+      : 'border-accent-edge bg-accent shadow-[0_10px_0_rgba(154,74,18,0.12)]'
+  const CardIcon = done ? Check : away ? Luggage : House
 
   return (
     <>
-      <TopBar left={<span className="text-body font-bold">{t(greetingKey(now))}</span>} />
+      <TopBar left={<span className="text-small font-bold tracking-wide text-accent-ink uppercase">{t(greetingKey(now))}</span>} />
       <main className="flex flex-1 flex-col gap-6 px-4 pt-4 pb-8">
         <div className="flex flex-col gap-3">
           <h1 className="text-greet font-bold">{t('residentName')}</h1>
@@ -223,7 +242,31 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
         </div>
 
         <div className="flex flex-col gap-3">
-          {hero}
+          <section
+            aria-labelledby={away ? undefined : 'checkin-title'}
+            aria-label={away ? t('todayCheckIn') : undefined}
+            className={`flex min-h-[282px] flex-col justify-between gap-6 rounded-[28px] border-2 p-6 transition-colors duration-200 ${cardStyle}`}
+            style={done || away ? undefined : { backgroundImage: 'radial-gradient(circle at 100% 0, rgba(255,255,255,0.45), transparent 12rem)' }}
+          >
+            <div className="flex items-start gap-4">
+              <span
+                aria-hidden
+                className={`flex size-16 shrink-0 items-center justify-center rounded-[20px] border-2 border-ink/15 bg-surface ${done ? 'text-done' : 'text-ink'}`}
+              >
+                <CardIcon size={40} strokeWidth={2.4} />
+              </span>
+              <div className="flex min-w-0 flex-col gap-1">
+                <Eyebrow className="text-ink">{t(done ? 'allSet' : 'todayCheckIn')}</Eyebrow>
+                {!away && (
+                  <h2 id="checkin-title" className="text-greet font-bold">
+                    {t(done ? 'checkedInHeading' : 'letThemKnow')}
+                  </h2>
+                )}
+                {status === 'normal' && <p className="text-body">{t('justOneTap')}</p>}
+              </div>
+            </div>
+            {hero}
+          </section>
           {status === 'reminder' && (
             <BigButton icon={Luggage} variant="secondary" onClick={() => setSheet(true)}>
               {t('imAway')}
@@ -231,14 +274,16 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
           )}
         </div>
 
-        <div className="flex flex-col gap-3">
-          <BigButton icon={ScanSearch} variant="secondary" onClick={onWhatIsThis}>
-            {t('whatIsThis')}
-          </BigButton>
-          <BigButton icon={HandHeart} variant="secondary" onClick={onNeedHelp}>
-            {t('needHelp')}
-          </BigButton>
-        </div>
+        <section aria-labelledby="ask-title" className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
+            <Eyebrow>{t('needSomething')}</Eyebrow>
+            <h2 id="ask-title" className="text-title font-bold">
+              {t('askYourCircle')}
+            </h2>
+          </div>
+          <ActionCard icon={MessageCircleQuestion} tone="warn" title={t('explainMessage')} sub={t('makeSimple')} onClick={onWhatIsThis} />
+          <ActionCard icon={HeartHandshake} tone="done" title={t('askFavour')} sub={t('askMeiSub')} onClick={onNeedHelp} />
+        </section>
 
         <CircleStrip />
 
