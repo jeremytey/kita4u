@@ -1,13 +1,14 @@
 import type { LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 
-type Variant = 'primary' | 'secondary' | 'quiet' | 'alert'
+type Variant = 'primary' | 'secondary' | 'quiet' | 'alert' | 'dark'
 
 const STYLE: Record<Variant, string> = {
   primary: 'bg-accent text-ink',
   secondary: 'bg-surface text-ink ring-2 ring-edge ring-inset',
   quiet: 'bg-quiet-tint text-ink ring-2 ring-edge ring-inset',
   alert: 'bg-alert text-white',
+  dark: 'bg-ink text-white', // demo End call. Not red: red is reserved.
 }
 
 // Full width, at least 64px tall.

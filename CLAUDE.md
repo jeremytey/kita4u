@@ -19,6 +19,7 @@ Persona: Mak Cik Aminah, Unit 12-3. Everything is fictional.
 - Never imply a real township, guardhouse, management team or neighbour agreed to anything.
 - "Not an emergency service" goes in the Home footer. "If this is an emergency, call 999" appears only in the Needs help state.
 - No live location tracking. Say so on the Family screen.
+- The chat and call screens are labelled DEMO CHAT / DEMO CALL. No phone number, no tel: link, no free text.
 
 ## Escalation rules (the core logic)
 All times are SIMULATED. Delays are demo settings, not validated policy.

@@ -1,5 +1,18 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { Car, Check, CheckCircle2, Heart, Info, Minus, RotateCcw, ShoppingBasket, Smartphone, type LucideIcon } from 'lucide-react'
+import {
+  Car,
+  Check,
+  CheckCircle2,
+  Heart,
+  Info,
+  MessageCircle,
+  Minus,
+  Phone,
+  RotateCcw,
+  ShoppingBasket,
+  Smartphone,
+  type LucideIcon,
+} from 'lucide-react'
 import { useState } from 'react'
 import BigButton from '../components/BigButton'
 import { ActionCard } from '../components/Card'
@@ -8,6 +21,8 @@ import { DAY, dayOf, formatTime } from '../lib/engine'
 import { useStore } from '../lib/store'
 import { useT, type StrKey } from '../strings'
 import type { AppEvent } from '../types'
+import DemoCall from './DemoCall'
+import DemoChat from './DemoChat'
 
 export type Task = 'groceries' | 'phone' | 'clinic'
 
@@ -46,7 +61,7 @@ export function currentHelp(events: AppEvent[], now: number): HelpState | undefi
   }
 }
 
-type Step = 'pick' | 'confirm' | 'status'
+type Step = 'pick' | 'confirm' | 'status' | 'chat' | 'call'
 
 const fade = {
   initial: { opacity: 0, y: 8 },
@@ -94,7 +109,11 @@ export default function NeedHelp({ initialTask, onExit }: { initialTask?: Task; 
     add('HELP_REQUESTED', 'resident', { task: k })
     setStep('status')
   }
-  const back = () => (step === 'confirm' ? setStep('pick') : onExit())
+  const back = () => {
+    if (step === 'confirm') setStep('pick')
+    else if (step === 'chat' || step === 'call') setStep('status')
+    else onExit()
+  }
   const phrase = t(TASKS[task].phrase)
 
   return (
@@ -187,9 +206,33 @@ export default function NeedHelp({ initialTask, onExit }: { initialTask?: Task; 
                 </div>
               )}
 
+              {/* Scripted demo only, after Mei accepted and before the favour is done. Never with Ask again or Say thanks. */}
+              {help.acceptedAt !== undefined && help.doneAt === undefined && (
+                <div className="flex flex-col gap-3">
+                  <BigButton icon={MessageCircle} variant="secondary" onClick={() => setStep('chat')}>
+                    {t('chatMei')}
+                  </BigButton>
+                  <BigButton icon={Phone} variant="secondary" onClick={() => setStep('call')}>
+                    {t('callMei')}
+                  </BigButton>
+                </div>
+              )}
+
               <BigButton variant="quiet" onClick={onExit}>
                 {t('backHome')}
               </BigButton>
+            </motion.div>
+          )}
+
+          {step === 'chat' && (
+            <motion.div key="chat" {...fade}>
+              <DemoChat />
+            </motion.div>
+          )}
+
+          {step === 'call' && (
+            <motion.div key="call" {...fade} className="flex flex-1 flex-col">
+              <DemoCall onEnd={() => setStep('status')} />
             </motion.div>
           )}
         </AnimatePresence>

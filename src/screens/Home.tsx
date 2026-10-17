@@ -60,7 +60,7 @@ function AwaySheet({ now, onPick, onClose }: { now: number; onPick: (until: numb
         role="dialog"
         aria-modal="true"
         aria-labelledby="away-title"
-        className="w-full rounded-t-[32px] bg-bg px-4 pt-6 pb-8"
+        className="w-full rounded-t-[32px] bg-bg px-4 pt-6 pb-24" // pb-24: clears the 64px Demo controls handle
         initial={{ y: 40 }}
         animate={{ y: 0 }}
         exit={{ y: 40 }}
