@@ -6,7 +6,7 @@ import { DemoReplyTag } from '../components/Card'
 import { PEOPLE } from '../components/CircleStrip'
 import { DAY, dayOf, formatTime, homeStatus } from '../lib/engine'
 import { SAMPLES } from '../lib/samples'
-import { latestContact } from '../lib/statusText'
+import { awayWhen, latestContact } from '../lib/statusText'
 import { useStore } from '../lib/store'
 import { useT, type StrKey } from '../strings'
 import type { AppEvent, ChainResult, Contact } from '../types'
@@ -67,8 +67,7 @@ function buildTimeline(events: AppEvent[], chain: ChainResult, now: number, t: T
         break
       case 'AWAY': {
         const until = Number(e.meta?.until ?? 0)
-        const when = dayOf(until) === dayOf(e.time) + 1 ? t('whenTomorrow') : t('whenSunday')
-        push(e.time, t('tlAway', { when }), 'quiet')
+        push(e.time, t('tlAway', { when: awayWhen(until, e.time, t) }), 'quiet')
         break
       }
       case 'BACK':
@@ -168,10 +167,8 @@ export default function Family() {
         return t('fNeedsHelp', { name: name(chain.steps.find((s) => s.outcome === 'needsHelp')?.who) })
       case 'unresolved':
         return t('fUnresolved')
-      case 'away': {
-        const until = chain.awayUntil ?? now
-        return t('fAway', { when: t(dayOf(until) === dayOf(now) + 1 ? 'whenTomorrow' : 'whenSunday') })
-      }
+      case 'away':
+        return t('fAway', { when: awayWhen(chain.awayUntil ?? now, now, t) })
     }
   })()
 

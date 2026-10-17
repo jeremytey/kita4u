@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { AlertTriangle, CalendarClock, CheckCircle2, HandHeart, Luggage, ScanSearch, Undo2, UserX } from 'lucide-react'
+import { AlertTriangle, CalendarClock, CheckCircle2, HandHeart, Luggage, Minus, Plus, ScanSearch, Undo2, UserX } from 'lucide-react'
 import { useCallback, useRef, useState, type ReactNode } from 'react'
 import BigButton from '../components/BigButton'
 import { DemoReplyTag } from '../components/Card'
@@ -8,7 +8,7 @@ import CircleStrip, { PEOPLE } from '../components/CircleStrip'
 import HeroButton from '../components/HeroButton'
 import TopBar from '../components/TopBar'
 import { DAY, dayOf, formatTime, homeStatus } from '../lib/engine'
-import { latestContact } from '../lib/statusText'
+import { awayWhen, latestContact } from '../lib/statusText'
 import { simulatedContacts, useStore } from '../lib/store'
 import { useDialog } from '../lib/useDialog'
 import { useT, type StrKey } from '../strings'
@@ -35,21 +35,15 @@ function AlertBox({ icon: Icon, title, children }: { icon: typeof UserX; title: 
   )
 }
 
-// Away until: next day 09:00, or the next Sunday 09:00 (Day 0 is Friday, so Sunday is day index 2).
-function awayOptions(now: number) {
-  const today = dayOf(now)
-  const weekday = ((today % 7) + 7) % 7
-  let toSunday = (2 - weekday + 7) % 7
-  if (toSunday === 0) toSunday = 7
-  return {
-    tomorrow: (today + 1) * DAY + 9 * 60,
-    sunday: toSunday === 1 ? undefined : (today + toSunday) * DAY + 9 * 60,
-  }
-}
+const MAX_AWAY_DAYS = 14 // demo setting, not validated policy
+
+const stepBtn =
+  'flex size-16 items-center justify-center rounded-2xl bg-surface ring-2 ring-edge ring-inset disabled:opacity-60'
 
 function AwaySheet({ now, onPick, onClose }: { now: number; onPick: (until: number) => void; onClose: () => void }) {
   const t = useT()
-  const opts = awayOptions(now)
+  const [days, setDays] = useState(1)
+  const until = (dayOf(now) + days) * DAY + 9 * 60
   const sheetRef = useRef<HTMLDivElement>(null)
   useDialog(sheetRef, true, onClose) // focus in, Tab trapped, Escape closes, focus back to I'm away (or the hero)
   return (
@@ -76,15 +70,34 @@ function AwaySheet({ now, onPick, onClose }: { now: number; onPick: (until: numb
         <h2 id="away-title" className="mb-5 text-title font-bold">
           {t('awaySheetTitle')}
         </h2>
-        <div className="flex flex-col gap-3">
-          <BigButton icon={CalendarClock} variant="secondary" onClick={() => onPick(opts.tomorrow)}>
-            {t('untilTomorrow')}
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between gap-3">
+            <button
+              type="button"
+              aria-label={t('fewerDays')}
+              disabled={days <= 1}
+              onClick={() => setDays((d) => Math.max(1, d - 1))}
+              className={stepBtn}
+            >
+              <Minus size={28} aria-hidden />
+            </button>
+            <p aria-live="polite" className="text-greet font-bold tabular-nums">
+              {t(days === 1 ? 'awayDayOne' : 'awayDays', { n: days })}
+            </p>
+            <button
+              type="button"
+              aria-label={t('moreDays')}
+              disabled={days >= MAX_AWAY_DAYS}
+              onClick={() => setDays((d) => Math.min(MAX_AWAY_DAYS, d + 1))}
+              className={stepBtn}
+            >
+              <Plus size={28} aria-hidden />
+            </button>
+          </div>
+          <p className="text-center text-body text-ink-soft">{t('awayPreview', { when: awayWhen(until, now, t) })}</p>
+          <BigButton icon={CalendarClock} onClick={() => onPick(until)}>
+            {t('setAway')}
           </BigButton>
-          {opts.sunday !== undefined && (
-            <BigButton icon={CalendarClock} variant="secondary" onClick={() => onPick(opts.sunday!)}>
-              {t('untilSunday')}
-            </BigButton>
-          )}
           <BigButton variant="quiet" onClick={onClose}>
             {t('cancel')}
           </BigButton>
@@ -115,11 +128,7 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
 
   const contactName = (who?: string) => (who && who in PEOPLE ? t(PEOPLE[who as keyof typeof PEOPLE].name) : '')
   const helpReporter = chain.steps.find((s) => s.outcome === 'needsHelp')?.who
-  const awayWhen = (() => {
-    if (chain.awayUntil === undefined) return ''
-    if (dayOf(chain.awayUntil) === dayOf(now) + 1) return t('whenTomorrow')
-    return t('whenSunday')
-  })()
+  const awayLabel = chain.awayUntil === undefined ? '' : awayWhen(chain.awayUntil, now, t)
   const hadCase = chain.caseOpenedAt !== undefined
   const checkedInTime = formatTime(chain.checkedInAt ?? now)
 
@@ -176,7 +185,7 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
       case 'away':
         return (
           <div className="flex flex-col gap-1">
-            <p className="text-title font-bold">{t('awayTitle', { when: awayWhen })}</p>
+            <p className="text-title font-bold">{t('awayTitle', { when: awayLabel })}</p>
             <p className="text-body">{t('awaySub')}</p>
           </div>
         )

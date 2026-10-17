@@ -1,4 +1,15 @@
+import type { StrKey, useT } from '../strings'
 import type { ChainResult, Contact } from '../types'
+import { dayOf } from './engine'
+
+type Tr = ReturnType<typeof useT>
+
+// Away until: "tomorrow 09:00" for the next day, otherwise the weekday ("Sun 09:00").
+export function awayWhen(until: number, now: number, t: Tr): string {
+  if (dayOf(until) === dayOf(now) + 1) return t('whenTomorrow')
+  const wd = ((dayOf(until) % 7) + 7) % 7
+  return t('whenOnDay', { day: t(`day${wd}` as StrKey) })
+}
 
 // Read-only: which contact the case is with right now, for the one-sentence status on Home and Family.
 export function latestContact(chain: ChainResult): { who: Contact; kind: 'asked' | 'checking' } | undefined {
