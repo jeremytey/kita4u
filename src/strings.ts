@@ -404,6 +404,7 @@ export const S = {
   finishAnyway: { en: 'You can finish without choosing.', bm: 'Anda boleh selesai tanpa memilih.', zh: '不选择也可以完成。' },
   next: { en: 'Next', bm: 'Seterusnya', zh: '下一步' },
   finish: { en: 'Finish', bm: 'Selesai', zh: '完成' },
+  skipSetup: { en: 'Skip setup · Try demo', bm: 'Langkau persediaan · Cuba demo', zh: '跳过设置 · 试用演示' },
   inviteEyebrow: { en: 'Circle invitation', bm: 'Jemputan Bulatan', zh: '关怀圈邀请' },
   inviteTitle: { en: 'Aminah invited you to her Circle.', bm: 'Aminah menjemput anda ke Bulatannya.', zh: 'Aminah 邀请你加入她的关怀圈。' },
   inviteDecline: { en: 'Decline', bm: 'Tolak', zh: '拒绝' },

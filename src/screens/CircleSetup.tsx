@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, CalendarDays, Check, Circle, CircleCheck, Clock, ListOrdered, ShieldCheck, Users } from 'lucide-react'
+import { ArrowRight, CalendarDays, Check, Circle, CircleCheck, Clock, ListOrdered, Play, ShieldCheck, Users } from 'lucide-react'
 import { useState } from 'react'
 import BigButton from '../components/BigButton'
 import { Eyebrow, IconTile } from '../components/Card'
@@ -84,7 +84,7 @@ function SwitchRow({ task, on, onToggle }: { task: Task; on: boolean; onToggle: 
   )
 }
 
-export default function CircleSetup({ onExit, onDone }: { onExit: () => void; onDone: () => void }) {
+export default function CircleSetup({ onExit, onDone, onDemo }: { onExit: () => void; onDone: () => void; onDemo: () => void }) {
   const t = useT()
   const circle = useCircle()
   const [step, setStep] = useState(1)
@@ -124,6 +124,10 @@ export default function CircleSetup({ onExit, onDone }: { onExit: () => void; on
               <Line icon={ListOrdered}>{t('orderFixed')}</Line>
               <BigButton icon={ArrowRight} onClick={() => setStep(2)}>
                 {t('next')}
+              </BigButton>
+              {/* Same prepared state as Demo mode on Landing. */}
+              <BigButton icon={Play} variant="quiet" onClick={onDemo}>
+                {t('skipSetup')}
               </BigButton>
             </motion.div>
           )}
