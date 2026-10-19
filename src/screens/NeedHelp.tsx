@@ -5,6 +5,7 @@ import {
   CheckCircle2,
   Heart,
   HeartHandshake,
+  Info,
   MessageCircle,
   Minus,
   Phone,
@@ -19,6 +20,7 @@ import BigButton from '../components/BigButton'
 import { ActionCard, Eyebrow, IconTile } from '../components/Card'
 import TopBar from '../components/TopBar'
 import { DAY, dayOf, formatTime } from '../lib/engine'
+import { useCircle } from '../lib/circle'
 import { useStore } from '../lib/store'
 import { useT, type StrKey } from '../strings'
 import type { AppEvent } from '../types'
@@ -111,8 +113,11 @@ export default function NeedHelp({ initialTask, onExit }: { initialTask?: Task; 
   const t = useT()
   const { events, now, add } = useStore()
   const help = currentHelp(events, now)
+  // Only the help types the resident turned on in setup. A task that is off never opens on confirm.
+  const { prefs } = useCircle()
+  const tasksOn = (Object.keys(TASKS) as Task[]).filter((k) => prefs[k])
   const [step, setStep] = useState<Step>(() => {
-    if (initialTask) return 'confirm'
+    if (initialTask) return prefs[initialTask] ? 'confirm' : 'pick'
     return help && help.thanksAt === undefined ? 'status' : 'pick'
   })
   const [task, setTask] = useState<Task>(initialTask ?? help?.task ?? 'groceries')
@@ -140,7 +145,18 @@ export default function NeedHelp({ initialTask, onExit }: { initialTask?: Task; 
                 <Eyebrow>{t('smallFavour')}</Eyebrow>
               </div>
               <h1 className="text-greet font-bold">{t('helpPickTitle')}</h1>
-              {(Object.keys(TASKS) as Task[]).map((k) => (
+              {tasksOn.length === 0 && (
+                <>
+                  <p className="flex items-start gap-3 rounded-[24px] border-2 border-edge bg-surface p-4 text-body font-bold">
+                    <Info size={26} strokeWidth={2.4} className="mt-0.5 shrink-0 text-quiet" aria-hidden />
+                    {t('noHelpTypes')}
+                  </p>
+                  <BigButton variant="secondary" onClick={onExit}>
+                    {t('back')}
+                  </BigButton>
+                </>
+              )}
+              {tasksOn.map((k) => (
                 <ActionCard
                   key={k}
                   icon={TASKS[k].icon}
@@ -153,7 +169,7 @@ export default function NeedHelp({ initialTask, onExit }: { initialTask?: Task; 
                   }}
                 />
               ))}
-              <SafetyNote />
+              {tasksOn.length > 0 && <SafetyNote />}
             </motion.div>
           )}
 
