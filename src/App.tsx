@@ -63,7 +63,7 @@ export default function App() {
         {screen === 'landing' && <Landing onStart={() => setScreen(setupDone ? 'home' : 'setup')} onDemo={() => setPanel(true)} onPreview={openPreview} />}
         {screen === 'setup' && <CircleSetup key={visit} onExit={() => setScreen('landing')} onDone={() => setScreen('home')} />}
         {screen === 'home' && (
-          <Home onAsk={() => setScreen('askChooser')} onHelp={() => setScreen('helpCircle')} />
+          <Home onAsk={() => setScreen('askChooser')} onHelp={() => setScreen('helpCircle')} onActivities={openPreview} />
         )}
         {screen === 'askChooser' && (
           <AskChooser
@@ -75,7 +75,7 @@ export default function App() {
             }}
           />
         )}
-        {screen === 'helpCircle' && <HelpYourCircle onBack={() => setScreen('home')} onPreview={openPreview} />}
+        {screen === 'helpCircle' && <HelpYourCircle onBack={() => setScreen('home')} />}
         {screen === 'activities' && <ActivitiesPreview onBack={() => setScreen(from)} />}
         {screen === 'needHelp' && <NeedHelp key={visit} initialTask={helpTask} onExit={() => setScreen('home')} />}
         {screen === 'whatIsThis' && (

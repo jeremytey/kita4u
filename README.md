@@ -52,7 +52,7 @@ All times are SIMULATED and staged with the Demo panel. A ribbon at the top of e
 
 Needs help: once a contact taps "Needs help", every view (Home, Mei, Daniel, Township Support) shows "If this may be an emergency, call 999.", a red Call 999 button (tel:999, the only phone link in the app) and "Kita4U does not replace emergency services." 999 is not a step in the chain.
 
-Proposed preview: "What's next (proposed)" on Landing, the dashed "Neighbourhood activities (proposed)" card on Help your Circle, or "Proposed preview" in the Demo panel open a labelled, read-only preview of neighbourhood activities among people in your Circle (PROPOSED FEATURE · SAMPLE CONTENT). It is a product direction, not a feature: nothing in it is stored or works.
+Proposed preview: "What's next (proposed)" on Landing, the dashed "Neighbourhood activities (proposed)" card on Home (under Ask and Help), or "Proposed preview" in the Demo panel open a labelled, read-only preview of neighbourhood activities among people in your Circle (PROPOSED FEATURE · SAMPLE CONTENT). It is a product direction, not a feature: nothing in it is stored or works.
 
 Away: in the reminder state, "I'm away" (under the check-in card) opens a day stepper (1 to 14 days, a demo setting, not validated policy). The sheet previews the return time ("Away until tomorrow 09:00" or a weekday such as "Sun 09:00"). "Set away" pauses everything until then; "I'm back" ends it.
 

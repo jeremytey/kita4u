@@ -4,6 +4,8 @@ import {
   CalendarClock,
   Check,
   CheckCircle2,
+  ChevronRight,
+  Compass,
   HeartHandshake,
   House,
   Luggage,
@@ -15,7 +17,7 @@ import {
 } from 'lucide-react'
 import { useCallback, useRef, useState, type ReactNode } from 'react'
 import BigButton from '../components/BigButton'
-import { ActionCard, DemoReplyTag, Eyebrow } from '../components/Card'
+import { ActionCard, DemoReplyTag, Eyebrow, IconTile } from '../components/Card'
 import { StatusTag } from '../components/ChainBar'
 import CircleRing from '../components/CircleRing'
 import Emergency999 from '../components/Emergency999'
@@ -130,7 +132,7 @@ function greetingKey(now: number): StrKey {
   return 'goodEvening'
 }
 
-export default function Home({ onAsk, onHelp }: { onAsk: () => void; onHelp: () => void }) {
+export default function Home({ onAsk, onHelp, onActivities }: { onAsk: () => void; onHelp: () => void; onActivities: () => void }) {
   const t = useT()
   const { chain, now, add, events } = useStore()
   const status = homeStatus(chain)
@@ -313,6 +315,20 @@ export default function Home({ onAsk, onHelp }: { onAsk: () => void; onHelp: () 
         <div className="flex flex-col gap-3">
           <ActionCard icon={MessageCircleQuestion} tone="accent" title={t('askYourCircle')} sub={t('askSub')} onClick={onAsk} />
           <ActionCard icon={HeartHandshake} tone="done" title={t('helpYourCircle')} sub={t('helpSub')} onClick={onHelp} />
+          {/* Not a main action: a link to the proposed preview. Grey and dashed so it reads as unfinished by design. */}
+          <button
+            type="button"
+            onClick={onActivities}
+            className="grid min-h-[86px] w-full grid-cols-[56px_1fr_auto] items-center gap-3.5 rounded-[22px] border-2 border-dashed border-edge bg-quiet-tint p-3.5 text-left transition-transform duration-200 active:scale-[0.98]"
+          >
+            <IconTile icon={Compass} tone="quiet" />
+            <span className="flex min-w-0 flex-col">
+              {/* At 260px wide (150% text stand-in) the column is 85px: long words wrap instead of scrolling the page. */}
+              <span className="text-title leading-tight font-bold [overflow-wrap:anywhere] hyphens-auto">{t('activitiesCard')}</span>
+              <span className="text-body text-ink-soft">{t('seeIdea')}</span>
+            </span>
+            <ChevronRight size={27} strokeWidth={2.4} className="text-ink-soft" aria-hidden />
+          </button>
         </div>
 
         <p className="mt-auto pt-4 text-center text-small text-ink-soft">{t('footer')}</p>
