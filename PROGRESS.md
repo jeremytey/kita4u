@@ -11,6 +11,9 @@
 - [x] 7 Family and Community views
 - [x] 8 Polish and audit
 - [x] 9 UI redesign (calm resident app, not a dashboard)
+- [x] 10 Groupmate suggestions
+- [x] 11 UI refresh and illustrated avatars
+- [x] 12 Kita4U: ring, setup and consent prototype, Ask / Help, 999, proposed preview, pitch claims
 
 ## Choices made
 - Engine (src/lib/engine.ts) and self-test were written early, during phase 0 while npm installed. They are committed in phase 0 and wired up in phase 4.
@@ -157,20 +160,36 @@ engine.ts, types.ts, store.ts, speech.ts, samples.ts and engine.selftest.ts were
 - 12D-fix (moved the preview entry): the dashed grey "Neighbourhood activities (proposed)" / "See the idea" card now sits on Home directly under Ask your Circle and Help your Circle, in every Home state (away and Needs help too); it is a link to the proposed preview, not a main action. It was removed from Help your Circle (the space under the parcel card stays free). Home gets an onActivities prop; App opens 'activities' with from = home, and Back returns there. Landing and Demo panel entries unchanged. Same markup and strings (activitiesCard, seeIdea), incl. the 260px long-word wrap. Checks: hero bottom edge at 390x844 identical to before in all 8 states (489, 498, 456, 456, 627, 588, 716, 515); card 121px tall at 390, dashed, quiet-tint, third of the three cards; at the end of the page it is 126px clear of the Demo pill in every state. Audit of Home (8 states + pending and declined captions), Help your Circle and the preview opened from Home, 12 scenes x 260-1280 x EN/BM/中文 (216 checks): 0 issues from 320 up; the 30 failures at 260 are all the known Home ring failure (8px centre letter; BM also scrolls sideways from the check-in eyebrow); the new card stays inside the page and has no overflow there. tel: map unchanged (same six places).
 - Native-speaker review needed (BM and 中文 drafts): proposedNextStep, connectTitle, connectLine, actBadminton, actWalks, actGardening, actCoffee, meiLooking, activityWhen, connectClosing, whatsNext, activitiesCard, seeIdea, proposedPreview. (previewTag and sampleActivityTag stay English.)
 
+## Phase 12E: audit and docs (final)
+engine.ts, types.ts, store.ts, speech.ts, samples.ts and engine.selftest.ts were not touched in any phase 12 batch (git diff against backup-phase11 empty, self-test 16/16).
+- Full audit: 66 screens / states x 320/360/375/390/430/1280 x EN/BM/中文 = 1188 checks, 0 issues. Scenes: Landing; preview from Landing (and after I'm interested), from Home and from the Demo panel; setup steps 1-3; Home normal, checked in, reminder, chain running, contact checked, unresolved, needs help, away, plus the pending / accepted / declined captions; Mei none / pending / accepted / declined, asked, checking, demo checking, resolved, thanks, unresolved, needs help, favour request; Daniel no case / open / resolved / unresolved / needs help / message card; Township no case / open / resolved / unresolved / needs help / help case; Ask chooser; message helper choose / suspicious result / sent / normal result; favour pick / confirm / tracker accepted / done, demo chat, demo call, clinic ride on, all help types off; Help your Circle open / helping / can't now; away sheet (1 and 14 days); Demo panel; clean mode Landing / setup / Home / result. Rules: no horizontal scroll, no text under 20px (ribbon 16px exempt), no tappable under 64px (Demo pill 56px), every button named, every avatar "Name, Role" in all three languages, ribbon on every screen and never covering the top bar or the hero, Demo pill never over a button at the end of a screen, language toggle in view with 56x64 buttons. Ring geometry on every real ring (288 checks): no overlap or overflow, smallest gap 3.8px. Lowest contrast pairs: 4.89 (grey tag on quiet tint), 5.28 (amber pill), 5.51 (green eyebrow on done tint), 5.55 (red text on alert tint), 5.87.
+- Demo paths re-run: Resolved path (Missed check-in, +2h, +1h, +2h, +1h) ends Fri 15:00: Home "Township Support checked on you at 15:00", Daniel "Township Support reported Mum is OK at 15:00.", Township case Resolved. Unresolved path (preset, all No reply, +2h x4, +1h) ends Fri 18:00: Home "We could not reach anyone yet." with no tel: link, Daniel "No one has confirmed yet. Please try to reach Mum.", Township case Unresolved.
+- docs/PITCH-CLAIMS.md: safe to say, do not say, deck wording fixes, and a who-sees-what table copied from the screens (captured from the DOM in EN at 390px; nothing added). Two facts it records as they are: Daniel's chain bar still labels Township Support's step "Community" (only the Township case card says "Proposed role"), and Township Support's view lists favour requests.
+- README: "What it is" no longer says the resident picks the Circle (people and order are fixed); "Claim" became "Aim ... not measured"; honest status covers simulated reminders, the proposed Township role, prototype-only consent and state, 999 outside the chain and the preview; stack says where state lives. CLAUDE.md file layout updated; skill: the check-in card has no fixed minimum height.
+- Native-speaker review needed for every BM and 中文 string added or changed in phase 12 (all drafts):
+  - 12A: circleCaption.
+  - 12B: setupStep, setupPeopleTitle, willBeInvited, familyDemo, townshipProposed, orderFixed, setupHelpTitle, checkInBy, switchOn, switchOff, setupMeetTitle, introTitle, introText, imInterested, interested, notYet, next, finish, inviteEyebrow, inviteTitle, inviteDecline, inviteAccepted, inviteDeclined, circleCaptionPending, circleCaptionDeclined, noHelpTypes, showSetup.
+  - 12C: askSub, helpYourCircle, helpSub, whatDoYouNeed, parcelAsk, parcelNote, iCanHelp, youCanHelp, savedDemoOnly, proposedRole, call999Needs, call999Unresolved, call999Btn, call999Aria, notEmergencyService; reworded stChecking, tlChecking, stOk, tlOk, fChecked.
+  - 12D: proposedNextStep, connectTitle, connectLine, actBadminton, actWalks, actGardening, actCoffee, meiLooking, activityWhen, connectClosing, whatsNext, activitiesCard, seeIdea, proposedPreview.
+  - English in all languages on purpose: introTag, parcelTag, previewTag, sampleActivityTag. footer and notEmergencyService now carry the name Kita4U.
+  - Removed in phase 12: allAgreed, call999, needSomething.
+
 ## Known gaps
-- Home at 260px wide fails: the check-in card leaves a 176px ring box and the Township label is 185px (labels overlap, the centre letter drops to 8px, BM scrolls sideways). 260px is a stand-in for 150% text and was never tested before phase 11D. Not fixed on purpose.
-- Risk: Not tested with large system text.
-- Hero below the Demo pill at 360x640 in three Home states: contactChecked (bottom 663), unresolved (624) and needsHelp (796 EN, 912 BM, 766 中文); the pill top is 570. All three are above the pill at 390x844.
-- Not tested on a real phone or with a screen reader.
+- Home at 260px wide fails (260px stands in for 150% text): the check-in card leaves a 176px ring box, so the Township label (185px) overlaps and the ring's centre "A" drops to 8px; in BM the check-in eyebrow "PEMERIKSAAN HARI INI" also makes the page scroll sideways. Not fixed on purpose. At 260, Landing, the Activities preview, Help your Circle and the Demo panel were audited and pass; other screens were not audited at 260.
+- Hero below the Demo pill at 360x640 in three Home states: contactChecked (bottom 663), unresolved (624) and needsHelp (796 EN, 912 BM, 766 中文); the pill top is 570. All are above the pill at 390x844.
+- 150% / large system text not tested. Sizes are in px, so OS text settings may not scale them.
+- Not tested on a real phone.
+- Not tested with a screen reader.
+- BM and 中文 are drafts (see the native-review list in Phase 12E).
 
 ## Notes for later phases
 - Phase 4: engine.ts and engine.selftest.ts already exist from phase 0 and pass. Do not rewrite them. Phase 4 builds only store.ts (events, simulated clock, behaviours in context, localStorage, reset), ChainBar and DemoPanel with presets.
 - Missed check-in preset: clear events, set clock to Day 0 09:00. Main demo row has +1h and +2h only; +24h sits under an "Advanced" label.
-- needsHelp status shown everywhere: Home (calm text plus "If this is an emergency, call 999"), Family, Community (red tag, never Resolved).
+- needsHelp status shown everywhere: Home (calm text plus "If this is an emergency, call 999"), Family, Community (red tag, never Resolved). (999 wording superseded by Phase 12 decision 5.)
 - Once a contact's step has passed to the next person, their ContactCard is read-only: "This case has moved to <next contact>." No buttons.
 - Phase 5: (a) greeting follows the simulated hour (morning, afternoon, evening), strings in en, bm, zh. (b) Remove hardcoded 08:05 and 11:40; use real event times. (c) Home needs its own copy for needsHelp (calm text plus "If this is an emergency, call 999") and for unresolved (must not say "we are asking your Circle").
 - Do not change engine rules without asking first.
 - Decision: keep the engine. A resident check-in closes a needsHelp case. Show it as "Resolved by Aminah's check-in" and keep the Needs help entry in the log.
 
 ## Next
-All phases done. Push, deploy to Vercel, add the link to README (Live demo line).
+Phase 12 is committed locally on main (backup-phase11 marks the phase 11 state). Not pushed. Next: native-speaker review of the BM and 中文 drafts, a real-phone pass, then push and redeploy.

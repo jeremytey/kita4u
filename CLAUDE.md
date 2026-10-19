@@ -87,8 +87,10 @@ All user-facing text lives in src/strings.ts as { en, bm, zh } objects. Translat
 ## File layout
 src/main.tsx, App.tsx, index.css, strings.ts, types.ts
 src/lib/engine.ts, engine.selftest.ts, store.ts (events + localStorage), speech.ts, samples.ts
-src/components/ (Card, BigButton, CircleStrip, avatars, ChainBar, TopBar, DemoPanel, PhoneFrame)
-src/screens/ (Landing, Home, WhatIsThis, NeedHelp, ContactCard, NeighbourHelp, Family, Community)
+src/lib/circle.ts (Circle setup, invitation, prefs, parcel; own key care-circle-circle), statusText.ts, useDialog.ts
+src/components/ (Card, BigButton, HeroButton, CircleStrip, CircleRing, avatars, ChainBar, TopBar, Ribbon, DemoPanel, PhoneFrame, Emergency999)
+src/screens/ (Landing, CircleSetup, Home, AskChooser, WhatIsThis, NeedHelp, DemoChat, DemoCall, HelpYourCircle, ActivitiesPreview, ContactCard, MeiInvite, NeighbourHelp, Family, Community)
+docs/PITCH-CLAIMS.md: what the deck may and may not say, and who sees what. Keep it in step with the screens.
 
 ## Working rules
 - Every phase must leave the app runnable. Run `npm run build` before you finish a phase.

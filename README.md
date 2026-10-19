@@ -5,15 +5,22 @@ Kita4U (earlier working title: Care Circle).
 Mobile web app prototype for the Sime Darby Property University Hackathon 2026, People track.
 
 ## What it is
-A resident who lives alone picks a Circle of three trusted people: a neighbour, a family member and a community contact. The app does two jobs.
+A resident who lives alone has a Circle of three people: a neighbour (Mei), a family member (Daniel) and a proposed community role (Township Support). In this prototype the people and their order are fixed. The app does two jobs.
 - Ask: explain a confusing message in simple language, then ask the Circle. Request a simple favour from a neighbour.
 - Notice: if the resident misses a daily check-in, the app asks the Circle one person at a time and logs every step. If nobody responds, the case shows as Unresolved.
 
 Promise: Ask when you need. Be noticed when you go quiet.
-Claim: shorter time until a human knows. We do not claim to prevent emergencies.
+Aim: shorten the time until a human knows. This has not been measured. We do not claim to prevent emergencies, and Kita4U does not replace emergency services.
+
+What we may and may not say about the prototype: [docs/PITCH-CLAIMS.md](docs/PITCH-CLAIMS.md).
 
 ## Honest status
-- This is a prototype. All people, messages and times are fictional.
+- This is an interactive prototype with simulated data. All people, messages and times are fictional.
+- Reminders, contact replies and the clock are simulated. Timings are demo settings, not validated policy; a pilot would agree them with each Circle.
+- Township Support is a proposed role, to be agreed in a pilot. No township, guardhouse, neighbour or family has agreed to anything.
+- The Circle setup, Mei's invitation (Accept / Decline), help-type switches, "I'm interested" and Help your Circle are prototype-only state in the browser. Accept or Decline does not change the chain; in a real deployment consent would be enforced by a backend.
+- 999 is not a step in the chain. A Call 999 button (tel:999, the only phone link) appears only in Needs help (all views) and in Unresolved for Daniel and Township Support.
+- "Neighbourhood activities" is a labelled preview of a proposed expansion. It does not work in the prototype.
 - The "What is this?" results are predefined sample responses (labelled DEMO RESULT · SAMPLE MESSAGE). The prototype does not call an AI model.
 - Contacts and their replies are simulated by the demo panel. All timings are demo settings, not validated policy.
 - The problem has not been validated by interviews yet.
@@ -59,4 +66,4 @@ Away: in the reminder state, "I'm away" (under the check-in card) opens a day st
 Reset (under Advanced in the Demo panel) returns a clean Friday 08:00 with every contact on "No reply", and clears the Circle setup (setup not done, Mei not invited, default help types). The language stays.
 
 ## Stack
-React, Vite, TypeScript, Tailwind CSS, lucide-react, framer-motion. Deployed on Vercel.
+React, Vite, TypeScript, Tailwind CSS, lucide-react, framer-motion. No router, backend, login or database: state lives in the browser's localStorage (care-circle-state, care-circle-circle, care-circle-lang). Deployed on Vercel.

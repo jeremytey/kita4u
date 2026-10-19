@@ -6,7 +6,7 @@ description: Rules for building large, calm, accessible mobile screens for resid
 ## Size and touch
 - Phone width, max 430px, one column, 16px side padding.
 - Body and small text 20px minimum. Only the top ribbon may be 16px. Never 13 to 18px text. Eyebrows (small labels above a heading) are 20px bold upper case. Card titles 24px bold. Greeting 30px. Hero label 28px bold.
-- Every tappable thing is 64px tall or more, with 12px gap between buttons. Only the floating Demo controls pill (presenter tool) may be 56px. The Home check-in card is at least 282px tall and holds an 82px dark I'm okay button.
+- Every tappable thing is 64px tall or more, with 12px gap between buttons. Only the floating Demo controls pill (presenter tool) may be 56px. The Home check-in card has no fixed minimum height (the Circle ring makes it tall) and holds an 82px dark I'm okay button right under its heading.
 - The language toggle stays three 56x64 buttons. Back stays a labelled pill (arrow + word). On narrow phones tighten gaps and padding first; if they still do not fit, the toggle wraps to its own row. Never shrink a tap target.
 - Action cards: one action per card, full width, one column. Icon tile, title, at most one short line of subtext, a chevron. 2px edge border so the card reads as a button. No badges or extra buttons on a card.
 - Maximum 3 main actions on any resident screen. Full-width buttons, stacked vertically. Home's three are I'm okay, Ask your Circle and Help your Circle, plus one dashed grey "proposed preview" link under them (Neighbourhood activities (proposed)) that is not a main action: grey, dashed, never green or red, 64px or taller.
