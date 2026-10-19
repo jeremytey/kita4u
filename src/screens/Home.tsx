@@ -22,6 +22,7 @@ import { PEOPLE } from '../components/CircleStrip'
 import HeroButton from '../components/HeroButton'
 import TopBar from '../components/TopBar'
 import { DAY, dayOf, formatTime, homeStatus } from '../lib/engine'
+import { useCircle } from '../lib/circle'
 import { awayWhen, latestContact } from '../lib/statusText'
 import { simulatedContacts, useStore } from '../lib/store'
 import { useDialog } from '../lib/useDialog'
@@ -134,6 +135,15 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
   const status = homeStatus(chain)
   const [sheet, setSheet] = useState(false)
   const closeSheet = useCallback(() => setSheet(false), [])
+  // The caption says only what is true in this demo: Mei's invitation state, Township still a proposal.
+  const { setupDone, meiInvite } = useCircle()
+  const caption: StrKey = !setupDone
+    ? 'circleCaption'
+    : meiInvite === 'pending'
+      ? 'circleCaptionPending'
+      : meiInvite === 'declined'
+        ? 'circleCaptionDeclined'
+        : 'circleCaption'
 
   const pickAway = (until: number) => {
     setSheet(false)
@@ -269,7 +279,7 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
             {hero}
             <div className="flex flex-col gap-3">
               <CircleRing order tone={done ? 'done' : away ? 'surface' : 'accent'} className="max-w-[240px]" />
-              <p className="text-center text-small font-bold">{t('circleCaption')}</p>
+              <p className="text-center text-small font-bold">{t(caption)}</p>
             </div>
           </section>
           {status === 'reminder' && (

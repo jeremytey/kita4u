@@ -8,6 +8,7 @@ import { CONTACTS, formatTime } from '../lib/engine'
 import { simulatedContacts, useStore } from '../lib/store'
 import { useT } from '../strings'
 import { currentHelp } from './NeedHelp'
+import MeiInvite from './MeiInvite'
 import NeighbourHelp from './NeighbourHelp'
 import type { ChainResult, Contact } from '../types'
 
@@ -206,6 +207,7 @@ export default function ContactCard({ who }: { who: Contact }) {
             <h1 className="text-greet font-bold">{t('contactHi', { name })}</h1>
           </div>
         </div>
+        {who === 'neighbour' && <MeiInvite />}
         {!asked && !hasHelp && (
           <Notice icon={Info} tone="quiet">
             <p>{t('notAskedYet')}</p>
