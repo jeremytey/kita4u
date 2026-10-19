@@ -439,6 +439,7 @@ export const S = {
     bm: `${APP_NAME} tidak menggantikan perkhidmatan kecemasan.`,
     zh: `${APP_NAME} 不能取代紧急服务。`,
   },
+  whatDoYouNeed: { en: 'What do you need?', bm: 'Apa yang anda perlukan?', zh: '你需要什么？' },
 } satisfies Record<string, Str>
 
 export type StrKey = keyof typeof S
