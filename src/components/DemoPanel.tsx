@@ -85,7 +85,8 @@ export function DemoBar({ onOpen, clean, role, next, onNext }: { onOpen: () => v
         </button>
       )}
       <button type="button" onClick={onOpen} className={pill}>
-        <SlidersHorizontal size={22} aria-hidden />
+        {/* Below 360px the icon makes room for the role name ("Demo controls · Township" would leave the column). */}
+        <SlidersHorizontal size={22} aria-hidden className={role === 'resident' ? undefined : 'max-[359px]:hidden'} />
         {role === 'resident' ? t('demoControls') : t('demoView', { name: t(SHORT_NAME[role]) })}
       </button>
     </div>
