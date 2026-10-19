@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, CalendarDays, Check, Clock, ListOrdered, ShieldCheck, Users } from 'lucide-react'
+import { ArrowRight, CalendarDays, Check, Circle, CircleCheck, Clock, ListOrdered, ShieldCheck, Users } from 'lucide-react'
 import { useState } from 'react'
 import BigButton from '../components/BigButton'
 import { Eyebrow, IconTile } from '../components/Card'
@@ -41,6 +41,23 @@ function Line({ icon: Icon, children }: { icon: typeof Clock; children: string }
       <Icon size={26} strokeWidth={2.4} className="mt-0.5 shrink-0" aria-hidden />
       {children}
     </p>
+  )
+}
+
+// One choice in a radio group. Selected: check icon, 3px ink outline and a warm tint, so it never relies on colour alone.
+function Choice({ on, label, onPick }: { on: boolean; label: string; onPick: () => void }) {
+  const Icon = on ? CircleCheck : Circle
+  return (
+    <button
+      type="button"
+      role="radio"
+      aria-checked={on}
+      onClick={onPick}
+      className={`flex min-h-16 w-full items-center gap-3 rounded-2xl px-4 py-2 text-left ring-inset ${on ? 'bg-accent-tint ring-[3px] ring-ink' : 'bg-surface ring-2 ring-edge'}`}
+    >
+      <Icon size={28} strokeWidth={2.4} className={`shrink-0 ${on ? 'text-ink' : 'text-ink-soft'}`} aria-hidden />
+      <span className="text-body font-bold">{label}</span>
+    </button>
   )
 }
 
@@ -143,19 +160,21 @@ export default function CircleSetup({ onExit, onDone }: { onExit: () => void; on
                   <CalendarDays size={26} strokeWidth={2.4} className="mt-0.5 shrink-0 text-quiet" aria-hidden />
                   {t('introText')}
                 </p>
-                <button
-                  type="button"
-                  aria-pressed={circle.introInterested}
-                  onClick={() => setCircle({ introInterested: !circle.introInterested })}
-                  className="flex min-h-16 w-full flex-wrap items-center justify-between gap-x-3 gap-y-1 rounded-2xl bg-surface px-5 py-2 text-left ring-2 ring-edge ring-inset"
-                >
-                  <span className="text-body font-bold">{t('imInterested')}</span>
-                  <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-small font-bold ${circle.introInterested ? 'bg-ink text-white' : 'bg-quiet-tint text-quiet'}`}>
-                    {circle.introInterested && <Check size={20} strokeWidth={3} aria-hidden />}
-                    {t(circle.introInterested ? 'interested' : 'notYet')}
-                  </span>
-                </button>
+                {/* A question with two choices. Not now is the default (introInterested false). */}
+                <div className="flex flex-col gap-3 pt-2">
+                  <div className="flex flex-wrap items-baseline gap-x-3">
+                    <h3 id="intro-question" className="text-title font-bold">
+                      {t('introQuestion')}
+                    </h3>
+                    <span className="text-small font-bold text-quiet">{t('optional')}</span>
+                  </div>
+                  <div role="radiogroup" aria-labelledby="intro-question" className="flex flex-col gap-3">
+                    <Choice on={circle.introInterested} label={t('introYes')} onPick={() => setCircle({ introInterested: true })} />
+                    <Choice on={!circle.introInterested} label={t('introNo')} onPick={() => setCircle({ introInterested: false })} />
+                  </div>
+                </div>
               </section>
+              <p className="text-body text-ink-soft">{t('finishAnyway')}</p>
               <BigButton icon={Check} onClick={finish}>
                 {t('finish')}
               </BigButton>

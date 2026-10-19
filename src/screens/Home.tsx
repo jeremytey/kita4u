@@ -323,9 +323,8 @@ export default function Home({ onAsk, onHelp, onActivities }: { onAsk: () => voi
           >
             <IconTile icon={Compass} tone="quiet" />
             <span className="flex min-w-0 flex-col">
-              {/* At 260px wide (150% text stand-in) the column is 85px: long words wrap instead of scrolling the page. */}
-              <span className="text-title leading-tight font-bold [overflow-wrap:anywhere] hyphens-auto">{t('activitiesCard')}</span>
-              <span className="text-body text-ink-soft">{t('seeIdea')}</span>
+              <span className="text-title leading-tight font-bold">{t('activitiesCard')}</span>
+              <span className="text-body text-ink-soft">{t('proposedSub')}</span>
             </span>
             <ChevronRight size={27} strokeWidth={2.4} className="text-ink-soft" aria-hidden />
           </button>
