@@ -32,7 +32,8 @@ export function Avatar({ who, size = 58, order }: { who: Contact; size?: number;
   )
 }
 
-// The resident's Circle: three illustrated badges, numbered in the order they are asked. Home only.
+// The resident's Circle as a card: three numbered badges. No longer rendered (12A: the CircleRing replaced it on Home);
+// the file stays because Avatar and PEOPLE live here.
 export default function CircleStrip() {
   const t = useT()
   const people = Object.keys(PEOPLE) as Contact[]
@@ -58,7 +59,7 @@ export default function CircleStrip() {
       </ul>
       <p className="flex items-center justify-center gap-2 border-t-2 border-line pt-4 text-small font-bold text-done">
         <CheckCircle2 size={24} strokeWidth={2.4} aria-hidden />
-        {t('allAgreed')}
+        {t('circleCaption')}
       </p>
     </section>
   )

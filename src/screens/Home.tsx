@@ -17,7 +17,8 @@ import { useCallback, useRef, useState, type ReactNode } from 'react'
 import BigButton from '../components/BigButton'
 import { ActionCard, DemoReplyTag, Eyebrow } from '../components/Card'
 import { StatusTag } from '../components/ChainBar'
-import CircleStrip, { PEOPLE } from '../components/CircleStrip'
+import CircleRing from '../components/CircleRing'
+import { PEOPLE } from '../components/CircleStrip'
 import HeroButton from '../components/HeroButton'
 import TopBar from '../components/TopBar'
 import { DAY, dayOf, formatTime, homeStatus } from '../lib/engine'
@@ -265,6 +266,10 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
                 {status === 'normal' && <p className="text-body">{t('justOneTap')}</p>}
               </div>
             </div>
+            <div className="flex flex-col gap-3">
+              <CircleRing order tone={done ? 'done' : away ? 'surface' : 'accent'} className="max-w-[240px]" />
+              <p className="text-center text-small font-bold">{t('circleCaption')}</p>
+            </div>
             {hero}
           </section>
           {status === 'reminder' && (
@@ -284,8 +289,6 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
           <ActionCard icon={MessageCircleQuestion} tone="warn" title={t('explainMessage')} sub={t('makeSimple')} onClick={onWhatIsThis} />
           <ActionCard icon={HeartHandshake} tone="done" title={t('askFavour')} sub={t('askMeiSub')} onClick={onNeedHelp} />
         </section>
-
-        <CircleStrip />
 
         <p className="mt-auto pt-4 text-center text-small text-ink-soft">{t('footer')}</p>
       </main>

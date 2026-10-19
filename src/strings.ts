@@ -24,7 +24,11 @@ export const S = {
   roleFamily: { en: 'Family', bm: 'Keluarga', zh: '家人' },
   roleCommunity: { en: 'Community', bm: 'Komuniti', zh: '社区' },
   yourCircle: { en: 'Your Circle', bm: 'Bulatan anda', zh: '你的关怀圈' },
-  allAgreed: { en: 'All agreed to help', bm: 'Semua setuju membantu', zh: '都已同意帮忙' },
+  circleCaption: {
+    en: 'Demo Circle. Mei and Daniel agreed. Township role: proposed.',
+    bm: 'Bulatan demo. Mei dan Daniel setuju. Peranan Taman: dicadangkan.',
+    zh: '演示关怀圈。Mei 和 Daniel 已同意。社区角色：拟议中。',
+  },
   simulated: same('SIMULATED'),
 
   // Landing
