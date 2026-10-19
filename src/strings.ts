@@ -319,6 +319,13 @@ export const S = {
 
   // Demo panel (for the presenter)
   demoControls: { en: 'Demo controls', bm: 'Kawalan demo', zh: '演示控制' },
+  demoView: { en: 'Demo controls · {name}', bm: 'Kawalan demo · {name}', zh: '演示控制 · {name}' },
+  nextStep: { en: 'Next step', bm: 'Langkah seterusnya', zh: '下一步' },
+  nextStepTo: { en: 'Next step, to {time}', bm: 'Langkah seterusnya, ke {time}', zh: '下一步，到 {time}' },
+  nextStepNone: { en: 'No next step', bm: 'Tiada langkah seterusnya', zh: '没有下一步' },
+  nameAminah: same('Aminah'),
+  townshipShort: { en: 'Township', bm: 'Taman', zh: '社区' },
+  viewInvite: { en: "View Mei's invitation", bm: 'Lihat jemputan Mei', zh: '查看 Mei 的邀请' },
   demoReply: { en: 'Demo reply', bm: 'Jawapan demo', zh: '演示回复' },
   demoReplyNote: {
     en: 'This reply came from the demo panel, not a real person.',

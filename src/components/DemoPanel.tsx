@@ -1,13 +1,14 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { CheckCircle2, ChevronRight, Clock, Compass, RotateCcw, SlidersHorizontal, User, Users, X } from 'lucide-react'
+import { CheckCircle2, Clock, Compass, MailOpen, RotateCcw, SkipForward, SlidersHorizontal, User, Users, X } from 'lucide-react'
 import { useRef } from 'react'
 import { resetCircle } from '../lib/circle'
 import { dayOf, formatTime } from '../lib/engine'
+import { useNextStep } from '../lib/demoNext'
 import { useStore, type Preset } from '../lib/store'
 import { useDialog } from '../lib/useDialog'
 import { useT, type StrKey } from '../strings'
 import type { Behaviour, Contact, Role } from '../types'
-import { IconTile, SimTag } from './Card'
+import { SimTag } from './Card'
 import { Avatar, PEOPLE } from './CircleStrip'
 
 const PRESETS: { id: Preset; key: StrKey }[] = [
@@ -16,13 +17,15 @@ const PRESETS: { id: Preset; key: StrKey }[] = [
   { id: 'help', key: 'pHelp' },
   { id: 'sample', key: 'pSample' },
 ]
-// View as: who the presenter is looking through. Contacts show their illustrated badge.
-const ROLES: { id: Role; name: StrKey; role: StrKey; who?: Contact }[] = [
-  { id: 'resident', name: 'residentName', role: 'roleResident' },
-  { id: 'neighbour', name: 'mei', role: 'roleNeighbour', who: 'neighbour' },
-  { id: 'family', name: 'daniel', role: 'roleSon', who: 'family' },
-  { id: 'community', name: 'township', role: 'roleCommunity', who: 'community' },
+// View as: who the presenter is looking through. Short names; contacts show their illustrated badge (named "Name, Role").
+const ROLES: { id: Role; name: StrKey; who?: Contact }[] = [
+  { id: 'resident', name: 'nameAminah' },
+  { id: 'neighbour', name: 'mei', who: 'neighbour' },
+  { id: 'family', name: 'daniel', who: 'family' },
+  { id: 'community', name: 'townshipShort', who: 'community' },
 ]
+const SHORT_NAME: Record<Role, StrKey> = { resident: 'nameAminah', neighbour: 'mei', family: 'daniel', community: 'townshipShort' }
+
 const BEHAVIOURS: { id: Behaviour; key: StrKey }[] = [
   { id: 'noReply', key: 'bNoReply' },
   { id: 'cantNow', key: 'bCantNow' },
@@ -48,9 +51,13 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
   )
 }
 
-// Presenter pill, floating bottom-right inside the phone column. The clock lives in the Ribbon.
-// Screens pad their bottom (pb-24) so it never covers the last button. Clean mode (?clean=1) shows only a faint corner button.
-export function DemoBar({ onOpen, clean }: { onOpen: () => void; clean: boolean }) {
+const pill =
+  'flex min-h-[56px] items-center gap-2 rounded-full border-2 border-edge bg-quiet-tint px-4 text-body font-bold whitespace-nowrap text-ink shadow-[0_4px_0_rgba(154,133,112,0.2)]'
+
+// Presenter pills, floating bottom-right inside the phone column: Demo controls (names the role being viewed) and,
+// while a case is open, Next step. If both do not fit on one row, Next sits above, right-aligned. Screens pad their bottom
+// (pb-24, pb-36 with Next) so neither covers the last button. Clean mode (?clean=1) shows only a faint corner button.
+export function DemoBar({ onOpen, clean, role, next, onNext }: { onOpen: () => void; clean: boolean; role: Role; next: number | null; onNext: () => void }) {
   const t = useT()
   if (clean) {
     return (
@@ -66,15 +73,22 @@ export function DemoBar({ onOpen, clean }: { onOpen: () => void; clean: boolean 
     )
   }
   return (
-    <button
-      type="button"
-      onClick={onOpen}
-      style={{ right: 'max(14px, calc(50vw - 201px))' }}
-      className="fixed bottom-[14px] z-30 flex min-h-[56px] items-center gap-2 rounded-full border-2 border-edge bg-quiet-tint px-4 text-body font-bold text-ink shadow-[0_4px_0_rgba(154,133,112,0.2)]"
+    <div
+      data-demo-bar
+      style={{ right: 'max(14px, calc(50vw - 201px))', maxWidth: 'calc(min(100vw, 430px) - 28px)' }}
+      className="fixed bottom-[14px] z-30 flex flex-wrap items-center justify-end gap-2"
     >
-      <SlidersHorizontal size={22} aria-hidden />
-      {t('demoControls')}
-    </button>
+      {next !== null && (
+        <button type="button" onClick={onNext} aria-label={t('nextStepTo', { time: formatTime(next) })} className={pill}>
+          <SkipForward size={22} aria-hidden />
+          {t('nextStep')}
+        </button>
+      )}
+      <button type="button" onClick={onOpen} className={pill}>
+        <SlidersHorizontal size={22} aria-hidden />
+        {role === 'resident' ? t('demoControls') : t('demoView', { name: t(SHORT_NAME[role]) })}
+      </button>
+    </div>
   )
 }
 
@@ -100,6 +114,7 @@ export default function DemoPanel({
   const t = useT()
   const store = useStore()
   const clock = useClockLabel()
+  const next = useNextStep()
   const dialogRef = useRef<HTMLDivElement>(null)
   useDialog(dialogRef, open, onClose) // focus in (on Close), Tab trapped, Escape closes, focus back to the opener
 
@@ -146,6 +161,16 @@ export default function DemoPanel({
                 <span className="text-greet font-bold tabular-nums">{clock}</span>
                 <SimTag />
               </div>
+              <button
+                type="button"
+                disabled={next === null}
+                aria-label={next === null ? undefined : t('nextStepTo', { time: formatTime(next) })}
+                className={`${chip} flex items-center justify-center gap-2 bg-accent text-ink disabled:opacity-60`}
+                onClick={() => next !== null && store.advance(next - store.now)}
+              >
+                <SkipForward size={22} aria-hidden />
+                {next === null ? t('nextStepNone') : t('nextStepTo', { time: formatTime(next) })}
+              </button>
               <div className="grid grid-cols-2 gap-3">
                 <button type="button" className={`${chip} bg-accent text-ink`} onClick={() => store.advance(60)}>
                   +1h
@@ -167,7 +192,7 @@ export default function DemoPanel({
             </Group>
 
             <Group title={t('viewAs')}>
-              <div className="flex flex-col gap-3" role="group">
+              <div className="grid grid-cols-2 gap-3" role="group" aria-label={t('viewAs')}>
                 {ROLES.map((r) => {
                   const on = role === r.id
                   return (
@@ -175,28 +200,29 @@ export default function DemoPanel({
                       key={r.id}
                       type="button"
                       aria-pressed={on}
-                      className={`grid min-h-[76px] w-full grid-cols-[56px_1fr_auto] items-center gap-3 rounded-[20px] border-2 px-3 py-2 text-left transition-colors duration-200 ${
-                        on ? 'border-done bg-done-tint' : 'border-line bg-surface'
+                      className={`relative flex min-h-[64px] w-full flex-col items-center justify-center gap-1 rounded-[20px] px-2 py-2 text-center ring-inset transition-colors duration-200 ${
+                        on ? 'bg-accent-tint ring-[3px] ring-ink' : 'bg-surface ring-2 ring-edge'
                       }`}
                       onClick={() => onRole(r.id)}
                     >
-                      <span className="flex justify-center">
-                        {r.who ? <Avatar who={r.who} size={52} /> : <IconTile icon={User} tone="accent" />}
-                      </span>
-                      <span className="flex min-w-0 flex-col">
-                        <span className="text-body leading-tight font-bold">{t(r.name)}</span>
-                        <span className="text-small leading-tight text-ink-soft">{t(r.role)}</span>
-                      </span>
-                      {on ? (
-                        <CheckCircle2 size={28} className="text-done" aria-hidden />
+                      {on && <CheckCircle2 size={24} strokeWidth={2.6} className="absolute top-1.5 right-1.5 text-ink" aria-hidden />}
+                      {r.who ? (
+                        <Avatar who={r.who} size={44} />
                       ) : (
-                        <ChevronRight size={28} className="text-ink-soft" aria-hidden />
+                        <span aria-hidden className="flex size-11 items-center justify-center rounded-full bg-accent text-ink">
+                          <User size={24} strokeWidth={2.4} />
+                        </span>
                       )}
+                      <span className="text-body leading-tight font-bold">{t(r.name)}</span>
                     </button>
                   )
                 })}
               </div>
               <p className="text-center text-small text-ink-soft">{t('demoViewsNote')}</p>
+              <button type="button" className={`${chip} flex items-center justify-center gap-2 bg-surface text-ink shadow-card`} onClick={() => onRole('neighbour')}>
+                <MailOpen size={22} aria-hidden />
+                {t('viewInvite')}
+              </button>
             </Group>
 
             <Group title={t('behaviours')}>

@@ -3,6 +3,7 @@ import DemoPanel, { DemoBar } from './components/DemoPanel'
 import PhoneFrame from './components/PhoneFrame'
 import Ribbon from './components/Ribbon'
 import { setCircle, useCircle } from './lib/circle'
+import { useNextStep } from './lib/demoNext'
 import { useStore, type Preset } from './lib/store'
 import ActivitiesPreview from './screens/ActivitiesPreview'
 import AskChooser from './screens/AskChooser'
@@ -52,6 +53,10 @@ export default function App() {
   }, [screen, visit])
 
   const closePanel = useCallback(() => setPanel(false), [])
+  // Next step pill: only while a case is open or being checked, never on Landing or Setup.
+  const nextAt = useNextStep()
+  const caseRunning = store.chain.status === 'open' || store.chain.status === 'beingChecked'
+  const showNext = nextAt !== null && caseRunning && screen !== 'landing' && screen !== 'setup' && !CLEAN
   // Demo mode: a prepared demo state, no setup. The Normal story, setup done and Mei marked as accepted
   // (so Home shows the standard "Demo Circle" caption). Help types stay at their defaults.
   const startDemo = () => {
@@ -87,7 +92,7 @@ export default function App() {
   return (
     <PhoneFrame>
       <Ribbon />
-      <div className={screen === 'landing' ? 'flex flex-1 flex-col' : 'flex flex-1 flex-col pb-24'}>
+      <div className={screen === 'landing' ? 'flex flex-1 flex-col' : showNext ? 'flex flex-1 flex-col pb-36' : 'flex flex-1 flex-col pb-24'}>
         {/* First visit: Try as Aminah opens the Circle setup. Presets and View as never need it. */}
         {screen === 'landing' && <Landing onStart={() => go(setupDone ? 'home' : 'setup')} onDemo={startDemo} onPreview={openPreview} />}
         {screen === 'setup' && <CircleSetup key={visit} onExit={() => go('landing')} onDone={() => go('home')} onDemo={startDemo} />}
@@ -129,7 +134,15 @@ export default function App() {
         {screen === 'community' && <Community />}
       </div>
 
-      {screen !== 'landing' && <DemoBar clean={CLEAN} onOpen={() => setPanel(true)} />}
+      {screen !== 'landing' && (
+        <DemoBar
+          clean={CLEAN}
+          role={role}
+          next={showNext ? nextAt : null}
+          onNext={() => nextAt !== null && store.advance(nextAt - store.now)}
+          onOpen={() => setPanel(true)}
+        />
+      )}
       <DemoPanel
         open={panel}
         role={role}
