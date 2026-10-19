@@ -1,4 +1,4 @@
-import { AlertTriangle, BellRing, ChevronDown, ChevronUp, MessageSquareText, ShieldCheck } from 'lucide-react'
+import { BellRing, ChevronDown, ChevronUp, MessageSquareText, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'
 import BigButton from '../components/BigButton'
 import ChainBar from '../components/ChainBar'
@@ -238,12 +238,6 @@ export default function Family() {
               </div>
               <ChainBar chain={chain} bare />
             </section>
-            {chain.status === 'needsHelp' && (
-              <p className="flex items-center gap-3 rounded-[24px] bg-alert-tint p-4 text-body font-bold text-alert">
-                <AlertTriangle size={26} className="shrink-0" aria-hidden />
-                {t('call999')}
-              </p>
-            )}
           </div>
         )}
 

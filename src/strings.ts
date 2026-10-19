@@ -426,6 +426,19 @@ export const S = {
   showSetup: { en: 'Show Circle setup', bm: 'Tunjuk persediaan Bulatan', zh: '显示关怀圈设置' },
   // Phase 12C: Ask / Help actions, parcel, 999. BM and 中文 are drafts.
   proposedRole: { en: 'Proposed role', bm: 'Peranan dicadangkan', zh: '拟议角色' },
+  call999Needs: { en: 'If this may be an emergency, call 999.', bm: 'Jika ini mungkin kecemasan, hubungi 999.', zh: '如果这可能是紧急情况，请拨打 999。' },
+  call999Unresolved: {
+    en: 'No one has confirmed yet. If you think she may be in danger, call 999.',
+    bm: 'Belum ada yang mengesahkan. Jika anda rasa dia mungkin dalam bahaya, hubungi 999.',
+    zh: '还没有人确认。如果你认为她可能有危险，请拨打 999。',
+  },
+  call999Btn: { en: 'Call 999', bm: 'Hubungi 999', zh: '拨打 999' },
+  call999Aria: { en: 'Call 999 emergency services', bm: 'Hubungi perkhidmatan kecemasan 999', zh: '拨打 999 紧急服务' },
+  notEmergencyService: {
+    en: `${APP_NAME} does not replace emergency services.`,
+    bm: `${APP_NAME} tidak menggantikan perkhidmatan kecemasan.`,
+    zh: `${APP_NAME} 不能取代紧急服务。`,
+  },
 } satisfies Record<string, Str>
 
 export type StrKey = keyof typeof S

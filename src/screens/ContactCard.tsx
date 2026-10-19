@@ -1,6 +1,7 @@
 import { BellRing, CheckCircle2, Clock3, Footprints, Info, TriangleAlert, X, type LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 import BigButton from '../components/BigButton'
+import Emergency999 from '../components/Emergency999'
 import { DemoReplyTag, Eyebrow, IconTile } from '../components/Card'
 import { Avatar, PEOPLE } from '../components/CircleStrip'
 import TopBar from '../components/TopBar'
@@ -86,7 +87,6 @@ export function WelfareSection({ who }: { who: Contact }) {
   const { chain, events, add, addAt } = useStore()
   const mode = contactMode(chain, who)
   const simulated = simulatedContacts(chain, events).has(who)
-  const call999 = <p className="font-bold text-alert">{t('call999')}</p>
 
   // A real tap after a simulated "I'll check" keeps that earlier reply in the log. A real "I'll check" is already logged.
   const outcome = (type: 'CONTACT_OK' | 'NEEDS_HELP') => {
@@ -175,13 +175,14 @@ export function WelfareSection({ who }: { who: Contact }) {
               ? t('youReportedHelp')
               : t('needsHelpInfo', { name: mode.reporter ? t(PEOPLE[mode.reporter].name) : '' })}
           </p>
-          {call999}
+          <Emergency999 variant="needsHelp" />
         </Notice>
       )}
 
+      {/* Decision 5: Daniel and Township get the 999 line and button when Unresolved; Mei does not. */}
       {mode.kind === 'unresolved' && (
         <Notice icon={Info} tone="alert">
-          <p className="font-bold">{t('noOneConfirmed')}</p>
+          {who === 'neighbour' ? <p className="font-bold">{t('noOneConfirmed')}</p> : <Emergency999 variant="unresolved" />}
         </Notice>
       )}
     </>
