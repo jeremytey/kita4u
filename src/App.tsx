@@ -2,7 +2,9 @@ import { useCallback, useState } from 'react'
 import DemoPanel, { DemoBar } from './components/DemoPanel'
 import PhoneFrame from './components/PhoneFrame'
 import Ribbon from './components/Ribbon'
+import { useCircle } from './lib/circle'
 import { useStore, type Preset } from './lib/store'
+import CircleSetup from './screens/CircleSetup'
 import Community from './screens/Community'
 import ContactCard from './screens/ContactCard'
 import Family from './screens/Family'
@@ -12,6 +14,9 @@ import NeedHelp, { type Task } from './screens/NeedHelp'
 import WhatIsThis from './screens/WhatIsThis'
 import type { Role, Screen } from './types'
 
+// Screens added in phase 12 live here; types.ts is frozen. askChooser, helpCircle and activities arrive in 12C and 12D.
+type AppScreen = Screen | 'setup' | 'askChooser' | 'helpCircle' | 'activities'
+
 const ROLE_SCREEN: Record<Role, Screen> = { resident: 'home', neighbour: 'contact', family: 'family', community: 'community' }
 
 // ?clean=1: recording mode. Hides the presenter bar; a faint corner button still opens the Demo panel.
@@ -19,7 +24,8 @@ const CLEAN = new URLSearchParams(location.search).get('clean') === '1'
 
 export default function App() {
   const store = useStore()
-  const [screen, setScreen] = useState<Screen>('landing')
+  const { setupDone } = useCircle()
+  const [screen, setScreen] = useState<AppScreen>('landing')
   const [role, setRole] = useState<Role>('resident')
   const [panel, setPanel] = useState(false)
   const [helpTask, setHelpTask] = useState<Task | undefined>()
@@ -44,7 +50,9 @@ export default function App() {
     <PhoneFrame>
       <Ribbon />
       <div className={screen === 'landing' ? 'flex flex-1 flex-col' : 'flex flex-1 flex-col pb-24'}>
-        {screen === 'landing' && <Landing onStart={() => setScreen('home')} onDemo={() => setPanel(true)} />}
+        {/* First visit: Try as Aminah opens the Circle setup. Presets and View as never need it. */}
+        {screen === 'landing' && <Landing onStart={() => setScreen(setupDone ? 'home' : 'setup')} onDemo={() => setPanel(true)} />}
+        {screen === 'setup' && <CircleSetup key={visit} onExit={() => setScreen('landing')} onDone={() => setScreen('home')} />}
         {screen === 'home' && (
           <Home
             onWhatIsThis={() => setScreen('whatIsThis')}
