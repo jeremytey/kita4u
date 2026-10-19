@@ -1,8 +1,8 @@
 import { createContext, createElement, useCallback, useContext, useState, type ReactNode } from 'react'
 import type { Lang } from './types'
 
-// Working title, placeholder.
-export const APP_NAME = 'Care Circle'
+// Product name. The single source: every UI string uses this. (Earlier working title: Care Circle.)
+export const APP_NAME = 'Kita4U'
 
 type Str = { en: string; bm: string; zh: string }
 const same = (s: string): Str => ({ en: s, bm: s, zh: s })

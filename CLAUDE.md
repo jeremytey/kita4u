@@ -1,4 +1,6 @@
-# Care Circle: build rules
+# Kita4U: build rules
+
+Kita4U (earlier working title: Care Circle).
 
 Mobile web app prototype for a hackathon demo. One developer, speedrun build. Priority: ship a convincing, good-looking demo. Do not over-engineer.
 
@@ -80,7 +82,7 @@ Phone frame: max width 430px, centred on desktop, full screen on a phone.
 9. Demo data is allowed only when labelled (PROTOTYPE · SAMPLE DATA ribbon, DEMO or SAMPLE tags). Evidence-style numbers (residents joined, % who want, participation counts) are never shown.
 
 ## Strings
-All user-facing text lives in src/strings.ts as { en, bm, zh } objects. Translate only the screens in the demo. Export APP_NAME there (working title, placeholder).
+All user-facing text lives in src/strings.ts as { en, bm, zh } objects. Translate only the screens in the demo. Export APP_NAME there (Kita4U, the single source for the product name).
 
 ## File layout
 src/main.tsx, App.tsx, index.css, strings.ts, types.ts

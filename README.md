@@ -1,4 +1,6 @@
-# Care Circle (working title)
+# Kita4U
+
+Kita4U (earlier working title: Care Circle).
 
 Mobile web app prototype for the Sime Darby Property University Hackathon 2026, People track.
 
