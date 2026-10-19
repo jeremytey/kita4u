@@ -18,9 +18,9 @@ What we may and may not say about the prototype: [docs/PITCH-CLAIMS.md](docs/PIT
 - This is an interactive prototype with simulated data. All people, messages and times are fictional.
 - Reminders, contact replies and the clock are simulated. Timings are demo settings, not validated policy; a pilot would agree them with each Circle.
 - Township Support is a proposed role, to be agreed in a pilot. No township, guardhouse, neighbour or family has agreed to anything.
-- The Circle setup, Mei's invitation (Accept / Decline), help-type switches, "I'm interested" and Help your Circle are prototype-only state in the browser. Accept or Decline does not change the chain; in a real deployment consent would be enforced by a backend.
+- The Circle setup, Mei's invitation (Accept / Decline), help-type switches, the introduction-session choice ("Yes, I'm interested" / "Not now"), "I'm interested" on the preview and Help your Circle are prototype-only state in the browser. Accept or Decline does not change the chain; in a real deployment consent would be enforced by a backend.
 - 999 is not a step in the chain. A Call 999 button (tel:999, the only phone link) appears only in Needs help (all views) and in Unresolved for Daniel and Township Support.
-- "Neighbourhood activities" is a labelled preview of a proposed expansion. It does not work in the prototype.
+- The Activities preview ("Connect with your neighbourhood") is a labelled preview of a proposed expansion. It does not work in the prototype.
 - The "What is this?" results are predefined sample responses (labelled DEMO RESULT · SAMPLE MESSAGE). The prototype does not call an AI model.
 - Contacts and their replies are simulated by the demo panel. All timings are demo settings, not validated policy.
 - The problem has not been validated by interviews yet.
@@ -59,7 +59,7 @@ All times are SIMULATED and staged with the Demo panel. A ribbon at the top of e
 
 Needs help: once a contact taps "Needs help", every view (Home, Mei, Daniel, Township Support) shows "If this may be an emergency, call 999.", a red Call 999 button (tel:999, the only phone link in the app) and "Kita4U does not replace emergency services." 999 is not a step in the chain.
 
-Proposed preview: "What's next (proposed)" on Landing, the dashed "Neighbourhood activities (proposed)" card on Home (under Ask and Help), or "Proposed preview" in the Demo panel open a labelled, read-only preview of neighbourhood activities among people in your Circle (PROPOSED FEATURE · SAMPLE CONTENT). It is a product direction, not a feature: nothing in it is stored or works.
+Proposed preview: "What's next (proposed)" on Landing, the dashed "Activities (proposed)" card on Home (under Ask and Help), or "Proposed preview" in the Demo panel open a labelled, read-only preview of neighbourhood activities among people in your Circle (PROPOSED FEATURE · SAMPLE CONTENT). It is a product direction, not a feature: nothing in it is stored or works.
 
 Away: in the reminder state, "I'm away" (under the check-in card) opens a day stepper (1 to 14 days, a demo setting, not validated policy). The sheet previews the return time ("Away until tomorrow 09:00" or a weekday such as "Sun 09:00"). "Set away" pauses everything until then; "I'm back" ends it.
 
