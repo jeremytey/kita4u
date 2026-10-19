@@ -34,7 +34,8 @@ const SAMPLE_ICON: Record<SampleId, LucideIcon> = { sms: MessageSquareText, bill
 interface Props {
   checkedIn: boolean
   onCheckIn: () => void
-  onExit: () => void
+  onExit: () => void // Done: back to Home
+  onBack?: () => void // Back at the first step: one level up (the Ask chooser); Home when opened by a preset
   onChecked: (id: SampleId) => void
   onAskCircle: (id: SampleId) => void
 }
@@ -90,7 +91,7 @@ function CheckInPrompt({ checkedIn, onCheckIn }: { checkedIn: boolean; onCheckIn
   )
 }
 
-export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onChecked, onAskCircle }: Props) {
+export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onBack, onChecked, onAskCircle }: Props) {
   const t = useT()
   const { lang } = useLang()
   const [step, setStep] = useState<Step>('choose')
@@ -114,7 +115,7 @@ export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onChecked, on
 
   const back = () => {
     speech.stop()
-    if (step === 'choose') onExit()
+    if (step === 'choose') (onBack ?? onExit)()
     else if (step === 'sent') setStep('result')
     else setStep('choose')
   }

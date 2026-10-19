@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import DemoPanel, { DemoBar } from './components/DemoPanel'
 import PhoneFrame from './components/PhoneFrame'
 import Ribbon from './components/Ribbon'
@@ -34,21 +34,39 @@ export default function App() {
   const [helpTask, setHelpTask] = useState<Task | undefined>()
   const [visit, setVisit] = useState(0) // remounts a screen when a preset re-opens it
   const [from, setFrom] = useState<AppScreen>('landing') // where the proposed preview's Back goes
+  const [origin, setOrigin] = useState<'chooser' | 'home'>('home') // where Back at the first step of WhatIsThis / NeedHelp goes
+
+  // Home keeps its scroll position. The page scrolls on window (no inner scroll container).
+  // Leaving Home saves it; coming back restores it; every other screen starts at the top. Presets, Landing and Reset set it to 0.
+  const homeY = useRef(0)
+  const go = (next: AppScreen) => {
+    if (screen === 'home' && next !== 'home') homeY.current = window.scrollY
+    if (next === 'landing' || next === 'setup') homeY.current = 0
+    setScreen(next)
+  }
+  useLayoutEffect(() => {
+    const y = screen === 'home' ? homeY.current : 0
+    window.scrollTo(0, y)
+    const id = requestAnimationFrame(() => window.scrollTo(0, y)) // once more after the screen has laid out
+    return () => cancelAnimationFrame(id)
+  }, [screen, visit])
 
   const closePanel = useCallback(() => setPanel(false), [])
   const openPreview = () => {
     if (screen !== 'activities') setFrom(screen)
-    setScreen('activities')
+    go('activities')
     setPanel(false)
   }
   const pickRole = (r: Role) => {
     setRole(r)
-    setScreen(ROLE_SCREEN[r])
+    go(ROLE_SCREEN[r])
     setPanel(false)
   }
   const pickPreset = (p: Preset) => {
     store.preset(p)
     setRole('resident')
+    homeY.current = 0
+    setOrigin('home') // a preset opens WhatIsThis / NeedHelp directly: Back goes Home
     setScreen(p === 'sample' ? 'whatIsThis' : p === 'help' ? 'needHelp' : 'home')
     setHelpTask(p === 'help' ? 'groceries' : undefined) // Help request opens on the confirm step
     setVisit((v) => v + 1)
@@ -60,30 +78,37 @@ export default function App() {
       <Ribbon />
       <div className={screen === 'landing' ? 'flex flex-1 flex-col' : 'flex flex-1 flex-col pb-24'}>
         {/* First visit: Try as Aminah opens the Circle setup. Presets and View as never need it. */}
-        {screen === 'landing' && <Landing onStart={() => setScreen(setupDone ? 'home' : 'setup')} onDemo={() => setPanel(true)} onPreview={openPreview} />}
-        {screen === 'setup' && <CircleSetup key={visit} onExit={() => setScreen('landing')} onDone={() => setScreen('home')} />}
+        {screen === 'landing' && <Landing onStart={() => go(setupDone ? 'home' : 'setup')} onDemo={() => setPanel(true)} onPreview={openPreview} />}
+        {screen === 'setup' && <CircleSetup key={visit} onExit={() => go('landing')} onDone={() => go('home')} />}
         {screen === 'home' && (
-          <Home onAsk={() => setScreen('askChooser')} onHelp={() => setScreen('helpCircle')} onActivities={openPreview} />
+          <Home onAsk={() => go('askChooser')} onHelp={() => go('helpCircle')} onActivities={openPreview} />
         )}
         {screen === 'askChooser' && (
           <AskChooser
-            onBack={() => setScreen('home')}
-            onMessage={() => setScreen('whatIsThis')}
+            onBack={() => go('home')}
+            onMessage={() => {
+              setOrigin('chooser')
+              go('whatIsThis')
+            }}
             onFavour={() => {
               setHelpTask(undefined)
-              setScreen('needHelp')
+              setOrigin('chooser')
+              go('needHelp')
             }}
           />
         )}
-        {screen === 'helpCircle' && <HelpYourCircle onBack={() => setScreen('home')} />}
-        {screen === 'activities' && <ActivitiesPreview onBack={() => setScreen(from)} />}
-        {screen === 'needHelp' && <NeedHelp key={visit} initialTask={helpTask} onExit={() => setScreen('home')} />}
+        {screen === 'helpCircle' && <HelpYourCircle onBack={() => go('home')} />}
+        {screen === 'activities' && <ActivitiesPreview onBack={() => go(from)} />}
+        {screen === 'needHelp' && (
+          <NeedHelp key={visit} initialTask={helpTask} onExit={() => go('home')} onBack={() => go(origin === 'chooser' ? 'askChooser' : 'home')} />
+        )}
         {screen === 'whatIsThis' && (
           <WhatIsThis
             key={visit}
             checkedIn={store.chain.checkedInAt !== undefined}
             onCheckIn={() => store.add('CHECK_IN', 'resident')}
-            onExit={() => setScreen('home')}
+            onExit={() => go('home')}
+            onBack={() => go(origin === 'chooser' ? 'askChooser' : 'home')}
             onChecked={(id) => store.add('MESSAGE_CHECKED', 'resident', { sample: id })}
             onAskCircle={(id) => store.add('ASKED_CIRCLE', 'resident', { sample: id, to: 'family' })}
           />
@@ -101,9 +126,13 @@ export default function App() {
         onRole={pickRole}
         onPreset={pickPreset}
         onPreview={openPreview}
+        onReset={() => {
+          homeY.current = 0
+          window.scrollTo(0, 0)
+        }}
         onSetup={() => {
           setRole('resident')
-          setScreen('setup')
+          go('setup')
           setVisit((v) => v + 1)
           setPanel(false)
         }}

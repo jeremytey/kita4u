@@ -109,7 +109,8 @@ function TrackLine({ state, text }: { state: 'done' | 'wait' | 'todo' | 'no'; te
   )
 }
 
-export default function NeedHelp({ initialTask, onExit }: { initialTask?: Task; onExit: () => void }) {
+// onExit: terminal actions (Back to home, Say thanks) go Home. onBack: the Back pill at the first step goes one level up.
+export default function NeedHelp({ initialTask, onExit, onBack }: { initialTask?: Task; onExit: () => void; onBack?: () => void }) {
   const t = useT()
   const { events, now, add } = useStore()
   const help = currentHelp(events, now)
@@ -129,7 +130,7 @@ export default function NeedHelp({ initialTask, onExit }: { initialTask?: Task; 
   const back = () => {
     if (step === 'confirm') setStep('pick')
     else if (step === 'chat' || step === 'call') setStep('status')
-    else onExit()
+    else (onBack ?? onExit)()
   }
   const phrase = t(TASKS[task].phrase)
 
@@ -151,7 +152,7 @@ export default function NeedHelp({ initialTask, onExit }: { initialTask?: Task; 
                     <Info size={26} strokeWidth={2.4} className="mt-0.5 shrink-0 text-quiet" aria-hidden />
                     {t('noHelpTypes')}
                   </p>
-                  <BigButton variant="secondary" onClick={onExit}>
+                  <BigButton variant="secondary" onClick={onBack ?? onExit}>
                     {t('back')}
                   </BigButton>
                 </>
@@ -236,7 +237,13 @@ export default function NeedHelp({ initialTask, onExit }: { initialTask?: Task; 
                   </motion.span>
                   <p className="text-title font-bold">{t('helpDoneTitle', { task: t(TASKS[help.task].phrase) })}</p>
                   {help.thanksAt === undefined ? (
-                    <BigButton icon={Heart} onClick={() => add('THANKS', 'resident', { task: help.task })}>
+                    <BigButton
+                      icon={Heart}
+                      onClick={() => {
+                        add('THANKS', 'resident', { task: help.task })
+                        onExit()
+                      }}
+                    >
                       {t('sayThanks')}
                     </BigButton>
                   ) : (

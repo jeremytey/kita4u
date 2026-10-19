@@ -86,6 +86,7 @@ export default function DemoPanel({
   onPreset,
   onSetup,
   onPreview,
+  onReset,
 }: {
   open: boolean
   role: Role
@@ -94,6 +95,7 @@ export default function DemoPanel({
   onPreset: (p: Preset) => void
   onSetup: () => void
   onPreview: () => void
+  onReset: () => void
 }) {
   const t = useT()
   const store = useStore()
@@ -231,6 +233,7 @@ export default function DemoPanel({
                   onClick={() => {
                     store.reset()
                     resetCircle()
+                    onReset()
                   }}
                 >
                   <RotateCcw size={22} aria-hidden />
