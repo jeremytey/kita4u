@@ -440,6 +440,13 @@ export const S = {
     zh: `${APP_NAME} 不能取代紧急服务。`,
   },
   whatDoYouNeed: { en: 'What do you need?', bm: 'Apa yang anda perlukan?', zh: '你需要什么？' },
+  helpYourCircle: { en: 'Help your Circle', bm: 'Bantu Bulatan anda', zh: '帮帮你的关怀圈' },
+  parcelAsk: { en: 'Mei asks: can you take in my parcel?', bm: 'Mei bertanya: boleh tolong ambil bungkusan saya?', zh: 'Mei 问：可以帮我收一下包裹吗？' },
+  parcelNote: { en: 'Doorstep only. No money.', bm: 'Di depan pintu sahaja. Tiada wang.', zh: '只在门口。不涉及金钱。' },
+  parcelTag: same('DEMO REQUEST · SCRIPTED'),
+  iCanHelp: { en: 'I can help', bm: 'Saya boleh bantu', zh: '我可以帮忙' },
+  youCanHelp: { en: 'You said you can help.', bm: 'Anda kata boleh bantu.', zh: '你说你可以帮忙。' },
+  savedDemoOnly: { en: 'Saved in this demo only.', bm: 'Disimpan dalam demo ini sahaja.', zh: '只保存在这个演示里。' },
 } satisfies Record<string, Str>
 
 export type StrKey = keyof typeof S
