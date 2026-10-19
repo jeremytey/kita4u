@@ -32,8 +32,6 @@ const READING_MS = 1500
 const SAMPLE_ICON: Record<SampleId, LucideIcon> = { sms: MessageSquareText, bill: Receipt, notice: Megaphone }
 
 interface Props {
-  checkedIn: boolean
-  onCheckIn: () => void
   onExit: () => void // Done: back to Home
   onBack?: () => void // Back at the first step: one level up (the Ask chooser); Home when opened by a preset
   onChecked: (id: SampleId) => void
@@ -74,24 +72,7 @@ function Quote({ sample }: { sample: Sample }) {
   )
 }
 
-function CheckInPrompt({ checkedIn, onCheckIn }: { checkedIn: boolean; onCheckIn: () => void }) {
-  const t = useT()
-  return (
-    <div className="flex flex-col gap-3 rounded-[24px] bg-done-tint p-4">
-      <p className="text-body font-bold">{t('whileHere')}</p>
-      <BigButton
-        icon={CheckCircle2}
-        variant={checkedIn ? 'quiet' : 'primary'}
-        disabled={checkedIn}
-        onClick={onCheckIn}
-      >
-        {checkedIn ? t('checkedInCard') : t('imOkay')}
-      </BigButton>
-    </div>
-  )
-}
-
-export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onBack, onChecked, onAskCircle }: Props) {
+export default function WhatIsThis({ onExit, onBack, onChecked, onAskCircle }: Props) {
   const t = useT()
   const { lang } = useLang()
   const [step, setStep] = useState<Step>('choose')
@@ -243,8 +224,6 @@ export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onBack, onChe
                   {t('done')}
                 </BigButton>
               </div>
-
-              <CheckInPrompt checkedIn={checkedIn} onCheckIn={onCheckIn} />
             </motion.div>
           )}
 
@@ -263,7 +242,6 @@ export default function WhatIsThis({ checkedIn, onCheckIn, onExit, onBack, onChe
               </h1>
               <p className="text-body text-ink-soft">{t('sentSub')}</p>
               <div className="flex w-full flex-col gap-4 text-left">
-                <CheckInPrompt checkedIn={checkedIn} onCheckIn={onCheckIn} />
                 <BigButton variant="quiet" onClick={onExit}>
                   {t('done')}
                 </BigButton>

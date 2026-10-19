@@ -121,8 +121,6 @@ export default function App() {
         {screen === 'whatIsThis' && (
           <WhatIsThis
             key={visit}
-            checkedIn={store.chain.checkedInAt !== undefined}
-            onCheckIn={() => store.add('CHECK_IN', 'resident')}
             onExit={() => go('home')}
             onBack={() => go(origin === 'chooser' ? 'askChooser' : 'home')}
             onChecked={(id) => store.add('MESSAGE_CHECKED', 'resident', { sample: id })}

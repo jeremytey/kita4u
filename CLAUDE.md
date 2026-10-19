@@ -58,7 +58,7 @@ The Circle ring (src/components/CircleRing.tsx) is on Landing and inside the Hom
 Demo bar: one floating "Demo controls" pill at the bottom right of the phone column. The clock lives in the ribbon.
 
 ## Message helper (simulated)
-Three predefined samples: Suspicious SMS, Electricity bill, Township notice. Each has a fictional message, a two-sentence explanation, and a suspicious flag. Show a thumbnail drawn in HTML/CSS (a message card), not an image file. No Take photo button. Always show the tag DEMO RESULT · SAMPLE MESSAGE. Buttons: Ask Daniel, Read aloud, Done. The message itself sits behind a Show message toggle. Under the buttons: "While you're here: tap I'm okay."
+Three predefined samples: Suspicious SMS, Electricity bill, Township notice. Each has a fictional message, a two-sentence explanation, and a suspicious flag. Show a thumbnail drawn in HTML/CSS (a message card), not an image file. No Take photo button. Always show the tag DEMO RESULT · SAMPLE MESSAGE. Buttons: Ask Daniel, Read aloud, Done. The message itself sits behind a Show message toggle. No check-in prompt on the helper (removed in phase 13): the resident checks in on Home.
 Read aloud uses window.speechSynthesis. If no voice exists for the chosen language, disable the button and show "Voice not available on this device".
 
 ## Design

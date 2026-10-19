@@ -58,7 +58,6 @@ export const S = {
   heroCheckedIn: { en: 'Checked in {time}', bm: 'Sudah lapor diri {time}', zh: '{time} 已报平安' },
   statusAsked: { en: 'We asked {name} to check on you.', bm: 'Kami minta {name} tengok anda.', zh: '我们已请 {name} 去看看你。' },
   statusChecking: { en: '{name} is checking on you.', bm: '{name} sedang tengok anda.', zh: '{name} 正在确认你的情况。' },
-  checkedInCard: { en: 'Checked in today', bm: 'Sudah lapor diri hari ini', zh: '今天已报平安' },
   reminderTitle: { en: 'Are you okay today?', bm: 'Anda okey hari ini?', zh: '你今天还好吗？' },
   imAway: { en: "I'm away", bm: 'Saya tiada di rumah', zh: '我不在家' },
   awayTitle: { en: 'You are away until {when}', bm: 'Anda tiada hingga {when}', zh: '你外出至 {when}' },
@@ -118,7 +117,6 @@ export const S = {
   showMessage: { en: 'Show message', bm: 'Tunjuk mesej', zh: '显示信息' },
   hideMessage: { en: 'Hide message', bm: 'Sembunyi mesej', zh: '隐藏信息' },
   done: { en: 'Done', bm: 'Selesai', zh: '完成' },
-  whileHere: { en: "While you're here: tap I'm okay.", bm: 'Sementara di sini: tekan Saya okey.', zh: '顺便：点一下“我很好”。' },
   sentTo: { en: 'Sent to Daniel', bm: 'Dihantar kepada Daniel', zh: '已发送给 Daniel' },
   sentSub: {
     en: 'Daniel will see the message and what it means.',
@@ -434,9 +432,9 @@ export const S = {
   noHelpTypes: { en: 'No help types turned on.', bm: 'Tiada jenis bantuan dihidupkan.', zh: '没有开启任何帮忙类型。' },
   showSetup: { en: 'Show Circle setup', bm: 'Tunjuk persediaan Bulatan', zh: '显示关怀圈设置' },
   // Phase 12C: Ask / Help actions, parcel, 999. BM and 中文 are drafts.
-  askSub: { en: 'Message or favour', bm: 'Mesej atau pertolongan', zh: '信息或小帮忙' },
+  askSub: { en: 'Ask someone you trust', bm: 'Minta orang yang anda percayai', zh: '请信任的人帮忙' },
   helpYourCircle: { en: 'Help your Circle', bm: 'Bantu Bulatan anda', zh: '帮帮你的关怀圈' },
-  helpSub: { en: '1 request (demo)', bm: '1 permintaan (demo)', zh: '1 个请求（演示）' },
+  helpSub: { en: 'See who needs you · demo', bm: 'Lihat siapa perlukan anda · demo', zh: '看看谁需要你 · 演示' },
   whatDoYouNeed: { en: 'What do you need?', bm: 'Apa yang anda perlukan?', zh: '你需要什么？' },
   parcelAsk: { en: 'Mei asks: can you take in my parcel?', bm: 'Mei bertanya: boleh tolong ambil bungkusan saya?', zh: 'Mei 问：可以帮我收一下包裹吗？' },
   parcelNote: { en: 'Doorstep only. No money.', bm: 'Di depan pintu sahaja. Tiada wang.', zh: '只在门口。不涉及金钱。' },
