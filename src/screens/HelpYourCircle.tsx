@@ -1,12 +1,13 @@
-import { Check, CheckCircle2, Minus, ShieldCheck, X } from 'lucide-react'
+import { Check, CheckCircle2, ChevronRight, Compass, Minus, ShieldCheck, X } from 'lucide-react'
 import BigButton from '../components/BigButton'
+import { IconTile } from '../components/Card'
 import { Avatar } from '../components/CircleStrip'
 import TopBar from '../components/TopBar'
 import { setCircle, useCircle } from '../lib/circle'
 import { useT } from '../strings'
 
 // A scripted request from Mei to Aminah. Only circle.parcel changes: no event, no timeline line, nothing the chain reads.
-export default function HelpYourCircle({ onBack }: { onBack: () => void }) {
+export default function HelpYourCircle({ onBack, onPreview }: { onBack: () => void; onPreview: () => void }) {
   const t = useT()
   const { parcel } = useCircle()
   return (
@@ -51,7 +52,20 @@ export default function HelpYourCircle({ onBack }: { onBack: () => void }) {
             </div>
           )}
         </section>
-        {/* Room below for the proposed Connect preview card (12D). */}
+        {/* Proposed, not built: grey and dashed so it reads as unfinished by design. */}
+        <button
+          type="button"
+          onClick={onPreview}
+          className="grid min-h-[86px] w-full grid-cols-[56px_1fr_auto] items-center gap-3.5 rounded-[22px] border-2 border-dashed border-edge bg-quiet-tint p-3.5 text-left transition-transform duration-200 active:scale-[0.98]"
+        >
+          <IconTile icon={Compass} tone="quiet" />
+          <span className="flex min-w-0 flex-col">
+            {/* At 260px wide (150% text stand-in) the column is 85px: long words wrap instead of scrolling the page. */}
+            <span className="text-title leading-tight font-bold [overflow-wrap:anywhere] hyphens-auto">{t('activitiesCard')}</span>
+            <span className="text-body text-ink-soft">{t('seeIdea')}</span>
+          </span>
+          <ChevronRight size={27} strokeWidth={2.4} className="text-ink-soft" aria-hidden />
+        </button>
       </main>
     </>
   )

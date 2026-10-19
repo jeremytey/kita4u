@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { CheckCircle2, ChevronRight, Clock, RotateCcw, SlidersHorizontal, User, Users, X } from 'lucide-react'
+import { CheckCircle2, ChevronRight, Clock, Compass, RotateCcw, SlidersHorizontal, User, Users, X } from 'lucide-react'
 import { useRef } from 'react'
 import { resetCircle } from '../lib/circle'
 import { dayOf, formatTime } from '../lib/engine'
@@ -85,6 +85,7 @@ export default function DemoPanel({
   onRole,
   onPreset,
   onSetup,
+  onPreview,
 }: {
   open: boolean
   role: Role
@@ -92,6 +93,7 @@ export default function DemoPanel({
   onRole: (r: Role) => void
   onPreset: (p: Preset) => void
   onSetup: () => void
+  onPreview: () => void
 }) {
   const t = useT()
   const store = useStore()
@@ -237,6 +239,10 @@ export default function DemoPanel({
                 <button type="button" className={`${chip} col-span-2 flex items-center justify-center gap-2 bg-surface text-ink shadow-card`} onClick={onSetup}>
                   <Users size={22} aria-hidden />
                   {t('showSetup')}
+                </button>
+                <button type="button" className={`${chip} col-span-2 flex items-center justify-center gap-2 bg-surface text-ink shadow-card`} onClick={onPreview}>
+                  <Compass size={22} aria-hidden />
+                  {t('proposedPreview')}
                 </button>
               </div>
             </Group>

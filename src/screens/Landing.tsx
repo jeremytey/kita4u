@@ -1,10 +1,10 @@
-import { Play, User } from 'lucide-react'
+import { Compass, Play, User } from 'lucide-react'
 import BigButton from '../components/BigButton'
 import CircleRing from '../components/CircleRing'
 import TopBar from '../components/TopBar'
 import { useT } from '../strings'
 
-export default function Landing({ onStart, onDemo }: { onStart: () => void; onDemo: () => void }) {
+export default function Landing({ onStart, onDemo, onPreview }: { onStart: () => void; onDemo: () => void; onPreview: () => void }) {
   const t = useT()
   return (
     <>
@@ -24,6 +24,9 @@ export default function Landing({ onStart, onDemo }: { onStart: () => void; onDe
           </BigButton>
           <BigButton icon={Play} variant="quiet" onClick={onDemo}>
             {t('demoMode')}
+          </BigButton>
+          <BigButton icon={Compass} variant="quiet" onClick={onPreview}>
+            {t('whatsNext')}
           </BigButton>
         </div>
       </main>

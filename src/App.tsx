@@ -4,6 +4,7 @@ import PhoneFrame from './components/PhoneFrame'
 import Ribbon from './components/Ribbon'
 import { useCircle } from './lib/circle'
 import { useStore, type Preset } from './lib/store'
+import ActivitiesPreview from './screens/ActivitiesPreview'
 import AskChooser from './screens/AskChooser'
 import CircleSetup from './screens/CircleSetup'
 import Community from './screens/Community'
@@ -16,7 +17,7 @@ import NeedHelp, { type Task } from './screens/NeedHelp'
 import WhatIsThis from './screens/WhatIsThis'
 import type { Role, Screen } from './types'
 
-// Screens added in phase 12 live here; types.ts is frozen. activities arrives in 12D.
+// Screens added in phase 12 live here; types.ts is frozen.
 type AppScreen = Screen | 'setup' | 'askChooser' | 'helpCircle' | 'activities'
 
 const ROLE_SCREEN: Record<Role, Screen> = { resident: 'home', neighbour: 'contact', family: 'family', community: 'community' }
@@ -32,8 +33,14 @@ export default function App() {
   const [panel, setPanel] = useState(false)
   const [helpTask, setHelpTask] = useState<Task | undefined>()
   const [visit, setVisit] = useState(0) // remounts a screen when a preset re-opens it
+  const [from, setFrom] = useState<AppScreen>('landing') // where the proposed preview's Back goes
 
   const closePanel = useCallback(() => setPanel(false), [])
+  const openPreview = () => {
+    if (screen !== 'activities') setFrom(screen)
+    setScreen('activities')
+    setPanel(false)
+  }
   const pickRole = (r: Role) => {
     setRole(r)
     setScreen(ROLE_SCREEN[r])
@@ -53,7 +60,7 @@ export default function App() {
       <Ribbon />
       <div className={screen === 'landing' ? 'flex flex-1 flex-col' : 'flex flex-1 flex-col pb-24'}>
         {/* First visit: Try as Aminah opens the Circle setup. Presets and View as never need it. */}
-        {screen === 'landing' && <Landing onStart={() => setScreen(setupDone ? 'home' : 'setup')} onDemo={() => setPanel(true)} />}
+        {screen === 'landing' && <Landing onStart={() => setScreen(setupDone ? 'home' : 'setup')} onDemo={() => setPanel(true)} onPreview={openPreview} />}
         {screen === 'setup' && <CircleSetup key={visit} onExit={() => setScreen('landing')} onDone={() => setScreen('home')} />}
         {screen === 'home' && (
           <Home onAsk={() => setScreen('askChooser')} onHelp={() => setScreen('helpCircle')} />
@@ -68,7 +75,8 @@ export default function App() {
             }}
           />
         )}
-        {screen === 'helpCircle' && <HelpYourCircle onBack={() => setScreen('home')} />}
+        {screen === 'helpCircle' && <HelpYourCircle onBack={() => setScreen('home')} onPreview={openPreview} />}
+        {screen === 'activities' && <ActivitiesPreview onBack={() => setScreen(from)} />}
         {screen === 'needHelp' && <NeedHelp key={visit} initialTask={helpTask} onExit={() => setScreen('home')} />}
         {screen === 'whatIsThis' && (
           <WhatIsThis
@@ -92,6 +100,7 @@ export default function App() {
         onClose={closePanel}
         onRole={pickRole}
         onPreset={pickPreset}
+        onPreview={openPreview}
         onSetup={() => {
           setRole('resident')
           setScreen('setup')
