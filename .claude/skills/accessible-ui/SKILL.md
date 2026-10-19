@@ -9,17 +9,18 @@ description: Rules for building large, calm, accessible mobile screens for resid
 - Every tappable thing is 64px tall or more, with 12px gap between buttons. Only the floating Demo controls pill (presenter tool) may be 56px. The Home check-in card is at least 282px tall and holds an 82px dark I'm okay button.
 - The language toggle stays three 56x64 buttons. Back stays a labelled pill (arrow + word). On narrow phones tighten gaps and padding first; if they still do not fit, the toggle wraps to its own row. Never shrink a tap target.
 - Action cards: one action per card, full width, one column. Icon tile, title, at most one short line of subtext, a chevron. 2px edge border so the card reads as a button. No badges or extra buttons on a card.
-- Maximum 3 main actions on any resident screen. Full-width buttons, stacked vertically.
+- Maximum 3 main actions on any resident screen. Full-width buttons, stacked vertically. Home's three are I'm okay, Ask (your Circle) and Help (your Circle) from Phase 12C; until then, I'm okay and the two Ask cards.
 - Every sub-screen has one large Back button, top left. No bottom navigation.
 ## Colour and state
 - Text contrast 4.5:1 or better. Never use colour alone: every state has an icon and a word.
 - Red only for Unresolved and Needs help. Primary actions use the soft warm accent.
+- Call 999 is the one tel: link and the one red button outside Unresolved/Needs help states. (It appears only inside those states, never anywhere else.)
 - Green = done. Amber = waiting. Grey = no reply, paused or not needed. Orange box = suspicious.
 ## Icons
 - lucide-react only. Dark glyph inside a tinted 56px rounded square. No emoji in the UI.
 ## Layout
 - Cards: 24px radius, a 2px border (--color-edge, 3:1 on the page) instead of a soft shadow, white on warm off-white. 16px between cards, 24px between groups.
-- The Circle strip (3 round initial circles with role labels) is on Home only.
+- The Circle ring (src/components/CircleRing.tsx: Aminah in the centre, Mei, Daniel and Township Support on a dashed ring) is on Landing and inside the Home check-in card (numbered 1/2/3, tone matching the card). The old Circle strip card is no longer rendered.
 - Avatars are three flat illustrated badges (Mei, Daniel, Township Support) from src/components/avatars.tsx: one shared spec, flat fills, no gradients. Each is named "Name, Role" for screen readers and always sits near the visible name. Daniel's badge is a muted sage, not the done-green.
 - Icon tiles are slightly tilted with a small highlight dot; decorative only. Never use the Sparkles icon (it implies live AI).
 - No chain bar on resident screens. The resident gets one status sentence; the chain bar is for Family and Community.
