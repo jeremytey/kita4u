@@ -27,7 +27,16 @@ npm install
 npm run dev
 
 ## Try the demo
-1. Open the app and tap "Demo mode".
+First visit (the path a resident would see):
+1. Landing: tap "Try as Mak Cik Aminah". The first time, this opens the Circle setup.
+2. Setup step 1 "Your people": Mei (will be invited), Daniel (family contact, demo), Township Support (proposed role). The order is fixed. Tap Next.
+3. Setup step 2 "How can they help?": Groceries and Phone help are on, Clinic ride is off (each switch shows On or Off). Tap Next.
+4. Setup step 3 "Meet your Circle": a mock introduction session (proposed, example only). Tap Finish. Home opens; the caption under the Circle ring says Mei has been invited.
+5. Mei: Demo controls, View as Mei, tap Accept on "Aminah invited you to her Circle." Back as Aminah, the caption reads "Mei and Daniel agreed".
+Accept or Decline is a prototype of consent only. It never changes the chain. Next visits skip the setup; "Show Circle setup" under Advanced in the Demo panel opens it again.
+
+Presenter path:
+1. Open the app and tap "Demo mode". Presets and View as do not need the setup.
 2. Use the Demo panel to set the simulated clock and each contact's behaviour.
 3. Switch roles (Resident, Neighbour, Family, Community) to see each view.
 
@@ -41,7 +50,7 @@ All times are SIMULATED and staged with the Demo panel. A ribbon at the top of e
 
 Away: in the reminder state, "I'm away" (under the check-in card) opens a day stepper (1 to 14 days, a demo setting, not validated policy). The sheet previews the return time ("Away until tomorrow 09:00" or a weekday such as "Sun 09:00"). "Set away" pauses everything until then; "I'm back" ends it.
 
-Reset (under Advanced in the Demo panel) returns a clean Friday 08:00 with every contact on "No reply". The language stays.
+Reset (under Advanced in the Demo panel) returns a clean Friday 08:00 with every contact on "No reply", and clears the Circle setup (setup not done, Mei not invited, default help types). The language stays.
 
 ## Stack
 React, Vite, TypeScript, Tailwind CSS, lucide-react, framer-motion. Deployed on Vercel.
