@@ -4,17 +4,19 @@ import PhoneFrame from './components/PhoneFrame'
 import Ribbon from './components/Ribbon'
 import { useCircle } from './lib/circle'
 import { useStore, type Preset } from './lib/store'
+import AskChooser from './screens/AskChooser'
 import CircleSetup from './screens/CircleSetup'
 import Community from './screens/Community'
 import ContactCard from './screens/ContactCard'
 import Family from './screens/Family'
+import HelpYourCircle from './screens/HelpYourCircle'
 import Home from './screens/Home'
 import Landing from './screens/Landing'
 import NeedHelp, { type Task } from './screens/NeedHelp'
 import WhatIsThis from './screens/WhatIsThis'
 import type { Role, Screen } from './types'
 
-// Screens added in phase 12 live here; types.ts is frozen. askChooser, helpCircle and activities arrive in 12C and 12D.
+// Screens added in phase 12 live here; types.ts is frozen. activities arrives in 12D.
 type AppScreen = Screen | 'setup' | 'askChooser' | 'helpCircle' | 'activities'
 
 const ROLE_SCREEN: Record<Role, Screen> = { resident: 'home', neighbour: 'contact', family: 'family', community: 'community' }
@@ -54,14 +56,19 @@ export default function App() {
         {screen === 'landing' && <Landing onStart={() => setScreen(setupDone ? 'home' : 'setup')} onDemo={() => setPanel(true)} />}
         {screen === 'setup' && <CircleSetup key={visit} onExit={() => setScreen('landing')} onDone={() => setScreen('home')} />}
         {screen === 'home' && (
-          <Home
-            onWhatIsThis={() => setScreen('whatIsThis')}
-            onNeedHelp={() => {
+          <Home onAsk={() => setScreen('askChooser')} onHelp={() => setScreen('helpCircle')} />
+        )}
+        {screen === 'askChooser' && (
+          <AskChooser
+            onBack={() => setScreen('home')}
+            onMessage={() => setScreen('whatIsThis')}
+            onFavour={() => {
               setHelpTask(undefined)
               setScreen('needHelp')
             }}
           />
         )}
+        {screen === 'helpCircle' && <HelpYourCircle onBack={() => setScreen('home')} />}
         {screen === 'needHelp' && <NeedHelp key={visit} initialTask={helpTask} onExit={() => setScreen('home')} />}
         {screen === 'whatIsThis' && (
           <WhatIsThis

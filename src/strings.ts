@@ -87,7 +87,6 @@ export const S = {
   justOneTap: { en: 'Just one tap.', bm: 'Hanya satu ketikan.', zh: '只需点一下。' },
   allSet: { en: 'All set', bm: 'Siap', zh: '已完成' },
   checkedInHeading: { en: "You're checked in", bm: 'Anda sudah lapor diri', zh: '你已报平安' },
-  needSomething: { en: 'Need something?', bm: 'Perlukan sesuatu?', zh: '需要什么？' },
   askYourCircle: { en: 'Ask your Circle', bm: 'Tanya Bulatan anda', zh: '问问你的关怀圈' },
   explainMessage: { en: 'Explain a message', bm: 'Terangkan satu mesej', zh: '解释一条信息' },
   makeSimple: { en: 'Make it simple', bm: 'Mudahkan', zh: '说得简单点' },
@@ -128,7 +127,6 @@ export const S = {
   },
   goodAfternoon: { en: 'Good afternoon', bm: 'Selamat petang', zh: '下午好' },
   goodEvening: { en: 'Good evening', bm: 'Selamat malam', zh: '晚上好' },
-  call999: { en: 'If this is an emergency, call 999.', bm: 'Jika ini kecemasan, hubungi 999.', zh: '如属紧急情况，请拨打 999。' },
   homeNeedsHelpTitle: { en: 'Your Circle has been told', bm: 'Bulatan anda sudah diberitahu', zh: '已通知你的关怀圈' },
   homeNeedsHelpSub: {
     en: '{name} asked everyone in your Circle to help you.',
@@ -425,6 +423,16 @@ export const S = {
   noHelpTypes: { en: 'No help types turned on.', bm: 'Tiada jenis bantuan dihidupkan.', zh: '没有开启任何帮忙类型。' },
   showSetup: { en: 'Show Circle setup', bm: 'Tunjuk persediaan Bulatan', zh: '显示关怀圈设置' },
   // Phase 12C: Ask / Help actions, parcel, 999. BM and 中文 are drafts.
+  askSub: { en: 'Message or favour', bm: 'Mesej atau pertolongan', zh: '信息或小帮忙' },
+  helpYourCircle: { en: 'Help your Circle', bm: 'Bantu Bulatan anda', zh: '帮帮你的关怀圈' },
+  helpSub: { en: '1 request (demo)', bm: '1 permintaan (demo)', zh: '1 个请求（演示）' },
+  whatDoYouNeed: { en: 'What do you need?', bm: 'Apa yang anda perlukan?', zh: '你需要什么？' },
+  parcelAsk: { en: 'Mei asks: can you take in my parcel?', bm: 'Mei bertanya: boleh tolong ambil bungkusan saya?', zh: 'Mei 问：可以帮我收一下包裹吗？' },
+  parcelNote: { en: 'Doorstep only. No money.', bm: 'Di depan pintu sahaja. Tiada wang.', zh: '只在门口。不涉及金钱。' },
+  parcelTag: same('DEMO REQUEST · SCRIPTED'),
+  iCanHelp: { en: 'I can help', bm: 'Saya boleh bantu', zh: '我可以帮忙' },
+  youCanHelp: { en: 'You said you can help.', bm: 'Anda kata boleh bantu.', zh: '你说你可以帮忙。' },
+  savedDemoOnly: { en: 'Saved in this demo only.', bm: 'Disimpan dalam demo ini sahaja.', zh: '只保存在这个演示里。' },
   proposedRole: { en: 'Proposed role', bm: 'Peranan dicadangkan', zh: '拟议角色' },
   call999Needs: { en: 'If this may be an emergency, call 999.', bm: 'Jika ini mungkin kecemasan, hubungi 999.', zh: '如果这可能是紧急情况，请拨打 999。' },
   call999Unresolved: {
@@ -439,14 +447,6 @@ export const S = {
     bm: `${APP_NAME} tidak menggantikan perkhidmatan kecemasan.`,
     zh: `${APP_NAME} 不能取代紧急服务。`,
   },
-  whatDoYouNeed: { en: 'What do you need?', bm: 'Apa yang anda perlukan?', zh: '你需要什么？' },
-  helpYourCircle: { en: 'Help your Circle', bm: 'Bantu Bulatan anda', zh: '帮帮你的关怀圈' },
-  parcelAsk: { en: 'Mei asks: can you take in my parcel?', bm: 'Mei bertanya: boleh tolong ambil bungkusan saya?', zh: 'Mei 问：可以帮我收一下包裹吗？' },
-  parcelNote: { en: 'Doorstep only. No money.', bm: 'Di depan pintu sahaja. Tiada wang.', zh: '只在门口。不涉及金钱。' },
-  parcelTag: same('DEMO REQUEST · SCRIPTED'),
-  iCanHelp: { en: 'I can help', bm: 'Saya boleh bantu', zh: '我可以帮忙' },
-  youCanHelp: { en: 'You said you can help.', bm: 'Anda kata boleh bantu.', zh: '你说你可以帮忙。' },
-  savedDemoOnly: { en: 'Saved in this demo only.', bm: 'Disimpan dalam demo ini sahaja.', zh: '只保存在这个演示里。' },
 } satisfies Record<string, Str>
 
 export type StrKey = keyof typeof S

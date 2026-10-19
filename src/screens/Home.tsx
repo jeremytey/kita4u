@@ -18,6 +18,7 @@ import BigButton from '../components/BigButton'
 import { ActionCard, DemoReplyTag, Eyebrow } from '../components/Card'
 import { StatusTag } from '../components/ChainBar'
 import CircleRing from '../components/CircleRing'
+import Emergency999 from '../components/Emergency999'
 import { PEOPLE } from '../components/CircleStrip'
 import HeroButton from '../components/HeroButton'
 import TopBar from '../components/TopBar'
@@ -129,7 +130,7 @@ function greetingKey(now: number): StrKey {
   return 'goodEvening'
 }
 
-export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () => void; onNeedHelp: () => void }) {
+export default function Home({ onAsk, onHelp }: { onAsk: () => void; onHelp: () => void }) {
   const t = useT()
   const { chain, now, add, events } = useStore()
   const status = homeStatus(chain)
@@ -197,7 +198,9 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
         return (
           <AlertBox icon={AlertTriangle} title={t('homeNeedsHelpTitle')}>
             <p>{t('homeNeedsHelpSub', { name: contactName(helpReporter) })}</p>
-            <p className="mt-2 font-bold text-alert">{t('call999')}</p>
+            <div className="mt-3">
+              <Emergency999 variant="needsHelp" />
+            </div>
           </AlertBox>
         )
       case 'unresolved':
@@ -236,6 +239,14 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
       ? 'border-edge bg-surface'
       : 'border-accent-edge bg-accent shadow-[0_10px_0_rgba(154,74,18,0.12)]'
   const CardIcon = done ? Check : away ? Luggage : House
+  const tile = (
+    <span
+      aria-hidden
+      className={`flex size-16 shrink-0 items-center justify-center rounded-[20px] border-2 border-ink/15 bg-surface ${done ? 'text-done' : 'text-ink'}`}
+    >
+      <CardIcon size={40} strokeWidth={2.4} />
+    </span>
+  )
 
   return (
     <>
@@ -259,24 +270,33 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
             className={`flex flex-col gap-6 rounded-[28px] border-2 p-6 transition-colors duration-200 ${cardStyle}`}
             style={done || away ? undefined : { backgroundImage: 'radial-gradient(circle at 100% 0, rgba(255,255,255,0.45), transparent 12rem)' }}
           >
-            <div className="flex items-start gap-4">
-              <span
-                aria-hidden
-                className={`flex size-16 shrink-0 items-center justify-center rounded-[20px] border-2 border-ink/15 bg-surface ${done ? 'text-done' : 'text-ink'}`}
-              >
-                <CardIcon size={40} strokeWidth={2.4} />
-              </span>
-              <div className="flex min-w-0 flex-col gap-1">
-                <Eyebrow className="text-ink">{t(done ? 'allSet' : 'todayCheckIn')}</Eyebrow>
-                {!away && (
-                  <h2 id="checkin-title" className="text-greet font-bold">
-                    {t(done ? 'checkedInHeading' : 'letThemKnow')}
-                  </h2>
-                )}
-                {status === 'normal' && <p className="text-body">{t('justOneTap')}</p>}
+            {status === 'needsHelp' ? (
+              // Needs help: the red box above is tall, so the eyebrow and heading go (the heading stays for screen readers)
+              // and the hero sits beside the tile, right under the top padding. On narrow cards the hero wraps below the tile.
+              <div className="flex flex-wrap items-center gap-4">
+                {tile}
+                <h2 id="checkin-title" className="sr-only">
+                  {t('letThemKnow')}
+                </h2>
+                <div className="min-w-[200px] flex-1">{hero}</div>
               </div>
-            </div>
-            {hero}
+            ) : (
+              <>
+                <div className="flex items-start gap-4">
+                  {tile}
+                  <div className="flex min-w-0 flex-col gap-1">
+                    <Eyebrow className="text-ink">{t(done ? 'allSet' : 'todayCheckIn')}</Eyebrow>
+                    {!away && (
+                      <h2 id="checkin-title" className="text-greet font-bold">
+                        {t(done ? 'checkedInHeading' : 'letThemKnow')}
+                      </h2>
+                    )}
+                    {status === 'normal' && <p className="text-body">{t('justOneTap')}</p>}
+                  </div>
+                </div>
+                {hero}
+              </>
+            )}
             <div className="flex flex-col gap-3">
               <CircleRing order tone={done ? 'done' : away ? 'surface' : 'accent'} className="max-w-[240px]" />
               <p className="text-center text-small font-bold">{t(caption)}</p>
@@ -289,16 +309,11 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
           )}
         </div>
 
-        <section aria-labelledby="ask-title" className="flex flex-col gap-3">
-          <div className="flex flex-col gap-1">
-            <Eyebrow>{t('needSomething')}</Eyebrow>
-            <h2 id="ask-title" className="text-title font-bold">
-              {t('askYourCircle')}
-            </h2>
-          </div>
-          <ActionCard icon={MessageCircleQuestion} tone="warn" title={t('explainMessage')} sub={t('makeSimple')} onClick={onWhatIsThis} />
-          <ActionCard icon={HeartHandshake} tone="done" title={t('askFavour')} sub={t('askMeiSub')} onClick={onNeedHelp} />
-        </section>
+        {/* Three main actions on Home: I'm okay (above), Ask and Help. */}
+        <div className="flex flex-col gap-3">
+          <ActionCard icon={MessageCircleQuestion} tone="accent" title={t('askYourCircle')} sub={t('askSub')} onClick={onAsk} />
+          <ActionCard icon={HeartHandshake} tone="done" title={t('helpYourCircle')} sub={t('helpSub')} onClick={onHelp} />
+        </div>
 
         <p className="mt-auto pt-4 text-center text-small text-ink-soft">{t('footer')}</p>
       </main>
