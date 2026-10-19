@@ -79,7 +79,19 @@ export default function App() {
       </div>
 
       {screen !== 'landing' && <DemoBar clean={CLEAN} onOpen={() => setPanel(true)} />}
-      <DemoPanel open={panel} role={role} onClose={closePanel} onRole={pickRole} onPreset={pickPreset} />
+      <DemoPanel
+        open={panel}
+        role={role}
+        onClose={closePanel}
+        onRole={pickRole}
+        onPreset={pickPreset}
+        onSetup={() => {
+          setRole('resident')
+          setScreen('setup')
+          setVisit((v) => v + 1)
+          setPanel(false)
+        }}
+      />
     </PhoneFrame>
   )
 }

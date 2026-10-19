@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { CheckCircle2, ChevronRight, Clock, RotateCcw, SlidersHorizontal, User, X } from 'lucide-react'
+import { CheckCircle2, ChevronRight, Clock, RotateCcw, SlidersHorizontal, User, Users, X } from 'lucide-react'
 import { useRef } from 'react'
+import { resetCircle } from '../lib/circle'
 import { dayOf, formatTime } from '../lib/engine'
 import { useStore, type Preset } from '../lib/store'
 import { useDialog } from '../lib/useDialog'
@@ -83,12 +84,14 @@ export default function DemoPanel({
   onClose,
   onRole,
   onPreset,
+  onSetup,
 }: {
   open: boolean
   role: Role
   onClose: () => void
   onRole: (r: Role) => void
   onPreset: (p: Preset) => void
+  onSetup: () => void
 }) {
   const t = useT()
   const store = useStore()
@@ -219,9 +222,21 @@ export default function DemoPanel({
                 <button type="button" className={`${chip} bg-surface text-ink shadow-card`} onClick={() => store.advance(24 * 60)}>
                   +24h
                 </button>
-                <button type="button" className={`${chip} flex items-center justify-center gap-2 bg-quiet-tint text-ink`} onClick={store.reset}>
+                {/* Reset clears the event log (store) and the Circle setup state (own key). The language stays. */}
+                <button
+                  type="button"
+                  className={`${chip} flex items-center justify-center gap-2 bg-quiet-tint text-ink`}
+                  onClick={() => {
+                    store.reset()
+                    resetCircle()
+                  }}
+                >
                   <RotateCcw size={22} aria-hidden />
                   {t('reset')}
+                </button>
+                <button type="button" className={`${chip} col-span-2 flex items-center justify-center gap-2 bg-surface text-ink shadow-card`} onClick={onSetup}>
+                  <Users size={22} aria-hidden />
+                  {t('showSetup')}
                 </button>
               </div>
             </Group>
