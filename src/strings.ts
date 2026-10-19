@@ -447,6 +447,31 @@ export const S = {
     bm: `${APP_NAME} tidak menggantikan perkhidmatan kecemasan.`,
     zh: `${APP_NAME} 不能取代紧急服务。`,
   },
+  // Phase 12D: proposed Connect preview (read-only, labelled). BM and 中文 are drafts.
+  previewTag: same('PROPOSED FEATURE · SAMPLE CONTENT'),
+  proposedNextStep: { en: 'Proposed next step', bm: 'Langkah seterusnya yang dicadangkan', zh: '拟议的下一步' },
+  connectTitle: { en: 'Connect with your neighbourhood', bm: 'Berhubung dengan kejiranan anda', zh: '和邻里多联系' },
+  connectLine: {
+    en: 'Find people in your Circle who share your interests.',
+    bm: 'Cari orang dalam Bulatan anda yang berkongsi minat anda.',
+    zh: '在你的关怀圈里找到兴趣相同的人。',
+  },
+  actBadminton: { en: 'Badminton', bm: 'Badminton', zh: '羽毛球' },
+  actWalks: { en: 'Morning walks', bm: 'Jalan pagi', zh: '晨走' },
+  actGardening: { en: 'Gardening', bm: 'Berkebun', zh: '园艺' },
+  actCoffee: { en: 'Coffee and chat', bm: 'Kopi dan sembang', zh: '喝咖啡聊天' },
+  sampleActivityTag: same('SAMPLE ACTIVITY'),
+  meiLooking: { en: 'Mei is looking for 3 more players.', bm: 'Mei mencari 3 lagi pemain.', zh: 'Mei 还在找 3 位球友。' },
+  activityWhen: { en: 'Thursday · 8:00 PM · sample court', bm: 'Khamis · 8:00 malam · gelanggang contoh', zh: '周四 · 晚上 8:00 · 示例球场' },
+  connectClosing: {
+    en: 'Activities among people in your Circle first. Not part of the current prototype.',
+    bm: 'Aktiviti antara orang dalam Bulatan anda dahulu. Bukan sebahagian daripada prototaip semasa.',
+    zh: '先从关怀圈里的人开始一起活动。这不是当前原型的一部分。',
+  },
+  whatsNext: { en: "What's next (proposed)", bm: 'Seterusnya (dicadangkan)', zh: '下一步（拟议）' },
+  activitiesCard: { en: 'Neighbourhood activities (proposed)', bm: 'Aktiviti kejiranan (dicadangkan)', zh: '邻里活动（拟议）' },
+  seeIdea: { en: 'See the idea', bm: 'Lihat idea', zh: '看看这个构想' },
+  proposedPreview: { en: 'Proposed preview', bm: 'Pratonton dicadangkan', zh: '拟议预览' },
 } satisfies Record<string, Str>
 
 export type StrKey = keyof typeof S
