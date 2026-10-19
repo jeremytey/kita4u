@@ -424,6 +424,8 @@ export const S = {
   },
   noHelpTypes: { en: 'No help types turned on.', bm: 'Tiada jenis bantuan dihidupkan.', zh: '没有开启任何帮忙类型。' },
   showSetup: { en: 'Show Circle setup', bm: 'Tunjuk persediaan Bulatan', zh: '显示关怀圈设置' },
+  // Phase 12C: Ask / Help actions, parcel, 999. BM and 中文 are drafts.
+  proposedRole: { en: 'Proposed role', bm: 'Peranan dicadangkan', zh: '拟议角色' },
 } satisfies Record<string, Str>
 
 export type StrKey = keyof typeof S

@@ -22,7 +22,7 @@ const EDGE: Record<CaseStatus, string> = {
 }
 
 // One row per contact, read from the chain: picture, name and role, what happened, and the same dot as the chain bar.
-function Row({ lead, name, role, state, dot, simulated }: { lead: ReactNode; name: string; role?: string; state: string; dot: ReactNode; simulated?: boolean }) {
+function Row({ lead, name, role, note, state, dot, simulated }: { lead: ReactNode; name: string; role?: string; note?: string; state: string; dot: ReactNode; simulated?: boolean }) {
   return (
     <li className="grid grid-cols-[48px_1fr_auto] items-center gap-3 border-t-2 border-line pt-3">
       <span className="flex justify-center">{lead}</span>
@@ -31,6 +31,7 @@ function Row({ lead, name, role, state, dot, simulated }: { lead: ReactNode; nam
           {name}
           {role && <span className="text-small font-normal text-ink-soft">{role}</span>}
         </span>
+        {note && <span className="text-small text-ink-soft">{note}</span>}
         <span className="text-small font-bold text-ink-soft">{state}</span>
         {simulated && (
           <span className="mt-1">
@@ -138,7 +139,9 @@ export default function Community() {
                     key={c}
                     lead={<Avatar who={c} size={46} />}
                     name={t(PEOPLE[c].name)}
-                    role={t(PEOPLE[c].role)}
+                    // Decision 4: Township Support is a proposed role, never "authorised".
+                    role={c === 'community' ? t('proposedRole') : t(PEOPLE[c].role)}
+                    note={c === 'community' ? t('townshipProposed') : undefined}
                     state={stepWord(s, t)}
                     dot={<StepDot dot={dotFor(s)} />}
                     simulated={sim.has(c)}
