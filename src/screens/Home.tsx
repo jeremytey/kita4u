@@ -246,7 +246,7 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
           <section
             aria-labelledby={away ? undefined : 'checkin-title'}
             aria-label={away ? t('todayCheckIn') : undefined}
-            className={`flex min-h-[282px] flex-col justify-between gap-6 rounded-[28px] border-2 p-6 transition-colors duration-200 ${cardStyle}`}
+            className={`flex flex-col gap-6 rounded-[28px] border-2 p-6 transition-colors duration-200 ${cardStyle}`}
             style={done || away ? undefined : { backgroundImage: 'radial-gradient(circle at 100% 0, rgba(255,255,255,0.45), transparent 12rem)' }}
           >
             <div className="flex items-start gap-4">
@@ -266,11 +266,11 @@ export default function Home({ onWhatIsThis, onNeedHelp }: { onWhatIsThis: () =>
                 {status === 'normal' && <p className="text-body">{t('justOneTap')}</p>}
               </div>
             </div>
+            {hero}
             <div className="flex flex-col gap-3">
               <CircleRing order tone={done ? 'done' : away ? 'surface' : 'accent'} className="max-w-[240px]" />
               <p className="text-center text-small font-bold">{t('circleCaption')}</p>
             </div>
-            {hero}
           </section>
           {status === 'reminder' && (
             <BigButton icon={Luggage} variant="secondary" onClick={() => setSheet(true)}>

@@ -116,6 +116,12 @@ engine.ts, types.ts, store.ts, speech.ts, samples.ts and engine.selftest.ts were
 - Open (not fixed, decision needed): the hero button is now below the fold at 360x640 in every Home state. Hero bottom 852 to 1050px against a visible limit of 570px (top of the Demo pill). The ring and caption add 360px (336px block + 24px gap). Before 12A the hero bottom was about 360px higher.
 - Unverified: real phone, 150% text, screen reader.
 - Native-speaker review needed (BM and 中文 drafts): circleCaption.
+- 12A-fix (commit "Home: hero above ring"): with the ring above it, the hero sat 852-1050px down at 360x640 (visible area ends at 570px, the top of the Demo pill), so the daily action needed scrolling. Inside the card the order is now icon tile + eyebrow + heading, hero, ring, caption; the card lost min-h-[282px] and justify-between. Hero bottom edge measured from page top, 360x640 / 390x844 (pill top 570 / 774): normal 525 / 489, checkedIn 498 / 498, reminder 492 / 456, chainRunning 492 / 456, away 515 / 515 all above the pill; contactChecked 663 / 627, unresolved 624 / 588, needsHelp 690 / 654 are above the pill at 390x844 but below it at 360x640 (their status text or red box above the card is taller; the hero is where it was before 12A). Side effect: I'm away (reminder only, still directly under the card) now comes after the ring: top at 890px at 360x640, 854px at 390x844.
+
+## Known gaps
+- Home at 260px wide fails: the check-in card leaves a 176px ring box and the Township label is 185px (labels overlap, the centre letter drops to 8px, BM scrolls sideways). 260px is a stand-in for 150% text and was never tested before phase 11D. Not fixed on purpose.
+- Risk: Not tested with large system text.
+- Not tested on a real phone or with a screen reader.
 
 ## Notes for later phases
 - Phase 4: engine.ts and engine.selftest.ts already exist from phase 0 and pass. Do not rewrite them. Phase 4 builds only store.ts (events, simulated clock, behaviours in context, localStorage, reset), ChainBar and DemoPanel with presets.
