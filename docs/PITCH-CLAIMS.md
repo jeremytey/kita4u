@@ -58,7 +58,7 @@ Always on every screen: the ribbon "PROTOTYPE · SAMPLE DATA" and "SIMULATED TIM
 | After Circle setup | caption "Demo Circle. Mei has been invited. Township role: proposed." | "CIRCLE INVITATION" "Aminah invited you to her Circle." "Accept" / "Decline" | nothing new (no invitation card for Daniel) | nothing new |
 
 Notes from the screens, as they are today:
-- 999 appears only in the Needs help rows (all four views) and the Unresolved rows for Daniel and Township Support. It is the one phone link in the app.
+- 999 appears only in the Needs help rows (all four views) and the Unresolved rows for Daniel and Township Support. The Call 999 button is shown but does not dial in the prototype; a real deployment would open the dialer. Tapping it shows "Demo only. In a real deployment this would open the phone dialer. Nobody is called." There is no phone link in the app.
 - Daniel's chain bar labels Township Support's step "Community"; only the Township case card says "Proposed role".
 - Township Support's view also lists the resident's favour requests ("Help request").
 - Help your Circle (Mei's parcel request to Aminah) and the Activities preview are seen by the resident only and write nothing to the timeline or the chain.

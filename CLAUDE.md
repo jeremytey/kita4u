@@ -21,7 +21,7 @@ Persona: Mak Cik Aminah, Unit 12-3. Everything is fictional.
 - Never imply a real township, guardhouse, management team or neighbour agreed to anything.
 - "Not an emergency service" goes in the Home footer. 999 wording follows Phase 12 decision 5 (below): Needs help in all views, Unresolved in Daniel and Township views only.
 - No live location tracking. Say so on the Family screen.
-- The chat and call screens are labelled DEMO CHAT / DEMO CALL. No phone number, no tel: link, no free text. The one exception is the contextual Call 999 button (tel:999) in the Needs help and Unresolved states (Phase 12 decision 5). It is the only tel: link in the app.
+- The chat and call screens are labelled DEMO CHAT / DEMO CALL. No phone number, no tel: link, no free text. The contextual Call 999 button in the Needs help and Unresolved states (Phase 12 decision 5) is a button that does not dial: tapping it shows a demo note. There is no tel: link in the app.
 
 ## Escalation rules (the core logic)
 All times are SIMULATED. Delays are demo settings, not validated policy.
@@ -83,7 +83,7 @@ Phone frame: max width 430px, centred on desktop, full screen on a phone.
    Never show "saw the request" for the Asked state.
 3. Only Mei gets an invitation card (prototype of consent). No Daniel invitation card.
 4. Township Support is a proposed role. Wording: "Proposed role, to be agreed in a pilot. Example: township community team or guardhouse." No Accept button.
-5. 999 is NOT a step in the chain. Needs help (all views): "If this may be an emergency, call 999." Unresolved (Daniel and Township views only; NOT resident Home, NOT Mei): "No one has confirmed yet. If you think she may be in danger, call 999." Both add "Kita4U does not replace emergency services." One contextual tel:999 button in those states only. It is the only tel: link in the app. Replaces the old CLAUDE.md 999 rule.
+5. 999 is NOT a step in the chain. Needs help (all views): "If this may be an emergency, call 999." Unresolved (Daniel and Township views only; NOT resident Home, NOT Mei): "No one has confirmed yet. If you think she may be in danger, call 999." Both add "Kita4U does not replace emergency services." One contextual Call 999 button in those states only. It does not dial in the prototype (it shows a demo note); there is no tel: link in the app. Replaces the old CLAUDE.md 999 rule.
 6. New screens use a local type in App.tsx: AppScreen = Screen | 'setup' | 'askChooser' | 'helpCircle' | 'activities'. types.ts is frozen.
 7. New Circle state lives in src/lib/circle.ts with its own localStorage key 'care-circle-circle'. "Reset demo" must also clear it. Do not rename existing localStorage keys.
 8. Do NOT delete src/components/CircleStrip.tsx. Avatar and PEOPLE are exported from it and about 10 files import them. Stop rendering the Circle card on Home only.

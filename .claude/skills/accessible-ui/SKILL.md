@@ -14,7 +14,7 @@ description: Rules for building large, calm, accessible mobile screens for resid
 ## Colour and state
 - Text contrast 4.5:1 or better. Never use colour alone: every state has an icon and a word.
 - Red only for Unresolved and Needs help. Primary actions use the soft warm accent.
-- Call 999 is the one tel: link and the one red button outside Unresolved/Needs help states. (It appears only inside those states, never anywhere else.)
+- Call 999 (a button that does not dial; it shows a demo note) is the one red button outside Unresolved/Needs help states. (It appears only inside those states, never anywhere else.)
 - Green = done. Amber = waiting. Grey = no reply, paused or not needed. Orange box = suspicious.
 ## Icons
 - lucide-react only. Dark glyph inside a tinted 56px rounded square. No emoji in the UI.

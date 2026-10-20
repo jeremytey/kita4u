@@ -451,6 +451,12 @@ export const S = {
   },
   call999Btn: { en: 'Call 999', bm: 'Hubungi 999', zh: '拨打 999' },
   call999Aria: { en: 'Call 999 emergency services', bm: 'Hubungi perkhidmatan kecemasan 999', zh: '拨打 999 紧急服务' },
+  // Call 999 demo note (the button never dials). BM and 中文 are drafts.
+  call999DemoNote: {
+    en: 'Demo only. In a real deployment this would open the phone dialer. Nobody is called.',
+    bm: 'Demo sahaja. Dalam penggunaan sebenar, ini akan membuka pendail telefon. Tiada sesiapa dihubungi.',
+    zh: '仅为演示。在真实使用中，这里会打开手机拨号界面。不会拨打任何电话。',
+  },
   notEmergencyService: {
     en: `${APP_NAME} does not replace emergency services.`,
     bm: `${APP_NAME} tidak menggantikan perkhidmatan kecemasan.`,

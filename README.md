@@ -42,7 +42,7 @@ Two jobs:
 5. Use **View as** to see the same case from **Mei**, **Daniel** and **Township Support**.
 6. Want the other ending? Run the story again, set all three contacts to **No reply**, and tap Next step until it stops. The case ends **Unresolved**, with the 999 option in Daniel's and Township's views.
 
-> Do not tap **Call 999**. It is a real phone link.
+> **Call 999** does not dial in the prototype. Tapping it shows a demo note; a real deployment would open the phone dialer.
 
 The detailed script is in [docs/DEMO-SCRIPT.md](docs/DEMO-SCRIPT.md).
 

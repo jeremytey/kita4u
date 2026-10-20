@@ -4,7 +4,7 @@ import BigButton from '../components/BigButton'
 import { Avatar } from '../components/CircleStrip'
 import { useT } from '../strings'
 
-// Scripted demo call screen. No number, no tel: link, no audio, no microphone. Nothing is stored.
+// Scripted demo call screen. No number, no phone link, no audio, no microphone. Nothing is stored.
 export default function DemoCall({ onEnd }: { onEnd: () => void }) {
   const t = useT()
   const [connected, setConnected] = useState(false)
