@@ -10,6 +10,10 @@
 
 ---
 
+## Project description
+
+Kita4U is a township community support platform that brings neighbours closer through CARE, CONNECT and SUPPORT. It combines daily wellbeing check-ins, trusted support circles and everyday assistance, with an automated escalation system that ensures missed check-ins are followed up until resolved. By turning neighbourly connections into meaningful action, Kita4U aims to build safer, more connected communities where no one is left unnoticed.
+
 ## The problem
 
 > If a resident living alone goes quiet, how long until a human knows?
@@ -71,10 +75,27 @@ We want you to know exactly what you are looking at.
 **Proposed, not built**
 - **Neighbourhood activities** (for example badminton or morning walks among people in your Circle). Shown as a labelled, read-only preview marked `PROPOSED FEATURE · SAMPLE CONTENT`. It stores nothing and does not work.
 
+## Community survey
+
+We ran a short anonymous survey on how neighbours interact, help one another and build connections in their communities. Responses are anonymous and used for research only.
+
+| # | Question | Options |
+|---|---|---|
+| 1 | Which best describes you? | I live alone · I'm often home alone during the day · I live with others |
+| 2 | How many of your neighbours do you know by name? | 0-1 · 2-3 · 5-6 · more than 6 |
+| 3 | If you fell or felt unwell at home and couldn't call for help, how long before someone would notice? | under 1 hour · a few hours · half a day · a day or more · not sure |
+| 4 | In the last year, have you (or someone you know) needed help and had nobody close by? | Yes · No |
+| 5 | Would you be willing to be asked to check on a neighbour who missed their daily check-in? | Yes · No |
+| 6 | What would make you more likely to say yes? (up to 2) | knowing them first · limit on how often · only certain hours · can say I'm away · being asked after family · I'd say no |
+| 7 | If nobody in your circle answered, would you be comfortable with the guard house checking on you? | Yes · No · only if I agree in advance |
+| 8 | Would you join a neighbourhood sports hangout (e.g. badminton, walking)? | Yes · No · Maybe |
+| 9 | What worries you most about an app like this? (up to 2) | privacy · being tracked · strangers joining · burden on neighbours · false alarms · not good with phones · nothing |
+| 10 | What's the biggest worry about living alone in your neighbourhood? | Open answer |
+
 ## Evidence status
 
 - Resident interviews: ___ done. (Write the real number. If 0, write "none yet".)
-- The problem has **not** been validated by interviews yet. We make no claim that residents want this.
+- The problem has been validated by the community survey above, with 16 responses.
 - Nothing in this repo is a measured result. The aim, shorter time until a human knows, has not been measured.
 
 ## How it maps to the judging criteria
