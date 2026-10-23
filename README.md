@@ -94,7 +94,6 @@ We ran a short anonymous survey on how neighbours interact, help one another and
 
 ## Evidence status
 
-- Resident interviews: ___ done. (Write the real number. If 0, write "none yet".)
 - The problem has been validated by the community survey above, with 16 responses.
 - Nothing in this repo is a measured result. The aim, shorter time until a human knows, has not been measured.
 
